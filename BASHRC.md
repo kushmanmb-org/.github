@@ -35,9 +35,9 @@ The function automatically adds the `-v` (verbose) flag and queries the bgp.tool
 The function is defined as:
 ```bash
 cwhois() {
-    whois -h bgp.tools " -v $*"
+    whois -h bgp.tools -v $*
 }
 export -f cwhois
 ```
 
-This wraps the standard `whois` command to always use the bgp.tools server with verbose output enabled.
+This wraps the standard `whois` command to always use the bgp.tools server with verbose output enabled (`-v` flag).
