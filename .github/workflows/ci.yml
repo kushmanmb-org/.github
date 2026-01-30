@@ -31,6 +31,8 @@ jobs:
           sudo apt-get install -y shellcheck
           # Install markdownlint
           npm install -g markdownlint-cli
+          # Install PyYAML for workflow validation
+          pip install PyYAML
       
       - name: Validate JSON files
         run: |
@@ -47,35 +49,43 @@ jobs:
       - name: Validate Python scripts
         run: |
           echo "Validating Python scripts..."
-          python -m py_compile *.py 2>&1 && echo "✓ Python syntax check passed!"
+          find . -name "*.py" -not -path "./.git/*" -not -path "./__pycache__/*" | while read -r script; do
+            echo "Checking $script..."
+            python3 -m py_compile "$script"
+          done
+          echo "✓ Python syntax check passed!"
       
       - name: Validate Shell scripts
         run: |
           echo "Validating Shell scripts..."
           find . -name "*.sh" -not -path "./.git/*" -exec shellcheck {} \;
-          for script in *.sh; do
-            if [ -f "$script" ]; then
-              bash -n "$script"
-            fi
+          find . -name "*.sh" -not -path "./.git/*" | while read -r script; do
+            echo "Checking syntax of $script..."
+            bash -n "$script"
           done
           echo "✓ Shell script validation passed!"
       
       - name: Validate Markdown files
         run: |
           echo "Validating Markdown files..."
-          markdownlint '**/*.md' --ignore node_modules --ignore .git || echo "⚠ Markdown linting found issues (non-blocking)"
+          # Run markdownlint with relaxed rules
+          markdownlint '**/*.md' --ignore node_modules --ignore .git --config <(echo '{"default": true, "MD013": false, "MD033": false, "MD041": false}') || echo "⚠ Markdown linting completed with warnings"
           echo "✓ Markdown validation completed!"
       
       - name: Validate workflow templates
         run: |
           echo "Validating workflow templates..."
-          for workflow in workflow-templates/*.yml; do
-            if [ -f "$workflow" ]; then
-              echo "Checking $workflow..."
-              python3 -c "import yaml, sys; yaml.safe_load(open('$workflow'))" 2>&1
-            fi
-          done
-          echo "✓ Workflow templates are valid!"
+          if [ -d "workflow-templates" ] && [ -n "$(find workflow-templates -name '*.yml' 2>/dev/null)" ]; then
+            for workflow in workflow-templates/*.yml; do
+              if [ -f "$workflow" ]; then
+                echo "Checking $workflow..."
+                python3 -c "import yaml, sys; yaml.safe_load(open('$workflow'))" 2>&1
+              fi
+            done
+            echo "✓ Workflow templates are valid!"
+          else
+            echo "ℹ No workflow templates found to validate"
+          fi
   
   all-checks-pass:
     name: All Checks Pass

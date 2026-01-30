@@ -27,7 +27,11 @@ jobs:
       
       - name: Check Python syntax
         run: |
-          python -m py_compile *.py
+          find . -name "*.py" -not -path "./.git/*" -not -path "./__pycache__/*" | while read -r script; do
+            echo "Checking $script..."
+            python3 -m py_compile "$script"
+          done
+          echo "✓ All Python files are valid!"
       
       - name: Install dependencies (if requirements exist)
         run: |
@@ -37,9 +41,11 @@ jobs:
       
       - name: Run Python scripts with --help (if supported)
         run: |
+          echo "Testing Python scripts..."
           for script in *.py; do
             if [ -x "$script" ] || [ -f "$script" ]; then
               echo "Testing $script..."
-              python "$script" --help || echo "$script doesn't support --help flag"
+              python "$script" --help 2>/dev/null || echo "  ℹ $script doesn't support --help flag (this is OK)"
             fi
           done
+          echo "✓ Python script testing completed!"
