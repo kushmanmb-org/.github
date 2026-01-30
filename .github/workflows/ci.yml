@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate-all:
+    name: Validate All Files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          # Install ShellCheck
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          # Install markdownlint
+          npm install -g markdownlint-cli
+      
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON files..."
+          find . -name "*.json" -not -path "./.git/*" | while read -r file; do
+            echo "Validating $file..."
+            if ! python3 -m json.tool "$file" > /dev/null 2>&1; then
+              echo "ERROR: Invalid JSON in $file"
+              exit 1
+            fi
+          done
+          echo "✓ All JSON files are valid!"
+      
+      - name: Validate Python scripts
+        run: |
+          echo "Validating Python scripts..."
+          python -m py_compile *.py 2>&1 && echo "✓ Python syntax check passed!"
+      
+      - name: Validate Shell scripts
+        run: |
+          echo "Validating Shell scripts..."
+          find . -name "*.sh" -not -path "./.git/*" -exec shellcheck {} \;
+          for script in *.sh; do
+            if [ -f "$script" ]; then
+              bash -n "$script"
+            fi
+          done
+          echo "✓ Shell script validation passed!"
+      
+      - name: Validate Markdown files
+        run: |
+          echo "Validating Markdown files..."
+          markdownlint '**/*.md' --ignore node_modules --ignore .git || echo "⚠ Markdown linting found issues (non-blocking)"
+          echo "✓ Markdown validation completed!"
+      
+      - name: Validate workflow templates
+        run: |
+          echo "Validating workflow templates..."
+          for workflow in workflow-templates/*.yml; do
+            if [ -f "$workflow" ]; then
+              echo "Checking $workflow..."
+              python3 -c "import yaml, sys; yaml.safe_load(open('$workflow'))" 2>&1
+            fi
+          done
+          echo "✓ Workflow templates are valid!"
+  
+  all-checks-pass:
+    name: All Checks Pass
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs:
+      - validate-all
+    steps:
+      - run: echo "✓ All validation checks passed!"
