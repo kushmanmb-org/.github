@@ -1,0 +1,33 @@
+{
+  "etherscan_api": {
+    "base_url": "https://api.etherscan.io/v2/api",
+    "version": "v2",
+    "endpoints": {
+      "addresstokenbalance": {
+        "module": "account",
+        "action": "addresstokenbalance",
+        "description": "Get list of ERC-20 tokens owned by an address",
+        "required_params": [
+          "chainid",
+          "address",
+          "apikey"
+        ],
+        "optional_params": [
+          "page",
+          "offset"
+        ]
+      }
+    },
+    "example_address": "0x983e3660c0bE01991785F80f266A84B911ab59b0",
+    "default_chain_id": 1,
+    "default_pagination": {
+      "page": 1,
+      "offset": 100
+    }
+  },
+  "chain_ids": {
+    "1": "Ethereum Mainnet",
+    "5": "Goerli Testnet",
+    "11155111": "Sepolia Testnet"
+  }
+}
