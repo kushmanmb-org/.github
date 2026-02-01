@@ -1,0 +1,51 @@
+name: Python Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '.github/workflows/python-validation.yml'
+  pull_request:
+    paths:
+      - '**.py'
+      - '.github/workflows/python-validation.yml'
+
+jobs:
+  validate-python:
+    name: Validate Python Scripts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Check Python syntax
+        run: |
+          find . -name "*.py" -not -path "./.git/*" -not -path "./__pycache__/*" | while read -r script; do
+            echo "Checking $script..."
+            python3 -m py_compile "$script"
+          done
+          echo "✓ All Python files are valid!"
+      
+      - name: Install dependencies (if requirements exist)
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+      
+      - name: Run Python scripts with --help (if supported)
+        run: |
+          echo "Testing Python scripts..."
+          for script in *.py; do
+            if [ -x "$script" ] || [ -f "$script" ]; then
+              echo "Testing $script..."
+              python "$script" --help 2>/dev/null || echo "  ℹ $script doesn't support --help flag (this is OK)"
+            fi
+          done
+          echo "✓ Python script testing completed!"

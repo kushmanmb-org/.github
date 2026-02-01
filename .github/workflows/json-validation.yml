@@ -1,0 +1,33 @@
+name: JSON Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.json'
+      - '.github/workflows/json-validation.yml'
+  pull_request:
+    paths:
+      - '**.json'
+      - '.github/workflows/json-validation.yml'
+
+jobs:
+  validate-json:
+    name: Validate JSON Files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate JSON syntax
+        run: |
+          echo "Validating JSON files..."
+          find . -name "*.json" -not -path "./.git/*" | while read -r file; do
+            echo "Validating $file..."
+            if ! python3 -m json.tool "$file" > /dev/null 2>&1; then
+              echo "ERROR: Invalid JSON in $file"
+              exit 1
+            fi
+          done
+          echo "All JSON files are valid!"
