@@ -96,10 +96,7 @@ echo "Offset: $OFFSET"
 echo ""
 
 # Make the API request
-response=$(curl -s "$API_URL")
-
-# Check if curl command was successful
-if [ $? -ne 0 ]; then
+if ! response=$(curl -s "$API_URL"); then
     echo "Error: Failed to connect to Etherscan API"
     exit 1
 fi
