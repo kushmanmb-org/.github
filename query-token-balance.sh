@@ -96,7 +96,7 @@ echo "Offset: $OFFSET"
 echo ""
 
 # Make the API request
-response=$(curl -s "$API_URL")
+api_response=$(curl -s "$API_URL")
 
 # Check if curl command was successful
 if [ $? -ne 0 ]; then
@@ -106,16 +106,16 @@ fi
 
 # Display the response
 echo "Response:"
-echo "$response" | python3 -m json.tool 2>/dev/null || echo "$response"
+echo "$api_response" | python3 -m json.tool 2>/dev/null || echo "$api_response"
 
 # Check response status
-status=$(echo "$response" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
-if [ "$status" = "1" ]; then
+api_status=$(echo "$api_response" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
+if [ "$api_status" = "1" ]; then
     echo ""
     echo "✓ Query successful"
 else
     echo ""
     echo "✗ Query failed"
-    message=$(echo "$response" | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
-    echo "Message: $message"
+    error_message=$(echo "$api_response" | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
+    echo "Message: $error_message"
 fi

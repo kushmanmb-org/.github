@@ -66,8 +66,8 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
         response = requests.get(ETHERSCAN_API_BASE, params=params, timeout=30)
         response.raise_for_status()
         return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error: Failed to connect to Etherscan API: {e}", file=sys.stderr)
+    except requests.exceptions.RequestException as api_error:
+        print(f"Error: Failed to connect to Etherscan API: {api_error}", file=sys.stderr)
         raise
 
 
@@ -81,13 +81,13 @@ def format_token_balance(token_data):
     Returns:
         str: Formatted token information
     """
-    lines = []
-    lines.append(f"  Token: {token_data.get('TokenName', 'Unknown')}")
-    lines.append(f"  Symbol: {token_data.get('TokenSymbol', 'N/A')}")
-    lines.append(f"  Address: {token_data.get('TokenAddress', 'N/A')}")
-    lines.append(f"  Quantity: {token_data.get('TokenQuantity', '0')}")
-    lines.append(f"  Divisor: {token_data.get('TokenDivisor', '18')}")
-    return "\n".join(lines)
+    formatted_lines = []
+    formatted_lines.append(f"  Token: {token_data.get('TokenName', 'Unknown')}")
+    formatted_lines.append(f"  Symbol: {token_data.get('TokenSymbol', 'N/A')}")
+    formatted_lines.append(f"  Address: {token_data.get('TokenAddress', 'N/A')}")
+    formatted_lines.append(f"  Quantity: {token_data.get('TokenQuantity', '0')}")
+    formatted_lines.append(f"  Divisor: {token_data.get('TokenDivisor', '18')}")
+    return "\n".join(formatted_lines)
 
 
 def main():
@@ -184,8 +184,8 @@ Examples:
                     results = response_data["result"]
                     if isinstance(results, list) and results:
                         print(f"\nFound {len(results)} token(s):\n")
-                        for i, token in enumerate(results, 1):
-                            print(f"Token #{i}:")
+                        for token_index, token in enumerate(results, 1):
+                            print(f"Token #{token_index}:")
                             print(format_token_balance(token))
                             print()
                     else:
@@ -196,8 +196,8 @@ Examples:
                 print(f"Message: {message}")
                 sys.exit(1)
                 
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
+    except Exception as unexpected_error:
+        print(f"Error: {unexpected_error}", file=sys.stderr)
         sys.exit(1)
 
 
