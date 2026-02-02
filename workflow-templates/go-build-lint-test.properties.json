@@ -1,0 +1,16 @@
+{
+  "name": "Go Build, Lint, and Test",
+  "description": "Workflow template for building, linting, and testing Go repositories with Makefile support.",
+  "iconName": "metamask-fox",
+  "categories": [
+    "Go",
+    "Golang",
+    "Blockchain"
+  ],
+  "filePatterns": [
+    "go.mod$",
+    "go.sum$",
+    "Makefile$",
+    "\\.go$"
+  ]
+}
