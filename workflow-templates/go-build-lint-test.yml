@@ -1,0 +1,55 @@
+name: Go Build, Lint, and Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build-lint-test:
+    name: Build, Lint, and Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        go-version: [1.19.x, 1.20.x, 1.21.x]
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache: true
+      
+      - name: Download dependencies
+        run: go mod download
+      
+      - name: Build
+        run: make build || go build -v ./...
+      
+      - name: Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --timeout=5m
+      
+      - name: Test
+        run: make test || go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.txt
+          flags: unittests
+          
+  all-jobs-pass:
+    name: All jobs pass
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs:
+      - build-lint-test
+    steps:
+      - run: echo "All jobs passed successfully!"

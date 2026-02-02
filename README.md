@@ -53,7 +53,8 @@ For detailed usage and examples, see [ETHERSCAN_TOKEN_BALANCE.md](ETHERSCAN_TOKE
 ## Workflow Templates
 
 The `workflow-templates/` directory contains GitHub Actions workflow templates for:
-- Build, lint, and test workflows
+- **JavaScript/TypeScript Projects**: Build, lint, and test workflows (Node.js)
+- **Go Projects**: Build, lint, and test workflows with Makefile support (for repositories like ethpandaops/eth-beacon-genesis)
 - Release creation and publishing
 
 ## License
