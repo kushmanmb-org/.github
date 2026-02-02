@@ -42,12 +42,12 @@ const options = {method: 'GET'};
 
 const baseUrl = 'https://api.etherscan.io/v2/api';
 const params = new URLSearchParams({
-  chainid: '1',
+  chainid: 1,
   module: 'account',
   action: 'addresstokenbalance',
   address: '0x983e3660c0bE01991785F80f266A84B911ab59b0',
-  page: '1',
-  offset: '100',
+  page: 1,
+  offset: 100,
   apikey: 'YourApiKeyToken'
 });
 
