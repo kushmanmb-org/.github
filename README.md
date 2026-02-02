@@ -11,6 +11,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 ### Utility Scripts
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
+- **[query-token-balance.js](query-token-balance.js)** - JavaScript/Node.js script for querying token balances
 
 ### Blockchain Resources
 - **[blockchain-address.json](blockchain-address.json)** - Blockchain address information
@@ -30,6 +31,11 @@ You can query ERC-20 token balances for any Ethereum address using the provided 
 #### Using Python Script
 ```bash
 ./query-token-balance.py --apikey YOUR_API_KEY --pretty
+```
+
+#### Using JavaScript/Node.js Script
+```bash
+node query-token-balance.js --apikey YOUR_API_KEY --pretty
 ```
 
 #### Using cURL
