@@ -35,6 +35,8 @@ curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstok
 
 #### Simple Fetch Example
 
+> **Note:** Replace `YourApiKeyToken` with your actual Etherscan API key. For production use, consider using environment variables to store sensitive credentials.
+
 ```javascript
 const options = {method: 'GET'};
 
