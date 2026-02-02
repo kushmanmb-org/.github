@@ -33,9 +33,20 @@ curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstok
 
 ### JavaScript Example
 
-```javascript
-const fetch = require('node-fetch');
+#### Simple Fetch Example
 
+```javascript
+const options = {method: 'GET'};
+
+fetch('https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstokenbalance&address=0x983e3660c0bE01991785F80f266A84B911ab59b0&page=1&offset=100&apikey=YourApiKeyToken', options)
+  .then(res => res.json())
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+```
+
+#### Full Example with Function
+
+```javascript
 async function getAddressTokenBalance(address, apiKey) {
   const url = `https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstokenbalance&address=${address}&page=1&offset=100&apikey=${apiKey}`;
   
@@ -55,6 +66,14 @@ const apiKey = 'YourApiKeyToken';
 getAddressTokenBalance(address, apiKey)
   .then(data => console.log(data))
   .catch(err => console.error(err));
+```
+
+#### Using the Command-Line Script
+
+For a full-featured command-line tool, use the included script:
+
+```bash
+node query-token-balance.js --apikey YOUR_API_KEY --pretty
 ```
 
 ### Python Example
