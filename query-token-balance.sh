@@ -18,14 +18,17 @@ if command -v jq &> /dev/null; then
     API_MODULE=$(jq -r '.etherscan_api.endpoints.addresstokenbalance.module' "$CONFIG_FILE")
     API_ACTION=$(jq -r '.etherscan_api.endpoints.addresstokenbalance.action' "$CONFIG_FILE")
 elif command -v python3 &> /dev/null; then
-    ETHERSCAN_API_BASE=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['base_url'])")
-    DEFAULT_ADDRESS=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['example_address'])")
-    DEFAULT_CHAIN_ID=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['default_chain_id'])")
-    DEFAULT_PAGE=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['default_pagination']['page'])")
-    DEFAULT_OFFSET=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['default_pagination']['offset'])")
-    ADDRESS_PATTERN=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['address_validation_pattern'])")
-    API_MODULE=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['endpoints']['addresstokenbalance']['module'])")
-    API_ACTION=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['etherscan_api']['endpoints']['addresstokenbalance']['action'])")
+    # Load JSON once and extract all values
+    read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET ADDRESS_PATTERN API_MODULE API_ACTION < <(python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    config = json.load(f)
+    api = config['etherscan_api']
+    endpoint = api['endpoints']['addresstokenbalance']
+    print(api['base_url'], api['example_address'], api['default_chain_id'], 
+          api['default_pagination']['page'], api['default_pagination']['offset'],
+          api['address_validation_pattern'], endpoint['module'], endpoint['action'])
+")
 else
     echo "Error: Neither jq nor python3 is available. Please install one of them to parse the config file."
     exit 1
