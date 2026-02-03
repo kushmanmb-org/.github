@@ -15,8 +15,17 @@ import requests
 
 # Load configuration from etherscan-config.json
 config_path = os.path.join(os.path.dirname(__file__), 'etherscan-config.json')
-with open(config_path, 'r') as f:
-    config = json.load(f)
+try:
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+except FileNotFoundError:
+    print("Error: etherscan-config.json not found", file=sys.stderr)
+    print(f"Expected location: {config_path}", file=sys.stderr)
+    sys.exit(1)
+except json.JSONDecodeError as e:
+    print("Error: etherscan-config.json contains invalid JSON", file=sys.stderr)
+    print(f"Details: {e}", file=sys.stderr)
+    sys.exit(1)
 
 # Configuration from JSON
 ETHERSCAN_API_BASE = config['etherscan_api']['base_url']

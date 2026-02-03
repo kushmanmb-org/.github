@@ -7,7 +7,15 @@ const path = require('path');
 
 // Load configuration from etherscan-config.json
 const configPath = path.join(__dirname, 'etherscan-config.json');
-const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+let config;
+try {
+  config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+} catch (err) {
+  console.error('Error: Failed to load etherscan-config.json');
+  console.error('Please ensure the config file exists and contains valid JSON.');
+  console.error('Config path:', configPath);
+  process.exit(1);
+}
 
 const options = {method: 'GET'};
 

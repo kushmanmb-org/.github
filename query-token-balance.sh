@@ -7,6 +7,13 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="${SCRIPT_DIR}/etherscan-config.json"
 
+# Check if config file exists
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: etherscan-config.json not found"
+    echo "Expected location: $CONFIG_FILE"
+    exit 1
+fi
+
 # Parse configuration using jq or python if available
 if command -v jq &> /dev/null; then
     ETHERSCAN_API_BASE=$(jq -r '.etherscan_api.base_url' "$CONFIG_FILE")
@@ -18,17 +25,27 @@ if command -v jq &> /dev/null; then
     API_MODULE=$(jq -r '.etherscan_api.endpoints.addresstokenbalance.module' "$CONFIG_FILE")
     API_ACTION=$(jq -r '.etherscan_api.endpoints.addresstokenbalance.action' "$CONFIG_FILE")
 elif command -v python3 &> /dev/null; then
-    # Load JSON once and extract all values
-    read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET ADDRESS_PATTERN API_MODULE API_ACTION < <(python3 -c "
+    # Load JSON once and extract all values - pass config file path as argument
+    read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET ADDRESS_PATTERN API_MODULE API_ACTION < <(python3 - "$CONFIG_FILE" <<'EOF'
 import json
-with open('$CONFIG_FILE') as f:
-    config = json.load(f)
+import sys
+try:
+    with open(sys.argv[1]) as f:
+        config = json.load(f)
     api = config['etherscan_api']
     endpoint = api['endpoints']['addresstokenbalance']
     print(api['base_url'], api['example_address'], api['default_chain_id'], 
           api['default_pagination']['page'], api['default_pagination']['offset'],
           api['address_validation_pattern'], endpoint['module'], endpoint['action'])
-")
+except Exception as e:
+    print(f"Error loading config: {e}", file=sys.stderr)
+    sys.exit(1)
+EOF
+)
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to parse etherscan-config.json"
+        exit 1
+    fi
 else
     echo "Error: Neither jq nor python3 is available. Please install one of them to parse the config file."
     exit 1
