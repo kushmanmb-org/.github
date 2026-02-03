@@ -22,9 +22,13 @@ wallet.dat
 wallet-*.dat
 
 # Blockchain wallet and keystore files
-*mnemonic*
-*seed*
-*recovery*
+*mnemonic*.txt
+*seed-phrase*
+*seed_phrase*
+*seedphrase*
+*recovery-phrase*
+*recovery_phrase*
+*recoveryphrase*
 UTC--*
 *.json.backup
 geth/keystore/
@@ -79,9 +83,9 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Hardhat and Truffle
-hardhat.config.js
-truffle-config.js
+# Hardhat and Truffle (only if they contain embedded secrets - use env vars instead)
+# hardhat.config.js
+# truffle-config.js
 .openzeppelin/
 .openzeppelin/*.json
 deployments/
