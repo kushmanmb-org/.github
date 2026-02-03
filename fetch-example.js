@@ -2,21 +2,27 @@
 // This demonstrates basic usage of the fetch API to query Etherscan
 // Note: Replace 'YourApiKeyToken' with your actual Etherscan API key
 
+const fs = require('fs');
+const path = require('path');
+
+// Load shared configuration
+const configPath = path.join(__dirname, 'etherscan-api-config.json');
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
 const options = {method: 'GET'};
 
 // Build the URL with all required parameters
-const baseUrl = 'https://api.etherscan.io/v2/api';
 const params = new URLSearchParams({
-  chainid: 1,
-  module: 'account',
-  action: 'addresstokenbalance',
-  address: '0x983e3660c0bE01991785F80f266A84B911ab59b0',
-  page: 1,
-  offset: 100,
+  chainid: config.defaultChainId,
+  module: config.module,
+  action: config.action,
+  address: config.defaultAddress,
+  page: config.defaultPage,
+  offset: config.defaultOffset,
   apikey: 'YourApiKeyToken'
 });
 
-const url = `${baseUrl}?${params}`;
+const url = `${config.apiBaseUrl}?${params}`;
 
 fetch(url, options)
   .then(res => res.json())

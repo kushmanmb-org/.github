@@ -1,0 +1,9 @@
+{
+  "apiBaseUrl": "https://api.etherscan.io/v2/api",
+  "defaultAddress": "0x983e3660c0bE01991785F80f266A84B911ab59b0",
+  "defaultChainId": 1,
+  "defaultPage": 1,
+  "defaultOffset": 100,
+  "module": "account",
+  "action": "addresstokenbalance"
+}
