@@ -43,8 +43,8 @@ __pycache__/
 
 # Private information files
 private-info*
-*private-info*
-info[0-9]*
-*info[0-9]*
+*-private-info*
+info[0-9]
+info[0-9].*
 personal-data*
-*personal-data*
+*-personal-data*
