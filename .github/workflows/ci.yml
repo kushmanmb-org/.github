@@ -8,18 +8,26 @@ on:
 jobs:
   validate-json:
     name: Validate JSON Files
+    permissions:
+      contents: read
     uses: ./.github/workflows/json-validation.yml
   
   validate-python:
     name: Validate Python Scripts
+    permissions:
+      contents: read
     uses: ./.github/workflows/python-validation.yml
   
   validate-shell:
     name: Validate Shell Scripts
+    permissions:
+      contents: read
     uses: ./.github/workflows/shell-validation.yml
   
   validate-markdown:
     name: Validate Markdown Files
+    permissions:
+      contents: read
     uses: ./.github/workflows/markdown-validation.yml
   
   all-checks-pass:
