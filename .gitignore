@@ -83,11 +83,12 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Hardhat and Truffle (only if they contain embedded secrets - use env vars instead)
+# Hardhat and Truffle config files
+# Note: These files should normally be committed to version control.
+# Only uncomment if you've mistakenly embedded secrets (not recommended - use .env instead)
 # hardhat.config.js
 # truffle-config.js
 .openzeppelin/
-.openzeppelin/*.json
 deployments/
 
 # Smart contract build artifacts with sensitive data
