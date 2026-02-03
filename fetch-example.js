@@ -2,21 +2,36 @@
 // This demonstrates basic usage of the fetch API to query Etherscan
 // Note: Replace 'YourApiKeyToken' with your actual Etherscan API key
 
+const fs = require('fs');
+const path = require('path');
+
+// Load configuration from etherscan-config.json
+const configPath = path.join(__dirname, 'etherscan-config.json');
+let config;
+try {
+  config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+} catch (err) {
+  console.error('Error: Failed to load etherscan-config.json');
+  console.error('Please ensure the config file exists and contains valid JSON.');
+  console.error('Config path:', configPath);
+  process.exit(1);
+}
+
 const options = {method: 'GET'};
 
 // Build the URL with all required parameters
-const baseUrl = 'https://api.etherscan.io/v2/api';
+const endpoint = config.etherscan_api.endpoints.addresstokenbalance;
 const params = new URLSearchParams({
-  chainid: 1,
-  module: 'account',
-  action: 'addresstokenbalance',
-  address: '0x983e3660c0bE01991785F80f266A84B911ab59b0',
-  page: 1,
-  offset: 100,
+  chainid: config.etherscan_api.default_chain_id,
+  module: endpoint.module,
+  action: endpoint.action,
+  address: config.etherscan_api.example_address,
+  page: config.etherscan_api.default_pagination.page,
+  offset: config.etherscan_api.default_pagination.offset,
   apikey: 'YourApiKeyToken'
 });
 
-const url = `${baseUrl}?${params}`;
+const url = `${config.etherscan_api.base_url}?${params}`;
 
 fetch(url, options)
   .then(res => res.json())

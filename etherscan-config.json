@@ -23,7 +23,8 @@
     "default_pagination": {
       "page": 1,
       "offset": 100
-    }
+    },
+    "address_validation_pattern": "^0x[a-fA-F0-9]{40}$"
   },
   "chain_ids": {
     "1": "Ethereum Mainnet",

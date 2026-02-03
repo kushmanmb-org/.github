@@ -7,17 +7,34 @@ This script queries ERC-20 token balances for an Ethereum address using the Ethe
 
 import argparse
 import json
+import os
 import re
 import sys
 import requests
 
 
-# Configuration
-ETHERSCAN_API_BASE = "https://api.etherscan.io/v2/api"
-DEFAULT_ADDRESS = "0x983e3660c0bE01991785F80f266A84B911ab59b0"
-DEFAULT_CHAIN_ID = 1
-DEFAULT_PAGE = 1
-DEFAULT_OFFSET = 100
+# Load configuration from etherscan-config.json
+config_path = os.path.join(os.path.dirname(__file__), 'etherscan-config.json')
+try:
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+except FileNotFoundError:
+    print("Error: etherscan-config.json not found", file=sys.stderr)
+    print(f"Expected location: {config_path}", file=sys.stderr)
+    sys.exit(1)
+except json.JSONDecodeError as e:
+    print("Error: etherscan-config.json contains invalid JSON", file=sys.stderr)
+    print(f"Details: {e}", file=sys.stderr)
+    sys.exit(1)
+
+# Configuration from JSON
+ETHERSCAN_API_BASE = config['etherscan_api']['base_url']
+DEFAULT_ADDRESS = config['etherscan_api']['example_address']
+DEFAULT_CHAIN_ID = config['etherscan_api']['default_chain_id']
+DEFAULT_PAGE = config['etherscan_api']['default_pagination']['page']
+DEFAULT_OFFSET = config['etherscan_api']['default_pagination']['offset']
+ADDRESS_PATTERN = config['etherscan_api']['address_validation_pattern']
+ADDRESS_PATTERN_COMPILED = re.compile(ADDRESS_PATTERN)
 
 
 def validate_ethereum_address(address):
@@ -30,8 +47,7 @@ def validate_ethereum_address(address):
     Returns:
         bool: True if valid, False otherwise
     """
-    pattern = re.compile(r'^0x[a-fA-F0-9]{40}$')
-    return bool(pattern.match(address))
+    return bool(ADDRESS_PATTERN_COMPILED.match(address))
 
 
 def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID, 
@@ -52,10 +68,11 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
     Raises:
         requests.exceptions.RequestException: If API request fails
     """
+    endpoint = config['etherscan_api']['endpoints']['addresstokenbalance']
     params = {
         "chainid": chain_id,
-        "module": "account",
-        "action": "addresstokenbalance",
+        "module": endpoint['module'],
+        "action": endpoint['action'],
         "address": address,
         "page": page,
         "offset": offset,
