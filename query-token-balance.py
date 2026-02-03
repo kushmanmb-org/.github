@@ -7,17 +7,23 @@ This script queries ERC-20 token balances for an Ethereum address using the Ethe
 
 import argparse
 import json
+import os
 import re
 import sys
 import requests
 
 
+# Load shared configuration
+config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
+with open(config_path, 'r') as f:
+    shared_config = json.load(f)
+
 # Configuration
-ETHERSCAN_API_BASE = "https://api.etherscan.io/v2/api"
-DEFAULT_ADDRESS = "0x983e3660c0bE01991785F80f266A84B911ab59b0"
-DEFAULT_CHAIN_ID = 1
-DEFAULT_PAGE = 1
-DEFAULT_OFFSET = 100
+ETHERSCAN_API_BASE = shared_config['apiBaseUrl']
+DEFAULT_ADDRESS = shared_config['defaultAddress']
+DEFAULT_CHAIN_ID = shared_config['defaultChainId']
+DEFAULT_PAGE = shared_config['defaultPage']
+DEFAULT_OFFSET = shared_config['defaultOffset']
 
 
 def validate_ethereum_address(address):
@@ -54,8 +60,8 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
     """
     params = {
         "chainid": chain_id,
-        "module": "account",
-        "action": "addresstokenbalance",
+        "module": shared_config['module'],
+        "action": shared_config['action'],
         "address": address,
         "page": page,
         "offset": offset,

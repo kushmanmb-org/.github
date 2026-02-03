@@ -3,12 +3,18 @@
 # Etherscan Address Token Balance Query Script
 # This script queries ERC-20 token balances for an Ethereum address using the Etherscan API v2
 
-# Configuration
-ETHERSCAN_API_BASE="https://api.etherscan.io/v2/api"
-DEFAULT_ADDRESS="0x983e3660c0bE01991785F80f266A84B911ab59b0"
-DEFAULT_CHAIN_ID="1"
-DEFAULT_PAGE="1"
-DEFAULT_OFFSET="100"
+# Load shared configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/etherscan-api-config.json"
+
+# Parse configuration using Python's json module
+ETHERSCAN_API_BASE=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['apiBaseUrl'])")
+DEFAULT_ADDRESS=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['defaultAddress'])")
+DEFAULT_CHAIN_ID=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['defaultChainId'])")
+DEFAULT_PAGE=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['defaultPage'])")
+DEFAULT_OFFSET=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['defaultOffset'])")
+API_MODULE=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['module'])")
+API_ACTION=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE'))['action'])")
 
 # Function to display usage
 usage() {
@@ -85,7 +91,7 @@ if [[ ! "$ADDRESS" =~ ^0x[a-fA-F0-9]{40}$ ]]; then
 fi
 
 # Build the API URL
-API_URL="${ETHERSCAN_API_BASE}?chainid=${CHAIN_ID}&module=account&action=addresstokenbalance&address=${ADDRESS}&page=${PAGE}&offset=${OFFSET}&apikey=${API_KEY}"
+API_URL="${ETHERSCAN_API_BASE}?chainid=${CHAIN_ID}&module=${API_MODULE}&action=${API_ACTION}&address=${ADDRESS}&page=${PAGE}&offset=${OFFSET}&apikey=${API_KEY}"
 
 # Display query information
 echo "Querying Etherscan API..."

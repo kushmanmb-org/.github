@@ -6,86 +6,21 @@ on:
   pull_request:
 
 jobs:
-  validate-all:
-    name: Validate All Files
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      
-      - name: Install dependencies
-        run: |
-          # Install ShellCheck
-          sudo apt-get update
-          sudo apt-get install -y shellcheck
-          # Install markdownlint
-          npm install -g markdownlint-cli
-          # Install PyYAML for workflow validation
-          pip install PyYAML
-      
-      - name: Validate JSON files
-        run: |
-          echo "Validating JSON files..."
-          find . -name "*.json" -not -path "./.git/*" | while read -r file; do
-            echo "Validating $file..."
-            if ! python3 -m json.tool "$file" > /dev/null 2>&1; then
-              echo "ERROR: Invalid JSON in $file"
-              exit 1
-            fi
-          done
-          echo "✓ All JSON files are valid!"
-      
-      - name: Validate Python scripts
-        run: |
-          echo "Validating Python scripts..."
-          find . -name "*.py" -not -path "./.git/*" -not -path "./__pycache__/*" | while read -r script; do
-            echo "Checking $script..."
-            python3 -m py_compile "$script"
-          done
-          echo "✓ Python syntax check passed!"
-      
-      - name: Validate Shell scripts
-        run: |
-          echo "Validating Shell scripts..."
-          find . -name "*.sh" -not -path "./.git/*" -exec shellcheck {} \;
-          find . -name "*.sh" -not -path "./.git/*" | while read -r script; do
-            echo "Checking syntax of $script..."
-            bash -n "$script"
-          done
-          echo "✓ Shell script validation passed!"
-      
-      - name: Validate Markdown files
-        run: |
-          echo "Validating Markdown files..."
-          # Run markdownlint with relaxed rules
-          markdownlint '**/*.md' --ignore node_modules --ignore .git --config <(echo '{"default": true, "MD013": false, "MD033": false, "MD041": false}') || echo "⚠ Markdown linting completed with warnings"
-          echo "✓ Markdown validation completed!"
-      
-      - name: Validate workflow templates
-        run: |
-          echo "Validating workflow templates..."
-          if [ -d "workflow-templates" ] && [ -n "$(find workflow-templates -name '*.yml' 2>/dev/null)" ]; then
-            for workflow in workflow-templates/*.yml; do
-              if [ -f "$workflow" ]; then
-                echo "Checking $workflow..."
-                python3 -c "import yaml, sys; yaml.safe_load(open('$workflow'))" 2>&1
-              fi
-            done
-            echo "✓ Workflow templates are valid!"
-          else
-            echo "ℹ No workflow templates found to validate"
-          fi
+  validate-json:
+    name: Validate JSON Files
+    uses: ./.github/workflows/json-validation.yml
+  
+  validate-python:
+    name: Validate Python Scripts
+    uses: ./.github/workflows/python-validation.yml
+  
+  validate-shell:
+    name: Validate Shell Scripts
+    uses: ./.github/workflows/shell-validation.yml
+  
+  validate-markdown:
+    name: Validate Markdown Files
+    uses: ./.github/workflows/markdown-validation.yml
   
   all-checks-pass:
     name: All Checks Pass
@@ -93,6 +28,9 @@ jobs:
     permissions:
       contents: read
     needs:
-      - validate-all
+      - validate-json
+      - validate-python
+      - validate-shell
+      - validate-markdown
     steps:
       - run: echo "✓ All validation checks passed!"
