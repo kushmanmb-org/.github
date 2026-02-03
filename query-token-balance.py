@@ -34,6 +34,7 @@ DEFAULT_CHAIN_ID = config['etherscan_api']['default_chain_id']
 DEFAULT_PAGE = config['etherscan_api']['default_pagination']['page']
 DEFAULT_OFFSET = config['etherscan_api']['default_pagination']['offset']
 ADDRESS_PATTERN = config['etherscan_api']['address_validation_pattern']
+ADDRESS_PATTERN_COMPILED = re.compile(ADDRESS_PATTERN)
 
 
 def validate_ethereum_address(address):
@@ -46,8 +47,7 @@ def validate_ethereum_address(address):
     Returns:
         bool: True if valid, False otherwise
     """
-    pattern = re.compile(ADDRESS_PATTERN)
-    return bool(pattern.match(address))
+    return bool(ADDRESS_PATTERN_COMPILED.match(address))
 
 
 def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID, 
