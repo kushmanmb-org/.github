@@ -12,10 +12,48 @@
 *.pem
 private-key*
 *private-key*
+*_private_key*
+*-private-key*
+*.keystore
+keystore/
+keystore-*
+*.wallet
+wallet.dat
+wallet-*.dat
 
-# Infura and blockchain configuration
+# Blockchain wallet and keystore files
+*mnemonic*
+*seed*
+*recovery*
+UTC--*
+*.json.backup
+geth/keystore/
+ethereum/keystore/
+.ethereum/keystore/
+
+# API Keys and tokens
+*apikey*
+*api-key*
+*api_key*
+*.apikey
+etherscan.key
+infura.key
+alchemy.key
+
+# Infura and blockchain service configuration
 infura.config*
+alchemy.config*
 *.secrets
+secrets.*
+secrets-*
+
+# Blockchain data and private configuration
+blockchain-private*
+*-private.json
+*_private.json
+private-*.json
+wallet-config.json
+wallet-*.json
 
 # Node modules and dependencies
 node_modules/
@@ -40,3 +78,26 @@ build/
 __pycache__/
 *.pyc
 *.pyo
+
+# Hardhat and Truffle
+hardhat.config.js
+truffle-config.js
+.openzeppelin/
+.openzeppelin/*.json
+deployments/
+
+# Smart contract build artifacts with sensitive data
+artifacts/
+cache/
+typechain/
+
+# Local blockchain data
+chaindata/
+geth/
+datadir/
+.ethereum/
+
+# Private transaction data
+transactions-private.json
+tx-private.json
+*-txs-private.json
