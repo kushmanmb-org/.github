@@ -1,0 +1,58 @@
+name: 'Validate Files'
+description: 'Reusable action to validate files with a specified pattern and command'
+
+inputs:
+  file-pattern:
+    description: 'Pattern to match files (e.g., "*.json", "*.py")'
+    required: true
+  exclude-paths:
+    description: 'Paths to exclude from validation'
+    required: false
+    default: './.git/*'
+  validation-command:
+    description: 'Command to validate each file (use $file as placeholder)'
+    required: true
+  setup-command:
+    description: 'Optional setup command to run before validation'
+    required: false
+    default: 'echo "No setup needed"'
+  success-message:
+    description: 'Message to display on successful validation'
+    required: false
+    default: '✓ All files validated successfully!'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run setup command
+      shell: bash
+      run: ${{ inputs.setup-command }}
+    
+    - name: Validate files
+      shell: bash
+      run: |
+        echo "Validating files matching pattern: ${{ inputs.file-pattern }}"
+        found_files=0
+        validation_failed=0
+        
+        while IFS= read -r -d '' file; do
+          echo "Validating $file..."
+          # Execute validation command with file variable exported
+          export file
+          if ! bash -c '${{ inputs.validation-command }}'; then
+            validation_failed=1
+          fi
+          found_files=$((found_files + 1))
+        done < <(find . -name "${{ inputs.file-pattern }}" -not -path "${{ inputs.exclude-paths }}" -print0)
+        
+        if [ $validation_failed -eq 1 ]; then
+          echo "❌ Validation failed for one or more files"
+          exit 1
+        fi
+        
+        if [ $found_files -eq 0 ]; then
+          echo "⚠ No files found matching pattern: ${{ inputs.file-pattern }}"
+        else
+          echo "${{ inputs.success-message }}"
+          echo "Total files validated: $found_files"
+        fi

@@ -22,13 +22,9 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Validate JSON syntax
-        run: |
-          echo "Validating JSON files..."
-          find . -name "*.json" -not -path "./.git/*" | while read -r file; do
-            echo "Validating $file..."
-            if ! python3 -m json.tool "$file" > /dev/null 2>&1; then
-              echo "ERROR: Invalid JSON in $file"
-              exit 1
-            fi
-          done
-          echo "All JSON files are valid!"
+        uses: ./.github/actions/validate-files
+        with:
+          file-pattern: '*.json'
+          exclude-paths: './.git/*'
+          validation-command: 'python3 -m json.tool "$file" > /dev/null 2>&1 || { echo "ERROR: Invalid JSON in $file"; exit 1; }'
+          success-message: '✓ All JSON files are valid!'

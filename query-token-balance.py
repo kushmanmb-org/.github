@@ -7,16 +7,17 @@ This script queries ERC-20 token balances for an Ethereum address using the Ethe
 
 import argparse
 import json
-import os
-import re
 import sys
 import requests
-
+from etherscan_common import (
+    validate_ethereum_address,
+    load_config,
+    build_api_params,
+    format_token_balance
+)
 
 # Load shared configuration
-config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
-with open(config_path, 'r') as f:
-    shared_config = json.load(f)
+shared_config = load_config()
 
 # Configuration
 ETHERSCAN_API_BASE = shared_config['apiBaseUrl']
@@ -24,20 +25,6 @@ DEFAULT_ADDRESS = shared_config['defaultAddress']
 DEFAULT_CHAIN_ID = shared_config['defaultChainId']
 DEFAULT_PAGE = shared_config['defaultPage']
 DEFAULT_OFFSET = shared_config['defaultOffset']
-
-
-def validate_ethereum_address(address):
-    """
-    Validate Ethereum address format.
-    
-    Args:
-        address (str): Ethereum address to validate
-        
-    Returns:
-        bool: True if valid, False otherwise
-    """
-    pattern = re.compile(r'^0x[a-fA-F0-9]{40}$')
-    return bool(pattern.match(address))
 
 
 def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID, 
@@ -58,15 +45,7 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
     Raises:
         requests.exceptions.RequestException: If API request fails
     """
-    params = {
-        "chainid": chain_id,
-        "module": shared_config['module'],
-        "action": shared_config['action'],
-        "address": address,
-        "page": page,
-        "offset": offset,
-        "apikey": api_key
-    }
+    params = build_api_params(shared_config, address, api_key, chain_id, page, offset)
     
     try:
         response = requests.get(ETHERSCAN_API_BASE, params=params, timeout=30)
@@ -75,25 +54,6 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
     except requests.exceptions.RequestException as e:
         print(f"Error: Failed to connect to Etherscan API: {e}", file=sys.stderr)
         raise
-
-
-def format_token_balance(token_data):
-    """
-    Format token balance data for display.
-    
-    Args:
-        token_data (dict): Token data from API response
-        
-    Returns:
-        str: Formatted token information
-    """
-    lines = []
-    lines.append(f"  Token: {token_data.get('TokenName', 'Unknown')}")
-    lines.append(f"  Symbol: {token_data.get('TokenSymbol', 'N/A')}")
-    lines.append(f"  Address: {token_data.get('TokenAddress', 'N/A')}")
-    lines.append(f"  Quantity: {token_data.get('TokenQuantity', '0')}")
-    lines.append(f"  Divisor: {token_data.get('TokenDivisor', '18')}")
-    return "\n".join(lines)
 
 
 def main():

@@ -5,12 +5,10 @@
  * Usage: node query-token-balance.js --apikey YOUR_API_KEY [--address ADDRESS] [--chainid CHAIN_ID]
  */
 
-const fs = require('fs');
-const path = require('path');
+const { loadConfig, buildApiParams, buildApiUrl } = require('./etherscan-common.js');
 
 // Load shared configuration
-const configPath = path.join(__dirname, 'etherscan-api-config.json');
-const sharedConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const sharedConfig = loadConfig();
 
 // Parse command-line arguments
 function parseArgs() {
@@ -77,20 +75,14 @@ async function queryTokenBalance(options) {
     process.exit(1);
   }
 
-  // Build the URL with query parameters
-  const url = new URL(sharedConfig.apiBaseUrl);
-  url.searchParams.append('chainid', chainid);
-  url.searchParams.append('module', sharedConfig.module);
-  url.searchParams.append('action', sharedConfig.action);
-  url.searchParams.append('address', address);
-  url.searchParams.append('page', page);
-  url.searchParams.append('offset', offset);
-  url.searchParams.append('apikey', apikey);
+  // Build API parameters and URL using shared module
+  const params = buildApiParams(sharedConfig, address, apikey, chainid, page, offset);
+  const url = buildApiUrl(sharedConfig, params);
 
   const fetchOptions = { method: 'GET' };
 
   try {
-    const response = await fetch(url.toString(), fetchOptions);
+    const response = await fetch(url, fetchOptions);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
