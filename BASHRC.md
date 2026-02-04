@@ -44,7 +44,7 @@ export -f cwhois
 
 This wraps the standard `whois` command to always use the bgp.tools server with verbose output enabled (`-v` flag).
 
-## etherscan_api Function
+### etherscan_api Function
 
 The `etherscan_api` function is a wrapper for making POST requests to the Etherscan API v2 endpoint.
 
