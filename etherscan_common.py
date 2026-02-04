@@ -10,6 +10,28 @@ import os
 # Ethereum address validation pattern
 ETHEREUM_ADDRESS_PATTERN = re.compile(r'^0x[a-fA-F0-9]{40}$')
 
+# Messages cache
+_MESSAGES = None
+
+
+def load_messages():
+    """
+    Load shared messages from JSON file.
+    
+    Returns:
+        dict: Messages data
+    """
+    global _MESSAGES
+    if _MESSAGES is None:
+        messages_path = os.path.join(os.path.dirname(__file__), 'etherscan-messages.json')
+        try:
+            with open(messages_path, 'r') as f:
+                _MESSAGES = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            # Fallback to empty dict if messages file not found
+            _MESSAGES = {"errors": {}, "status": {}, "labels": {}}
+    return _MESSAGES
+
 
 def validate_ethereum_address(address):
     """

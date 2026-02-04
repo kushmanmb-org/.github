@@ -3,6 +3,17 @@
 # Etherscan Address Token Balance Query Script
 # This script queries ERC-20 token balances for an Ethereum address using the Etherscan API v2
 
+# Load messages from JSON file
+load_messages() {
+    python3 -c "import json, os; messages = json.load(open(os.path.join(os.path.dirname('$0'), 'etherscan-messages.json'))); print(json.dumps(messages))"
+}
+
+MESSAGES=$(load_messages)
+
+get_message() {
+    echo "$MESSAGES" | python3 -c "import json, sys; data = json.load(sys.stdin); keys = '$1'.split('.'); result = data; [result := result.get(k, '') for k in keys]; print(result)"
+}
+
 # Use Python to load config and validate address (shared functionality)
 # shellcheck disable=SC2046
 read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET API_MODULE API_ACTION <<< \
@@ -76,15 +87,15 @@ done
 
 # Validate required parameters
 if [ -z "$API_KEY" ]; then
-    echo "Error: API key is required"
+    echo "$(get_message 'errors.apiKeyRequired')"
     echo ""
     usage
 fi
 
 # Validate address format using shared validation function
 if ! validate_address "$ADDRESS"; then
-    echo "Error: Invalid Ethereum address format"
-    echo "Expected format: 0x followed by 40 hexadecimal characters"
+    echo "$(get_message 'errors.invalidAddress')"
+    echo "$(get_message 'errors.expectedAddressFormat')"
     exit 1
 fi
 
@@ -92,31 +103,31 @@ fi
 API_URL="${ETHERSCAN_API_BASE}?chainid=${CHAIN_ID}&module=${API_MODULE}&action=${API_ACTION}&address=${ADDRESS}&page=${PAGE}&offset=${OFFSET}&apikey=${API_KEY}"
 
 # Display query information
-echo "Querying Etherscan API..."
-echo "Address: $ADDRESS"
-echo "Chain ID: $CHAIN_ID"
-echo "Page: $PAGE"
-echo "Offset: $OFFSET"
+echo "$(get_message 'status.querying')"
+echo "$(get_message 'labels.address'): $ADDRESS"
+echo "$(get_message 'labels.chainId'): $CHAIN_ID"
+echo "$(get_message 'labels.page'): $PAGE"
+echo "$(get_message 'labels.offset'): $OFFSET"
 echo ""
 
 # Make the API request
 if ! response=$(curl -s "$API_URL"); then
-    echo "Error: Failed to connect to Etherscan API"
+    echo "$(get_message 'errors.apiFailed')"
     exit 1
 fi
 
 # Display the response
-echo "Response:"
+echo "$(get_message 'labels.response'):"
 echo "$response" | python3 -m json.tool 2>/dev/null || echo "$response"
 
 # Check response status
 status=$(echo "$response" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
 if [ "$status" = "1" ]; then
     echo ""
-    echo "✓ Query successful"
+    echo "$(get_message 'status.success')"
 else
     echo ""
-    echo "✗ Query failed"
+    echo "$(get_message 'status.failed')"
     message=$(echo "$response" | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
-    echo "Message: $message"
+    echo "$(get_message 'labels.message'): $message"
 fi

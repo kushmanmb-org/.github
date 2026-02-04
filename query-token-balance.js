@@ -5,10 +5,11 @@
  * Usage: node query-token-balance.js --apikey YOUR_API_KEY [--address ADDRESS] [--chainid CHAIN_ID]
  */
 
-const { loadConfig, buildApiParams, buildApiUrl } = require('./etherscan-common.js');
+const { loadConfig, buildApiParams, buildApiUrl, loadMessages } = require('./etherscan-common.js');
 
-// Load shared configuration
+// Load shared configuration and messages
 const sharedConfig = loadConfig();
+const messages = loadMessages();
 
 // Parse command-line arguments
 function parseArgs() {
@@ -71,7 +72,7 @@ async function queryTokenBalance(options) {
   const { apikey, address, chainid, page, offset } = options;
 
   if (!apikey) {
-    console.error('Error: API key is required. Use --apikey option or set ETHERSCAN_API_KEY environment variable.');
+    console.error(messages.errors.apiKeyRequired + '. Use --apikey option or set ETHERSCAN_API_KEY environment variable.');
     process.exit(1);
   }
 
