@@ -8,6 +8,7 @@ This script queries ERC-20 token balances for an Ethereum address using the Ethe
 import argparse
 import json
 import sys
+import os
 import requests
 from etherscan_common import (
     validate_ethereum_address,
@@ -58,8 +59,11 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
 
 def main():
     """Main function to handle command-line interface and execute query."""
+    help_config = shared_config.get('helpText', {})
+    help_options = help_config.get('options', {})
+    
     parser = argparse.ArgumentParser(
-        description="Query ERC-20 token balances for an Ethereum address using Etherscan API v2",
+        description=help_config.get('description', 'Query ERC-20 token balances using Etherscan API v2'),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -71,30 +75,30 @@ Examples:
     parser.add_argument(
         "-a", "--address",
         default=DEFAULT_ADDRESS,
-        help=f"Ethereum address to query (default: {DEFAULT_ADDRESS})"
+        help=f"{help_options.get('address', 'Ethereum address to query')} (default: {DEFAULT_ADDRESS})"
     )
     parser.add_argument(
         "-k", "--apikey",
-        required=True,
-        help="Etherscan API key (required)"
+        default=os.environ.get('ETHERSCAN_API_KEY'),
+        help=help_options.get('apikey', 'Etherscan API key (required)')
     )
     parser.add_argument(
         "-c", "--chainid",
         type=int,
         default=DEFAULT_CHAIN_ID,
-        help=f"Chain ID (default: {DEFAULT_CHAIN_ID} for Ethereum mainnet)"
+        help=f"{help_options.get('chainid', 'Chain ID')} (default: {DEFAULT_CHAIN_ID})"
     )
     parser.add_argument(
         "-p", "--page",
         type=int,
         default=DEFAULT_PAGE,
-        help=f"Page number for pagination (default: {DEFAULT_PAGE})"
+        help=f"{help_options.get('page', 'Page number for pagination')} (default: {DEFAULT_PAGE})"
     )
     parser.add_argument(
         "-o", "--offset",
         type=int,
         default=DEFAULT_OFFSET,
-        help=f"Results per page (default: {DEFAULT_OFFSET}, max: 10000)"
+        help=f"{help_options.get('offset', 'Results per page')} (default: {DEFAULT_OFFSET})"
     )
     parser.add_argument(
         "--json",
@@ -108,6 +112,11 @@ Examples:
     )
     
     args = parser.parse_args()
+    
+    # Check if API key is provided either as argument or environment variable
+    if not args.apikey:
+        print("Error: API key is required. Use --apikey option or set ETHERSCAN_API_KEY environment variable.", file=sys.stderr)
+        sys.exit(1)
     
     # Validate address
     if not validate_ethereum_address(args.address):

@@ -5,5 +5,20 @@
   "defaultPage": 1,
   "defaultOffset": 100,
   "module": "account",
-  "action": "addresstokenbalance"
+  "action": "addresstokenbalance",
+  "helpText": {
+    "description": "Query ERC-20 token balances for an Ethereum address using Etherscan API v2",
+    "options": {
+      "apikey": "Etherscan API key (required, can also be set via ETHERSCAN_API_KEY environment variable)",
+      "address": "Ethereum address to query",
+      "chainid": "Chain ID (1 for Ethereum mainnet)",
+      "page": "Page number for pagination",
+      "offset": "Results per page (max: 10000)"
+    },
+    "examples": [
+      "Using only API key (uses default address)",
+      "With custom address",
+      "With pagination options"
+    ]
+  }
 }
