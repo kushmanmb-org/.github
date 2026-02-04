@@ -11,6 +11,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Utility Scripts
 
+- **[api-test.sh](api-test.sh)** - Simple script to test Etherscan API v2 endpoint connectivity
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
 - **[query-token-balance.js](query-token-balance.js)** - JavaScript/Node.js script for querying token balances
@@ -45,6 +46,21 @@ node query-token-balance.js --apikey YOUR_API_KEY --pretty
 ```
 
 #### Using cURL
+
+##### Test API Endpoint (Basic GET)
+
+```bash
+curl --request GET \
+  --url https://api.etherscan.io/v2/api
+```
+
+Or use the provided test script:
+
+```bash
+./api-test.sh
+```
+
+##### Query Token Balance (Full Example)
 
 ```bash
 curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstokenbalance&address=0x983e3660c0bE01991785F80f266A84B911ab59b0&page=1&offset=100&apikey=YourApiKeyToken"

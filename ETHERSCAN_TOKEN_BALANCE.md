@@ -26,7 +26,26 @@ https://api.etherscan.io/v2/api
 
 ## Example Usage
 
-### cURL Command
+### Testing API Endpoint Connectivity
+
+Before making API calls with parameters, you can test basic connectivity to the Etherscan API v2 endpoint:
+
+#### Basic GET Request
+
+```bash
+curl --request GET \
+  --url https://api.etherscan.io/v2/api
+```
+
+Or use the provided test script:
+
+```bash
+./api-test.sh
+```
+
+**Note:** The API requires specific parameters for actual queries. The basic GET request above is useful for testing endpoint availability.
+
+### cURL Command (Full Query)
 
 ```bash
 curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstokenbalance&address=0x983e3660c0bE01991785F80f266A84B911ab59b0&page=1&offset=100&apikey=YourApiKeyToken"
