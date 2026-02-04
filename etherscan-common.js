@@ -6,8 +6,21 @@
 const fs = require('fs');
 const path = require('path');
 
-// Ethereum address validation pattern
-const ETHEREUM_ADDRESS_PATTERN = /^0x[a-fA-F0-9]{40}$/;
+// Cache for config
+let _config = null;
+
+/**
+ * Get cached configuration.
+ * @returns {object} Configuration data
+ */
+function getConfig() {
+  if (!_config) {
+    const configPath = path.join(__dirname, 'etherscan-api-config.json');
+    const configData = fs.readFileSync(configPath, 'utf8');
+    _config = JSON.parse(configData);
+  }
+  return _config;
+}
 
 /**
  * Validate Ethereum address format.
@@ -15,8 +28,13 @@ const ETHEREUM_ADDRESS_PATTERN = /^0x[a-fA-F0-9]{40}$/;
  * @returns {boolean} True if valid, false otherwise
  */
 function validateEthereumAddress(address) {
-  return ETHEREUM_ADDRESS_PATTERN.test(address);
+  const config = getConfig();
+  const pattern = new RegExp(config.validationPatterns.ethereumAddress);
+  return pattern.test(address);
 }
+
+// Export pattern for backward compatibility
+const ETHEREUM_ADDRESS_PATTERN = new RegExp(getConfig().validationPatterns.ethereumAddress);
 
 /**
  * Load shared configuration from JSON file.
@@ -31,7 +49,10 @@ function loadConfig(configPath = null) {
   
   try {
     const configData = fs.readFileSync(configPath, 'utf8');
-    return JSON.parse(configData);
+    const config = JSON.parse(configData);
+    // Update cached config
+    _config = config;
+    return config;
   } catch (err) {
     if (err.code === 'ENOENT') {
       throw new Error(

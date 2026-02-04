@@ -7,21 +7,8 @@ import re
 import json
 import os
 
-# Ethereum address validation pattern
-ETHEREUM_ADDRESS_PATTERN = re.compile(r'^0x[a-fA-F0-9]{40}$')
-
-
-def validate_ethereum_address(address):
-    """
-    Validate Ethereum address format.
-    
-    Args:
-        address (str): Ethereum address to validate
-        
-    Returns:
-        bool: True if valid, False otherwise
-    """
-    return bool(ETHEREUM_ADDRESS_PATTERN.match(address))
+# Cache for config
+_config = None
 
 
 def load_config(config_path=None):
@@ -38,12 +25,15 @@ def load_config(config_path=None):
         FileNotFoundError: If config file doesn't exist
         json.JSONDecodeError: If config file is not valid JSON
     """
+    global _config
     if config_path is None:
         config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
     
     try:
         with open(config_path, 'r') as f:
-            return json.load(f)
+            config = json.load(f)
+            _config = config  # Update cache
+            return config
     except FileNotFoundError:
         raise FileNotFoundError(
             f"Configuration file not found: {config_path}\n"
@@ -54,6 +44,29 @@ def load_config(config_path=None):
             f"Invalid JSON in configuration file: {config_path}",
             e.doc, e.pos
         )
+
+
+def get_config():
+    """Get cached configuration."""
+    global _config
+    if _config is None:
+        _config = load_config()
+    return _config
+
+
+def validate_ethereum_address(address):
+    """
+    Validate Ethereum address format.
+    
+    Args:
+        address (str): Ethereum address to validate
+        
+    Returns:
+        bool: True if valid, False otherwise
+    """
+    config = get_config()
+    pattern = re.compile(config['validationPatterns']['ethereumAddress'])
+    return bool(pattern.match(address))
 
 
 def build_api_params(config, address, api_key, chain_id=None, page=None, offset=None):

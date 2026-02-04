@@ -53,7 +53,7 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error: Failed to connect to Etherscan API: {e}", file=sys.stderr)
+        print(f"{shared_config['errorMessages']['apiRequestFailed']}: {e}", file=sys.stderr)
         raise
 
 
@@ -115,13 +115,13 @@ Examples:
     
     # Check if API key is provided either as argument or environment variable
     if not args.apikey:
-        print("Error: API key is required. Use --apikey option or set ETHERSCAN_API_KEY environment variable.", file=sys.stderr)
+        print(shared_config['errorMessages']['apiKeyRequired'], file=sys.stderr)
         sys.exit(1)
     
     # Validate address
     if not validate_ethereum_address(args.address):
-        print("Error: Invalid Ethereum address format", file=sys.stderr)
-        print("Expected format: 0x followed by 40 hexadecimal characters", file=sys.stderr)
+        print(shared_config['errorMessages']['invalidAddress'], file=sys.stderr)
+        print(shared_config['errorMessages']['invalidAddressFormat'], file=sys.stderr)
         sys.exit(1)
     
     # Display query information

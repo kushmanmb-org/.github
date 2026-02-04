@@ -8,6 +8,11 @@
 read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET API_MODULE API_ACTION HELP_DESC <<< \
   $(python3 -c "from etherscan_common import load_config; config = load_config(); print(config['apiBaseUrl'], config['defaultAddress'], config['defaultChainId'], config['defaultPage'], config['defaultOffset'], config['module'], config['action'], config['helpText']['description'])")
 
+# Helper function to get error message from config
+get_error_message() {
+    python3 -c "from etherscan_common import get_config; print(get_config()['errorMessages']['$1'])"
+}
+
 # Function to validate Ethereum address using shared Python module
 validate_address() {
     # Pass address via stdin to prevent command injection
@@ -76,15 +81,15 @@ done
 
 # Validate required parameters
 if [ -z "$API_KEY" ]; then
-    echo "Error: API key is required. Use --apikey option or set ETHERSCAN_API_KEY environment variable."
+    get_error_message "apiKeyRequired"
     echo ""
     usage
 fi
 
 # Validate address format using shared validation function
 if ! validate_address "$ADDRESS"; then
-    echo "Error: Invalid Ethereum address format"
-    echo "Expected format: 0x followed by 40 hexadecimal characters"
+    get_error_message "invalidAddress"
+    get_error_message "invalidAddressFormat"
     exit 1
 fi
 

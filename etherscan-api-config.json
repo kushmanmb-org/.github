@@ -20,5 +20,16 @@
       "With custom address",
       "With pagination options"
     ]
+  },
+  "errorMessages": {
+    "apiKeyRequired": "Error: API key is required. Use --apikey option or set ETHERSCAN_API_KEY environment variable.",
+    "invalidAddress": "Error: Invalid Ethereum address format",
+    "invalidAddressFormat": "Expected format: 0x followed by 40 hexadecimal characters",
+    "configNotFound": "Configuration file not found",
+    "invalidJson": "Invalid JSON in configuration file",
+    "apiRequestFailed": "Error: Failed to connect to Etherscan API"
+  },
+  "validationPatterns": {
+    "ethereumAddress": "^0x[a-fA-F0-9]{40}$"
   }
 }
