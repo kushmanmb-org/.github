@@ -3,14 +3,15 @@
 # Etherscan Address Token Balance Query Script
 # This script queries ERC-20 token balances for an Ethereum address using the Etherscan API v2
 
-# Load shared configuration
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$SCRIPT_DIR/etherscan-api-config.json"
-
-# Parse configuration using Python's json module (load once for efficiency)
+# Use Python to load config and validate address (shared functionality)
 # shellcheck disable=SC2046
 read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET API_MODULE API_ACTION <<< \
-  $(python3 -c "import json; config = json.load(open('$CONFIG_FILE')); print(config['apiBaseUrl'], config['defaultAddress'], config['defaultChainId'], config['defaultPage'], config['defaultOffset'], config['module'], config['action'])")
+  $(python3 -c "from etherscan_common import load_config; config = load_config(); print(config['apiBaseUrl'], config['defaultAddress'], config['defaultChainId'], config['defaultPage'], config['defaultOffset'], config['module'], config['action'])")
+
+# Function to validate Ethereum address using shared Python module
+validate_address() {
+    python3 -c "from etherscan_common import validate_ethereum_address; import sys; sys.exit(0 if validate_ethereum_address('$1') else 1)"
+}
 
 # Function to display usage
 usage() {
@@ -79,8 +80,8 @@ if [ -z "$API_KEY" ]; then
     usage
 fi
 
-# Validate address format (basic check)
-if [[ ! "$ADDRESS" =~ ^0x[a-fA-F0-9]{40}$ ]]; then
+# Validate address format using shared validation function
+if ! validate_address "$ADDRESS"; then
     echo "Error: Invalid Ethereum address format"
     echo "Expected format: 0x followed by 40 hexadecimal characters"
     exit 1
