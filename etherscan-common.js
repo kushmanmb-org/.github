@@ -33,8 +33,25 @@ function validateEthereumAddress(address) {
   return pattern.test(address);
 }
 
-// Export pattern for backward compatibility
-const ETHEREUM_ADDRESS_PATTERN = new RegExp(getConfig().validationPatterns.ethereumAddress);
+/**
+ * Get Ethereum address validation pattern (for backward compatibility).
+ * @returns {RegExp} Ethereum address validation pattern
+ */
+function getEthereumAddressPattern() {
+  const config = getConfig();
+  return new RegExp(config.validationPatterns.ethereumAddress);
+}
+
+// Lazy-loaded pattern for backward compatibility
+let _ethereumAddressPattern = null;
+Object.defineProperty(exports, 'ETHEREUM_ADDRESS_PATTERN', {
+  get: function() {
+    if (!_ethereumAddressPattern) {
+      _ethereumAddressPattern = getEthereumAddressPattern();
+    }
+    return _ethereumAddressPattern;
+  }
+});
 
 /**
  * Load shared configuration from JSON file.
@@ -122,6 +139,5 @@ module.exports = {
   loadConfig,
   buildApiParams,
   buildApiUrl,
-  formatTokenBalance,
-  ETHEREUM_ADDRESS_PATTERN
+  formatTokenBalance
 };
