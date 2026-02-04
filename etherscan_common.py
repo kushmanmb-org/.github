@@ -10,6 +10,28 @@ import os
 # Ethereum address validation pattern
 ETHEREUM_ADDRESS_PATTERN = re.compile(r'^0x[a-fA-F0-9]{40}$')
 
+# Messages cache
+_MESSAGES = None
+
+
+def load_messages():
+    """
+    Load shared messages from JSON file.
+    
+    Returns:
+        dict: Messages data
+    """
+    global _MESSAGES
+    if _MESSAGES is None:
+        messages_path = os.path.join(os.path.dirname(__file__), 'etherscan-messages.json')
+        try:
+            with open(messages_path, 'r') as f:
+                _MESSAGES = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            # Fallback to empty dict if messages file not found
+            _MESSAGES = {"errors": {}, "status": {}, "labels": {}}
+    return _MESSAGES
+
 
 def validate_ethereum_address(address):
     """
@@ -100,3 +122,31 @@ def format_token_balance(token_data):
     lines.append(f"  Quantity: {token_data.get('TokenQuantity', '0')}")
     lines.append(f"  Divisor: {token_data.get('TokenDivisor', '18')}")
     return "\n".join(lines)
+
+
+def is_response_successful(response):
+    """
+    Check if API response indicates success.
+    
+    Args:
+        response (dict): API response data
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    return response and response.get("status") == "1"
+
+
+def format_response(response, pretty=False):
+    """
+    Format API response output.
+    
+    Args:
+        response (dict): API response data
+        pretty (bool): Whether to pretty-print the JSON
+        
+    Returns:
+        str: Formatted JSON string
+    """
+    indent = 2 if pretty else None
+    return json.dumps(response, indent=indent)

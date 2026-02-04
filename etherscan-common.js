@@ -9,6 +9,22 @@ const path = require('path');
 // Ethereum address validation pattern
 const ETHEREUM_ADDRESS_PATTERN = /^0x[a-fA-F0-9]{40}$/;
 
+// Load shared messages
+let MESSAGES = null;
+function loadMessages() {
+  if (!MESSAGES) {
+    const messagesPath = path.join(__dirname, 'etherscan-messages.json');
+    try {
+      const messagesData = fs.readFileSync(messagesPath, 'utf8');
+      MESSAGES = JSON.parse(messagesData);
+    } catch (err) {
+      // Fallback to empty object if messages file not found
+      MESSAGES = { errors: {}, status: {}, labels: {} };
+    }
+  }
+  return MESSAGES;
+}
+
 /**
  * Validate Ethereum address format.
  * @param {string} address - Ethereum address to validate
@@ -81,10 +97,33 @@ function buildApiUrl(config, params) {
   return url.toString();
 }
 
+/**
+ * Check if API response indicates success.
+ * @param {object} response - API response data
+ * @returns {boolean} True if successful, false otherwise
+ */
+function isResponseSuccessful(response) {
+  return response && response.status === "1";
+}
+
+/**
+ * Format API response output based on options.
+ * @param {object} response - API response data
+ * @param {object} options - Formatting options (e.g., {pretty: true})
+ * @returns {string} Formatted output string
+ */
+function formatResponse(response, options = {}) {
+  const indent = options.pretty ? 2 : undefined;
+  return JSON.stringify(response, null, indent);
+}
+
 module.exports = {
   validateEthereumAddress,
   loadConfig,
+  loadMessages,
   buildApiParams,
   buildApiUrl,
+  isResponseSuccessful,
+  formatResponse,
   ETHEREUM_ADDRESS_PATTERN
 };
