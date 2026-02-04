@@ -8,7 +8,7 @@ This repository includes a `.bashrc` file with custom bash functions.
 
 The `cwhois` function is a custom whois wrapper that queries bgp.tools for network information.
 
-### Usage
+#### Usage
 
 To use the `cwhois` function, source the `.bashrc` file in your shell:
 
@@ -22,7 +22,7 @@ Then you can use the function:
 cwhois <query>
 ```
 
-### Example
+#### Example
 
 ```bash
 # Query information about an IP address or AS number
@@ -32,7 +32,7 @@ cwhois AS15169
 
 The function automatically adds the `-v` (verbose) flag and queries the bgp.tools whois server.
 
-### How it works
+#### How it works
 
 The function is defined as:
 ```bash
@@ -48,7 +48,7 @@ This wraps the standard `whois` command to always use the bgp.tools server with 
 
 The `etherscan_api` function is a wrapper for making POST requests to the Etherscan API v2 endpoint.
 
-### Usage
+#### Usage
 
 To use the `etherscan_api` function, source the `.bashrc` file in your shell:
 
@@ -62,7 +62,7 @@ Then you can use the function with standard curl options:
 etherscan_api [curl options]
 ```
 
-### Examples
+#### Examples
 
 ```bash
 # Make a POST request with JSON data
@@ -75,7 +75,7 @@ etherscan_api -d 'module=contract&action=getabi&address=0x...&apikey=YOUR_API_KE
 etherscan_api -d 'chainid=2201&module=contract&action=getsourcecode&address=0x...&apikey=YOUR_API_KEY'
 ```
 
-### How it works
+#### How it works
 
 The function is defined as:
 ```bash
