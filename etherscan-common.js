@@ -91,7 +91,12 @@ function buildApiParams(config, address, apiKey, chainId = null, page = null, of
  */
 function buildApiUrl(config, params) {
   const url = new URL(config.apiBaseUrl);
-  url.search = new URLSearchParams(params).toString();
+  // Append params to any existing query parameters
+  const urlParams = new URLSearchParams(url.search);
+  Object.entries(params).forEach(([key, value]) => {
+    urlParams.set(key, value);
+  });
+  url.search = urlParams.toString();
   return url.toString();
 }
 

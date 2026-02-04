@@ -65,19 +65,21 @@ def load_config(config_path=None):
     """
     global _CONFIG
     
-    # Use cached config if available and using default path
-    if config_path is None and _CONFIG is not None:
-        return _CONFIG
-    
+    # Resolve default path if None
+    default_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
     if config_path is None:
-        config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
+        config_path = default_path
+    
+    # Use cached config if available and using default path
+    if config_path == default_path and _CONFIG is not None:
+        return _CONFIG
     
     try:
         with open(config_path, 'r') as f:
             config = json.load(f)
             
         # Cache config if using default path
-        if config_path == os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json'):
+        if config_path == default_path:
             _CONFIG = config
             
         return config
