@@ -105,6 +105,23 @@ def build_api_params(config, address, api_key, chain_id=None, page=None, offset=
     return params
 
 
+def build_api_url(config, params):
+    """
+    Build full API URL with parameters.
+    
+    Args:
+        config (dict): Shared configuration
+        params (dict): API request parameters
+        
+    Returns:
+        str: Full API URL with query parameters
+    """
+    from urllib.parse import urlencode
+    base_url = config['apiBaseUrl']
+    query_string = urlencode(params)
+    return f"{base_url}?{query_string}"
+
+
 def format_token_balance(token_data):
     """
     Format token balance data for display.
