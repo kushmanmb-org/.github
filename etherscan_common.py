@@ -100,3 +100,20 @@ def format_token_balance(token_data):
     lines.append(f"  Quantity: {token_data.get('TokenQuantity', '0')}")
     lines.append(f"  Divisor: {token_data.get('TokenDivisor', '18')}")
     return "\n".join(lines)
+
+
+def build_api_url(config, params):
+    """
+    Build full API URL with parameters.
+    
+    Args:
+        config (dict): Shared configuration
+        params (dict): API request parameters
+        
+    Returns:
+        str: Full API URL with query parameters
+    """
+    from urllib.parse import urlencode
+    base_url = config['apiBaseUrl']
+    query_string = urlencode(params)
+    return f"{base_url}?{query_string}"

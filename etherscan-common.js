@@ -81,10 +81,26 @@ function buildApiUrl(config, params) {
   return url.toString();
 }
 
+/**
+ * Format token balance data for display.
+ * @param {object} tokenData - Token data from API response
+ * @returns {string} Formatted token information
+ */
+function formatTokenBalance(tokenData) {
+  const lines = [];
+  lines.push(`  Token: ${tokenData.TokenName || 'Unknown'}`);
+  lines.push(`  Symbol: ${tokenData.TokenSymbol || 'N/A'}`);
+  lines.push(`  Address: ${tokenData.TokenAddress || 'N/A'}`);
+  lines.push(`  Quantity: ${tokenData.TokenQuantity || '0'}`);
+  lines.push(`  Divisor: ${tokenData.TokenDivisor || '18'}`);
+  return lines.join('\n');
+}
+
 module.exports = {
   validateEthereumAddress,
   loadConfig,
   buildApiParams,
   buildApiUrl,
+  formatTokenBalance,
   ETHEREUM_ADDRESS_PATTERN
 };
