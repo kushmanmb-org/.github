@@ -12,7 +12,7 @@ on:
       - '.github/workflows/json-validation.yml'
 
 jobs:
-  validate-json:
+  validate:
     name: Validate JSON Files
     uses: ./.github/workflows/reusable-validation.yml
     with:
