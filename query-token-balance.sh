@@ -10,7 +10,8 @@ read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT
 
 # Function to validate Ethereum address using shared Python module
 validate_address() {
-    python3 -c "from etherscan_common import validate_ethereum_address; import sys; sys.exit(0 if validate_ethereum_address('$1') else 1)"
+    # Pass address via stdin to prevent command injection
+    echo "$1" | python3 -c "from etherscan_common import validate_ethereum_address; import sys; address = sys.stdin.read().strip(); sys.exit(0 if validate_ethereum_address(address) else 1)"
 }
 
 # Function to display usage

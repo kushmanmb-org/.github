@@ -33,12 +33,27 @@ def load_config(config_path=None):
         
     Returns:
         dict: Configuration data
+        
+    Raises:
+        FileNotFoundError: If config file doesn't exist
+        json.JSONDecodeError: If config file is not valid JSON
     """
     if config_path is None:
         config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
     
-    with open(config_path, 'r') as f:
-        return json.load(f)
+    try:
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"Configuration file not found: {config_path}\n"
+            "Please ensure etherscan-api-config.json exists in the script directory."
+        )
+    except json.JSONDecodeError as e:
+        raise json.JSONDecodeError(
+            f"Invalid JSON in configuration file: {config_path}",
+            e.doc, e.pos
+        )
 
 
 def build_api_params(config, address, api_key, chain_id=None, page=None, offset=None):

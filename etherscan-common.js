@@ -22,12 +22,27 @@ function validateEthereumAddress(address) {
  * Load shared configuration from JSON file.
  * @param {string} [configPath] - Path to config file. If null, uses default location.
  * @returns {object} Configuration data
+ * @throws {Error} If config file doesn't exist or contains invalid JSON
  */
 function loadConfig(configPath = null) {
   if (!configPath) {
     configPath = path.join(__dirname, 'etherscan-api-config.json');
   }
-  return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  
+  try {
+    const configData = fs.readFileSync(configPath, 'utf8');
+    return JSON.parse(configData);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      throw new Error(
+        `Configuration file not found: ${configPath}\n` +
+        'Please ensure etherscan-api-config.json exists in the script directory.'
+      );
+    } else if (err instanceof SyntaxError) {
+      throw new Error(`Invalid JSON in configuration file: ${configPath}\n${err.message}`);
+    }
+    throw err;
+  }
 }
 
 /**
