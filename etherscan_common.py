@@ -13,6 +13,9 @@ ETHEREUM_ADDRESS_PATTERN = re.compile(r'^0x[a-fA-F0-9]{40}$')
 # Messages cache
 _MESSAGES = None
 
+# Config cache
+_CONFIG = None
+
 
 def load_messages():
     """
@@ -60,12 +63,24 @@ def load_config(config_path=None):
         FileNotFoundError: If config file doesn't exist
         json.JSONDecodeError: If config file is not valid JSON
     """
+    global _CONFIG
+    
+    # Use cached config if available and using default path
+    if config_path is None and _CONFIG is not None:
+        return _CONFIG
+    
     if config_path is None:
         config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
     
     try:
         with open(config_path, 'r') as f:
-            return json.load(f)
+            config = json.load(f)
+            
+        # Cache config if using default path
+        if config_path == os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json'):
+            _CONFIG = config
+            
+        return config
     except FileNotFoundError:
         raise FileNotFoundError(
             f"Configuration file not found: {config_path}\n"

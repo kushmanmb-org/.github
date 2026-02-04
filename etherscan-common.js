@@ -91,9 +91,7 @@ function buildApiParams(config, address, apiKey, chainId = null, page = null, of
  */
 function buildApiUrl(config, params) {
   const url = new URL(config.apiBaseUrl);
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.append(key, value);
-  });
+  url.search = new URLSearchParams(params).toString();
   return url.toString();
 }
 
