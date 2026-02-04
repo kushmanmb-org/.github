@@ -7,14 +7,15 @@ This document provides information about querying ERC-20 token balances for Ethe
 The Etherscan API v2 allows you to retrieve all ERC-20 token balances for a specific Ethereum address.
 
 ### Endpoint URL
-```
+
+```text
 https://api.etherscan.io/v2/api
 ```
 
 ### Parameters
 
 | Parameter | Required | Description |
-|-----------|----------|-------------|
+| --------- | -------- | ----------- |
 | `chainid` | Yes | The chain ID (1 for Ethereum mainnet) |
 | `module` | Yes | The module name (`account`) |
 | `action` | Yes | The action to perform (`addresstokenbalance`) |
