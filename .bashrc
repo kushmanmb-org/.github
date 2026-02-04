@@ -3,7 +3,8 @@
 
 # cwhois: Custom whois function that queries bgp.tools
 # Usage: cwhois <query>
+# Accepts: IP address, domain, or AS number to query
 cwhois() {
-    whois -h bgp.tools -v $*
+    whois -h bgp.tools -v "$@"
 }
 export -f cwhois
