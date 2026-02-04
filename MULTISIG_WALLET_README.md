@@ -11,24 +11,28 @@ This directory contains the ABI (Application Binary Interface) definition for an
 The multisignature wallet contract provides secure multi-owner administration with the following capabilities:
 
 ### Owner Management
+
 - `addOwner(address _owner)` - Add a new owner to the wallet
 - `removeOwner(address _owner)` - Remove an existing owner
 - `changeOwner(address _from, address _to)` - Replace one owner with another
 - `isOwner(address _addr)` - Check if an address is an owner (read-only)
 
 ### Transaction Execution
+
 - `execute(address _to, uint256 _value, bytes _data)` - Submit a transaction for confirmation
 - `confirm(bytes32 _h)` - Add your signature to a pending operation
 - `revoke(bytes32 _operation)` - Withdraw your confirmation
 - `hasConfirmed(bytes32 _operation, address _owner)` - Check if an owner has confirmed (read-only)
 
 ### Configuration
+
 - `changeRequirement(uint256 _newRequired)` - Change the number of required signatures
 - `setDailyLimit(uint256 _newLimit)` - Set the daily spending limit
 - `resetSpentToday()` - Reset today's spending counter
 - `kill(address _to)` - Destroy the contract and send remaining funds
 
 ### View Functions
+
 - `m_numOwners()` - Get the number of owners (read-only)
 - `m_required()` - Get the required number of signatures (read-only)
 - `m_dailyLimit()` - Get the daily spending limit (read-only)
@@ -51,6 +55,7 @@ The contract emits the following events with indexed parameters for efficient fi
 ## Deployment
 
 When deploying the contract, the constructor requires:
+
 - `address[] _owners` - Array of initial owner addresses
 - `uint256 _required` - Number of required confirmations for transactions
 - `uint256 _dailyLimit` - Maximum amount that can be spent per day without multi-sig

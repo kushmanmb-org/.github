@@ -33,6 +33,7 @@ The function automatically adds the `-v` (verbose) flag and queries the bgp.tool
 ### How it works
 
 The function is defined as:
+
 ```bash
 cwhois() {
     whois -h bgp.tools -v $*
