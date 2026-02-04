@@ -6,6 +6,7 @@ This module provides common functionality used across multiple implementations.
 import re
 import json
 import os
+from urllib.parse import urlencode
 
 # Ethereum address validation pattern
 ETHEREUM_ADDRESS_PATTERN = re.compile(r'^0x[a-fA-F0-9]{40}$')
@@ -103,6 +104,22 @@ def build_api_params(config, address, api_key, chain_id=None, page=None, offset=
         "apikey": api_key
     }
     return params
+
+
+def build_api_url(config, params):
+    """
+    Build full API URL with parameters.
+    
+    Args:
+        config (dict): Shared configuration
+        params (dict): API request parameters
+        
+    Returns:
+        str: Full API URL with query parameters
+    """
+    base_url = config['apiBaseUrl']
+    query_string = urlencode(params)
+    return f"{base_url}?{query_string}"
 
 
 def format_token_balance(token_data):

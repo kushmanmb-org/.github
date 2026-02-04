@@ -23,25 +23,18 @@ from etherscan_common import (
 shared_config = load_config()
 messages = load_messages()
 
-# Configuration
-ETHERSCAN_API_BASE = shared_config['apiBaseUrl']
-DEFAULT_ADDRESS = shared_config['defaultAddress']
-DEFAULT_CHAIN_ID = shared_config['defaultChainId']
-DEFAULT_PAGE = shared_config['defaultPage']
-DEFAULT_OFFSET = shared_config['defaultOffset']
 
-
-def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID, 
-                       page=DEFAULT_PAGE, offset=DEFAULT_OFFSET):
+def query_token_balance(address, api_key, chain_id=None, 
+                       page=None, offset=None):
     """
     Query ERC-20 token balances for an Ethereum address.
     
     Args:
         address (str): Ethereum address to query
         api_key (str): Etherscan API key
-        chain_id (int): Chain ID (1 for Ethereum mainnet)
-        page (int): Page number for pagination
-        offset (int): Results per page
+        chain_id (int, optional): Chain ID (defaults to config value)
+        page (int, optional): Page number for pagination (defaults to config value)
+        offset (int, optional): Results per page (defaults to config value)
         
     Returns:
         dict: API response data
@@ -52,7 +45,7 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
     params = build_api_params(shared_config, address, api_key, chain_id, page, offset)
     
     try:
-        response = requests.get(ETHERSCAN_API_BASE, params=params, timeout=30)
+        response = requests.get(shared_config['apiBaseUrl'], params=params, timeout=30)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -74,8 +67,8 @@ Examples:
     
     parser.add_argument(
         "-a", "--address",
-        default=DEFAULT_ADDRESS,
-        help=f"Ethereum address to query (default: {DEFAULT_ADDRESS})"
+        default=shared_config['defaultAddress'],
+        help=f"Ethereum address to query (default: {shared_config['defaultAddress']})"
     )
     parser.add_argument(
         "-k", "--apikey",
@@ -85,20 +78,20 @@ Examples:
     parser.add_argument(
         "-c", "--chainid",
         type=int,
-        default=DEFAULT_CHAIN_ID,
-        help=f"Chain ID (default: {DEFAULT_CHAIN_ID} for Ethereum mainnet)"
+        default=shared_config['defaultChainId'],
+        help=f"Chain ID (default: {shared_config['defaultChainId']} for Ethereum mainnet)"
     )
     parser.add_argument(
         "-p", "--page",
         type=int,
-        default=DEFAULT_PAGE,
-        help=f"Page number for pagination (default: {DEFAULT_PAGE})"
+        default=shared_config['defaultPage'],
+        help=f"Page number for pagination (default: {shared_config['defaultPage']})"
     )
     parser.add_argument(
         "-o", "--offset",
         type=int,
-        default=DEFAULT_OFFSET,
-        help=f"Results per page (default: {DEFAULT_OFFSET}, max: 10000)"
+        default=shared_config['defaultOffset'],
+        help=f"Results per page (default: {shared_config['defaultOffset']}, max: 10000)"
     )
     parser.add_argument(
         "--json",

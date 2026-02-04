@@ -1,7 +1,6 @@
 name: JSON Validation
 
 on:
-  workflow_call:
   push:
     branches: [main]
     paths:
@@ -13,18 +12,11 @@ on:
       - '.github/workflows/json-validation.yml'
 
 jobs:
-  validate-json:
+  validate:
     name: Validate JSON Files
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Validate JSON syntax
-        uses: ./.github/actions/validate-files
-        with:
-          file-pattern: '*.json'
-          exclude-paths: './.git/*'
-          validation-command: 'python3 -m json.tool "$file" > /dev/null 2>&1 || { echo "ERROR: Invalid JSON in $file"; exit 1; }'
-          success-message: '✓ All JSON files are valid!'
+    uses: ./.github/workflows/reusable-validation.yml
+    with:
+      file-pattern: '*.json'
+      file-type: 'JSON Files'
+      validation-command: 'python3 -m json.tool "$file" > /dev/null 2>&1 || { echo "ERROR: Invalid JSON in $file"; exit 1; }'
+      success-message: '✓ All JSON files are valid!'
