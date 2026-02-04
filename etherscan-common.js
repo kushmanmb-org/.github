@@ -113,7 +113,7 @@ function isResponseSuccessful(response) {
  * @returns {string} Formatted output string
  */
 function formatResponse(response, options = {}) {
-  const indent = options.pretty ? 2 : 0;
+  const indent = options.pretty ? 2 : undefined;
   return JSON.stringify(response, null, indent);
 }
 

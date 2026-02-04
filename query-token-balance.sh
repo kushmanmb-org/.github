@@ -3,15 +3,28 @@
 # Etherscan Address Token Balance Query Script
 # This script queries ERC-20 token balances for an Ethereum address using the Etherscan API v2
 
+# Get the directory where the script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Load messages from JSON file
 load_messages() {
-    python3 -c "import json, os; messages = json.load(open(os.path.join(os.path.dirname('$0'), 'etherscan-messages.json'))); print(json.dumps(messages))"
+    python3 -c "import json, os; messages = json.load(open(os.path.join('$SCRIPT_DIR', 'etherscan-messages.json'))); print(json.dumps(messages))"
 }
 
 MESSAGES=$(load_messages)
 
 get_message() {
-    echo "$MESSAGES" | python3 -c "import json, sys; data = json.load(sys.stdin); keys = '$1'.split('.'); result = data; [result := result.get(k, '') for k in keys]; print(result)"
+    echo "$MESSAGES" | python3 -c "
+import json
+import sys
+
+data = json.load(sys.stdin)
+keys = '$1'.split('.')
+result = data
+for k in keys:
+    result = result.get(k, '')
+print(result)
+"
 }
 
 # Use Python to load config and validate address (shared functionality)
