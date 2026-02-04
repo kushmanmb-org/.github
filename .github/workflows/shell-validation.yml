@@ -21,19 +21,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install ShellCheck
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y shellcheck
-      
       - name: Run ShellCheck
-        run: |
-          find . -name "*.sh" -not -path "./.git/*" -exec shellcheck {} \;
+        uses: ./.github/actions/validate-files
+        with:
+          file-pattern: '*.sh'
+          exclude-paths: './.git/*'
+          setup-command: 'sudo apt-get update && sudo apt-get install -y shellcheck'
+          validation-command: 'shellcheck "$file"'
+          success-message: '✓ All shell scripts passed ShellCheck!'
       
       - name: Check shell script syntax
-        run: |
-          find . -name "*.sh" -not -path "./.git/*" | while read -r script; do
-            echo "Checking syntax of $script..."
-            bash -n "$script"
-          done
-          echo "✓ All shell scripts have valid syntax!"
+        uses: ./.github/actions/validate-files
+        with:
+          file-pattern: '*.sh'
+          exclude-paths: './.git/*'
+          validation-command: 'bash -n "$file"'
+          success-message: '✓ All shell scripts have valid syntax!'

@@ -1,30 +1,25 @@
 // Simple fetch example for Etherscan API v2
-// This demonstrates basic usage of the fetch API to query Etherscan
+// This demonstrates basic usage by utilizing the query-token-balance module
 // Note: Replace 'YourApiKeyToken' with your actual Etherscan API key
 
-const fs = require('fs');
-const path = require('path');
+const { queryTokenBalance } = require('./query-token-balance.js');
 
-// Load shared configuration
-const configPath = path.join(__dirname, 'etherscan-api-config.json');
-const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+// Example usage with custom options
+const options = {
+  apikey: 'YourApiKeyToken',
+  pretty: true
+  // Optionally override defaults:
+  // address: '0x...',
+  // chainid: 1,
+  // page: 1,
+  // offset: 100
+};
 
-const options = {method: 'GET'};
-
-// Build the URL with all required parameters
-const params = new URLSearchParams({
-  chainid: config.defaultChainId,
-  module: config.module,
-  action: config.action,
-  address: config.defaultAddress,
-  page: config.defaultPage,
-  offset: config.defaultOffset,
-  apikey: 'YourApiKeyToken'
-});
-
-const url = `${config.apiBaseUrl}?${params}`;
-
-fetch(url, options)
-  .then(res => res.json())
-  .then(res => console.log(res))
-  .catch(err => console.error(err));
+queryTokenBalance(options)
+  .then(data => {
+    console.log('Success! Token balance retrieved.');
+    // Data is already printed by queryTokenBalance when pretty=true
+  })
+  .catch(err => {
+    console.error('Failed to fetch token balance:', err.message);
+  });

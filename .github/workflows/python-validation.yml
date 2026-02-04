@@ -27,12 +27,12 @@ jobs:
           python-version: '3.x'
       
       - name: Check Python syntax
-        run: |
-          find . -name "*.py" -not -path "./.git/*" -not -path "./__pycache__/*" | while read -r script; do
-            echo "Checking $script..."
-            python3 -m py_compile "$script"
-          done
-          echo "✓ All Python files are valid!"
+        uses: ./.github/actions/validate-files
+        with:
+          file-pattern: '*.py'
+          exclude-paths: './.git/*'
+          validation-command: 'python3 -m py_compile "$file"'
+          success-message: '✓ All Python files are valid!'
       
       - name: Install dependencies (if requirements exist)
         run: |
