@@ -14,7 +14,9 @@ from etherscan_common import (
     load_config,
     build_api_params,
     format_token_balance,
-    load_messages
+    load_messages,
+    is_response_successful,
+    format_response
 )
 
 # Load shared configuration and messages
@@ -137,14 +139,13 @@ Examples:
         
         # Output results
         if args.json:
-            print(json.dumps(response_data, indent=2))
+            print(format_response(response_data, pretty=True))
         else:
             print(f"{messages['labels']['response']}:")
-            print(json.dumps(response_data, indent=2))
+            print(format_response(response_data, pretty=True))
             
             # Check status
-            status = response_data.get("status", "0")
-            if status == "1":
+            if is_response_successful(response_data):
                 print(f"\n{messages['status']['success']}")
                 
                 # Pretty print if requested

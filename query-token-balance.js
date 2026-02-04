@@ -5,7 +5,7 @@
  * Usage: node query-token-balance.js --apikey YOUR_API_KEY [--address ADDRESS] [--chainid CHAIN_ID]
  */
 
-const { loadConfig, buildApiParams, buildApiUrl, loadMessages } = require('./etherscan-common.js');
+const { loadConfig, buildApiParams, buildApiUrl, loadMessages, isResponseSuccessful, formatResponse } = require('./etherscan-common.js');
 
 // Load shared configuration and messages
 const sharedConfig = loadConfig();
@@ -86,16 +86,12 @@ async function queryTokenBalance(options) {
     const response = await fetch(url, fetchOptions);
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`${messages.errors.apiError}: ${response.status}`);
     }
     
     const data = await response.json();
     
-    if (options.pretty) {
-      console.log(JSON.stringify(data, null, 2));
-    } else {
-      console.log(JSON.stringify(data));
-    }
+    console.log(formatResponse(data, options));
     
     return data;
   } catch (err) {

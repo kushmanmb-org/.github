@@ -97,11 +97,33 @@ function buildApiUrl(config, params) {
   return url.toString();
 }
 
+/**
+ * Check if API response indicates success.
+ * @param {object} response - API response data
+ * @returns {boolean} True if successful, false otherwise
+ */
+function isResponseSuccessful(response) {
+  return response && response.status === "1";
+}
+
+/**
+ * Format API response output based on options.
+ * @param {object} response - API response data
+ * @param {object} options - Formatting options (e.g., {pretty: true})
+ * @returns {string} Formatted output string
+ */
+function formatResponse(response, options = {}) {
+  const indent = options.pretty ? 2 : 0;
+  return JSON.stringify(response, null, indent);
+}
+
 module.exports = {
   validateEthereumAddress,
   loadConfig,
   loadMessages,
   buildApiParams,
   buildApiUrl,
+  isResponseSuccessful,
+  formatResponse,
   ETHEREUM_ADDRESS_PATTERN
 };
