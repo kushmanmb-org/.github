@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "node --test",
-    "lint": "echo 'No linting configured'",
-    "build": "echo 'No build step required'"
+    "lint": "echo 'No linting configured' && exit 0",
+    "build": "echo 'No build step required' && exit 0"
   },
   "keywords": [
     "ethereum",
