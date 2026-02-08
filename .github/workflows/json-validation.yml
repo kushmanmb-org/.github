@@ -1,5 +1,8 @@
 name: JSON Validation
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
