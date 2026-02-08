@@ -327,6 +327,7 @@ If GitHub says your SSH key is already associated with another account:
 
 Create `~/.ssh/config` for better management:
 
+**On macOS:**
 ```
 Host github.com
   HostName github.com
@@ -336,7 +337,7 @@ Host github.com
   UseKeychain yes
 ```
 
-On Linux (without keychain):
+**On Linux/Windows:**
 ```
 Host github.com
   HostName github.com
