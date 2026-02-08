@@ -6,11 +6,14 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Blockchain Documentation
 
+- **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
 
 ### Utility Scripts
 
+- **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
+- **[blockchain_rpc_client.py](blockchain_rpc_client.py)** - Client for testing the JSON-RPC server
 - **[api-test.sh](api-test.sh)** - Simple script to test Etherscan API v2 endpoint connectivity
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
@@ -22,6 +25,33 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[multisig-wallet.abi.json](multisig-wallet.abi.json)** - ABI definition for multisig wallet contract
 
 ## Quick Start
+
+### Blockchain JSON-RPC Server
+
+Start a JSON-RPC server for blockchain transaction operations:
+
+```bash
+# Start the server (default: 127.0.0.1:8332)
+python3 blockchain_rpc_server.py
+
+# Test with the client
+python3 blockchain_rpc_client.py \
+  --tx 08901b81e39bc61d632c93241c44ec3763366bd57444b01494481ed46079c898 \
+  --height 172165 \
+  --pretty
+
+# Or test with curl
+curl -X POST http://127.0.0.1:8332 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "blockchain.transaction.get_merkle",
+    "params": ["08901b81e39bc61d632c93241c44ec3763366bd57444b01494481ed46079c898", 172165]
+  }'
+```
+
+For detailed usage and API documentation, see [BLOCKCHAIN_RPC.md](BLOCKCHAIN_RPC.md).
 
 ### Query Token Balances
 
