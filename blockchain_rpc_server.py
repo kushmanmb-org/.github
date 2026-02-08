@@ -85,6 +85,20 @@ class BlockchainRPC:
                 "id": request_id
             }
         
+        # Validate transaction hash is hexadecimal
+        try:
+            int(tx_hash, 16)
+        except ValueError:
+            return {
+                "jsonrpc": "2.0",
+                "error": {
+                    "code": -32602,
+                    "message": "Invalid params",
+                    "data": "Transaction hash must contain only hexadecimal characters"
+                },
+                "id": request_id
+            }
+        
         # Validate block height
         if not isinstance(block_height, int) or block_height < 0:
             return {
@@ -158,6 +172,7 @@ class BlockchainRPCHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         
+        request = None  # Initialize request variable
         try:
             request = json.loads(post_data.decode('utf-8'))
             response = BlockchainRPC.handle_jsonrpc_request(request)

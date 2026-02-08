@@ -94,6 +94,7 @@ class TestBlockchainRPCServer(unittest.TestCase):
     
     def test_invalid_tx_hash_format(self):
         """Test request with invalid transaction hash format."""
+        # Test wrong length
         request = {
             "jsonrpc": "2.0",
             "id": 1,
@@ -106,6 +107,22 @@ class TestBlockchainRPCServer(unittest.TestCase):
         self.assertIn("error", response)
         self.assertEqual(response["error"]["code"], -32602)
         self.assertIn("64-character hex string", response["error"]["data"])
+    
+    def test_invalid_tx_hash_hex_characters(self):
+        """Test request with invalid hexadecimal characters in transaction hash."""
+        # Test correct length but invalid hex characters
+        request = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "blockchain.transaction.get_merkle",
+            "params": ["zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", 100]
+        }
+        
+        response = BlockchainRPC.handle_jsonrpc_request(request)
+        
+        self.assertIn("error", response)
+        self.assertEqual(response["error"]["code"], -32602)
+        self.assertIn("hexadecimal", response["error"]["data"])
     
     def test_invalid_block_height_type(self):
         """Test request with invalid block height type."""
@@ -145,7 +162,7 @@ class TestBlockchainRPCServer(unittest.TestCase):
     
     def test_request_id_preserved(self):
         """Test that request ID is preserved in response."""
-        test_ids = [1, "test-id", None, {"nested": "id"}]
+        test_ids = [1, "test-id", None]  # Valid JSON-RPC 2.0 ID types
         
         for test_id in test_ids:
             request = {
