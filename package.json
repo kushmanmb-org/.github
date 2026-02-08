@@ -16,7 +16,10 @@
     "blockchain",
     "etherscan",
     "token-balance",
-    "multisig-wallet"
+    "multisig-wallet",
+    "bitcoin",
+    "mempool",
+    "difficulty-adjustment"
   ],
   "author": "Kushmanmb",
   "license": "SEE LICENSE IN LICENSE",

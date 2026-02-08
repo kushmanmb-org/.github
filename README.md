@@ -13,6 +13,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
+- **[Bitcoin Difficulty Adjustment API](MEMPOOL_DIFFICULTY.md)** - Example HTML page for fetching Bitcoin difficulty adjustment data using mempool.space API
 
 ### Utility Scripts
 
@@ -27,6 +28,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 - **[blockchain-address.json](blockchain-address.json)** - Blockchain address information
 - **[multisig-wallet.abi.json](multisig-wallet.abi.json)** - ABI definition for multisig wallet contract
+- **[mempool-difficulty-adjustment.html](mempool-difficulty-adjustment.html)** - HTML example for fetching Bitcoin difficulty adjustment data
 
 ## Quick Start
 
@@ -101,6 +103,21 @@ curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstok
 ```
 
 For detailed usage and examples, see [ETHERSCAN_TOKEN_BALANCE.md](ETHERSCAN_TOKEN_BALANCE.md).
+
+### Bitcoin Difficulty Adjustment
+
+View Bitcoin network difficulty adjustment data using the mempool.space API:
+
+```bash
+# Open the HTML file in your browser
+open mempool-difficulty-adjustment.html
+# Or on Linux:
+xdg-open mempool-difficulty-adjustment.html
+```
+
+The page will automatically fetch and display current Bitcoin difficulty adjustment information including progress percentage, difficulty change, estimated retarget date, and remaining blocks.
+
+For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DIFFICULTY.md).
 
 ## Addresses
 
