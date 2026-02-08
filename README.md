@@ -4,6 +4,10 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ## Contents
 
+### GitHub Documentation
+
+- **[Connecting to GitHub with SSH](CONNECTING_TO_GITHUB_WITH_SSH.md)** - Complete guide for setting up SSH authentication with GitHub
+
 ### Blockchain Documentation
 
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
