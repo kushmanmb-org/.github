@@ -13,6 +13,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
+- **[zkpdf Repository Setup](ZKPDF_SETUP.md)** - Instructions for cloning and setting up the zkpdf repository
 
 ### Utility Scripts
 
