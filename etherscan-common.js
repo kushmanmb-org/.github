@@ -88,12 +88,17 @@ function buildApiParams(config, address, apiKey, chainId = null, page = null, of
  * @param {object} config - Shared configuration
  * @param {object} params - API request parameters
  * @returns {string} Full API URL
+ * 
+ * Note: This replaces any existing query parameters in the base URL.
+ * The current apiBaseUrl doesn't contain query parameters, so this is safe.
+ * If the base URL needs to include persistent query parameters in the future,
+ * they should be merged with params before calling this function.
  */
 function buildApiUrl(config, params) {
   const url = new URL(config.apiBaseUrl);
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.append(key, value);
-  });
+  // Use URLSearchParams constructor for efficiency
+  const searchParams = new URLSearchParams(params);
+  url.search = searchParams.toString();
   return url.toString();
 }
 

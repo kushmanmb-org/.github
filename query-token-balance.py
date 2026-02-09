@@ -134,8 +134,9 @@ Examples:
         if args.json:
             print(format_response(response_data, pretty=True))
         else:
+            formatted_response = format_response(response_data, pretty=True)
             print(f"{messages['labels']['response']}:")
-            print(format_response(response_data, pretty=True))
+            print(formatted_response)
             
             # Check status
             if is_response_successful(response_data):
