@@ -1,0 +1,22 @@
+{
+  "errors": {
+    "invalidAddress": "Error: Invalid Ethereum address format",
+    "expectedAddressFormat": "Expected format: 0x followed by 40 hexadecimal characters",
+    "apiKeyRequired": "Error: API key is required",
+    "apiFailed": "Error: Failed to connect to Etherscan API",
+    "apiError": "HTTP error! status"
+  },
+  "status": {
+    "querying": "Querying Etherscan API...",
+    "success": "✓ Query successful",
+    "failed": "✗ Query failed"
+  },
+  "labels": {
+    "address": "Address",
+    "chainId": "Chain ID",
+    "page": "Page",
+    "offset": "Offset",
+    "response": "Response",
+    "message": "Message"
+  }
+}

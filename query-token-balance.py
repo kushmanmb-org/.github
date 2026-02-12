@@ -14,31 +14,28 @@ from etherscan_common import (
     validate_ethereum_address,
     load_config,
     build_api_params,
-    format_token_balance
+    format_token_balance,
+    load_messages,
+    is_response_successful,
+    format_response
 )
 
-# Load shared configuration
+# Load shared configuration and messages
 shared_config = load_config()
-
-# Configuration
-ETHERSCAN_API_BASE = shared_config['apiBaseUrl']
-DEFAULT_ADDRESS = shared_config['defaultAddress']
-DEFAULT_CHAIN_ID = shared_config['defaultChainId']
-DEFAULT_PAGE = shared_config['defaultPage']
-DEFAULT_OFFSET = shared_config['defaultOffset']
+messages = load_messages()
 
 
-def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID, 
-                       page=DEFAULT_PAGE, offset=DEFAULT_OFFSET):
+def query_token_balance(address, api_key, chain_id=None, 
+                       page=None, offset=None):
     """
     Query ERC-20 token balances for an Ethereum address.
     
     Args:
         address (str): Ethereum address to query
         api_key (str): Etherscan API key
-        chain_id (int): Chain ID (1 for Ethereum mainnet)
-        page (int): Page number for pagination
-        offset (int): Results per page
+        chain_id (int, optional): Chain ID (defaults to config value)
+        page (int, optional): Page number for pagination (defaults to config value)
+        offset (int, optional): Results per page (defaults to config value)
         
     Returns:
         dict: API response data
@@ -49,11 +46,15 @@ def query_token_balance(address, api_key, chain_id=DEFAULT_CHAIN_ID,
     params = build_api_params(shared_config, address, api_key, chain_id, page, offset)
     
     try:
-        response = requests.get(ETHERSCAN_API_BASE, params=params, timeout=30)
+        response = requests.get(shared_config['apiBaseUrl'], params=params, timeout=30)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
+<<<<<<< HEAD
         print(f"{shared_config['errorMessages']['apiRequestFailed']}: {e}", file=sys.stderr)
+=======
+        print(f"{messages['errors']['apiFailed']}: {e}", file=sys.stderr)
+>>>>>>> origin/main
         raise
 
 
@@ -74,8 +75,13 @@ Examples:
     
     parser.add_argument(
         "-a", "--address",
+<<<<<<< HEAD
         default=DEFAULT_ADDRESS,
         help=f"{help_options.get('address', 'Ethereum address to query')} (default: {DEFAULT_ADDRESS})"
+=======
+        default=shared_config['defaultAddress'],
+        help=f"Ethereum address to query (default: {shared_config['defaultAddress']})"
+>>>>>>> origin/main
     )
     parser.add_argument(
         "-k", "--apikey",
@@ -85,20 +91,35 @@ Examples:
     parser.add_argument(
         "-c", "--chainid",
         type=int,
+<<<<<<< HEAD
         default=DEFAULT_CHAIN_ID,
         help=f"{help_options.get('chainid', 'Chain ID')} (default: {DEFAULT_CHAIN_ID})"
+=======
+        default=shared_config['defaultChainId'],
+        help=f"Chain ID (default: {shared_config['defaultChainId']} for Ethereum mainnet)"
+>>>>>>> origin/main
     )
     parser.add_argument(
         "-p", "--page",
         type=int,
+<<<<<<< HEAD
         default=DEFAULT_PAGE,
         help=f"{help_options.get('page', 'Page number for pagination')} (default: {DEFAULT_PAGE})"
+=======
+        default=shared_config['defaultPage'],
+        help=f"Page number for pagination (default: {shared_config['defaultPage']})"
+>>>>>>> origin/main
     )
     parser.add_argument(
         "-o", "--offset",
         type=int,
+<<<<<<< HEAD
         default=DEFAULT_OFFSET,
         help=f"{help_options.get('offset', 'Results per page')} (default: {DEFAULT_OFFSET})"
+=======
+        default=shared_config['defaultOffset'],
+        help=f"Results per page (default: {shared_config['defaultOffset']}, max: 10000)"
+>>>>>>> origin/main
     )
     parser.add_argument(
         "--json",
@@ -120,16 +141,21 @@ Examples:
     
     # Validate address
     if not validate_ethereum_address(args.address):
+<<<<<<< HEAD
         print(shared_config['errorMessages']['invalidAddress'], file=sys.stderr)
         print(shared_config['errorMessages']['invalidAddressFormat'], file=sys.stderr)
+=======
+        print(messages['errors']['invalidAddress'], file=sys.stderr)
+        print(messages['errors']['expectedAddressFormat'], file=sys.stderr)
+>>>>>>> origin/main
         sys.exit(1)
     
     # Display query information
-    print("Querying Etherscan API...")
-    print(f"Address: {args.address}")
-    print(f"Chain ID: {args.chainid}")
-    print(f"Page: {args.page}")
-    print(f"Offset: {args.offset}")
+    print(messages['status']['querying'])
+    print(f"{messages['labels']['address']}: {args.address}")
+    print(f"{messages['labels']['chainId']}: {args.chainid}")
+    print(f"{messages['labels']['page']}: {args.page}")
+    print(f"{messages['labels']['offset']}: {args.offset}")
     print()
     
     # Execute query
@@ -144,15 +170,14 @@ Examples:
         
         # Output results
         if args.json:
-            print(json.dumps(response_data, indent=2))
+            print(format_response(response_data, pretty=True))
         else:
-            print("Response:")
-            print(json.dumps(response_data, indent=2))
+            print(f"{messages['labels']['response']}:")
+            print(format_response(response_data, pretty=True))
             
             # Check status
-            status = response_data.get("status", "0")
-            if status == "1":
-                print("\n✓ Query successful")
+            if is_response_successful(response_data):
+                print(f"\n{messages['status']['success']}")
                 
                 # Pretty print if requested
                 if args.pretty and "result" in response_data:
@@ -166,9 +191,9 @@ Examples:
                     else:
                         print("\nNo tokens found for this address")
             else:
-                print("\n✗ Query failed")
+                print(f"\n{messages['status']['failed']}")
                 message = response_data.get("message", "Unknown error")
-                print(f"Message: {message}")
+                print(f"{messages['labels']['message']}: {message}")
                 sys.exit(1)
                 
     except Exception as e:

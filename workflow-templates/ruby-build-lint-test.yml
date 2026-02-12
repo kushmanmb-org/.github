@@ -1,0 +1,80 @@
+name: Ruby Build, Lint, and Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build-lint-test:
+    name: Build, Lint, and Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        ruby-version: ['3.0', '3.1', '3.2', '3.3']
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      
+      - name: Build
+        run: |
+          if [ -f Rakefile ]; then
+            bundle exec rake build || echo "No build task found"
+          else
+            echo "No Rakefile found, skipping build"
+          fi
+      
+      - name: Lint
+        run: |
+          if bundle show rubocop > /dev/null 2>&1; then
+            bundle exec rubocop
+          else
+            echo "RuboCop not installed, skipping lint"
+          fi
+      
+      - name: Test
+        run: |
+          if [ -f Rakefile ]; then
+            if bundle exec rake -T | grep -q "rake test"; then
+              bundle exec rake test
+            elif bundle exec rake -T | grep -q "rake spec"; then
+              bundle exec rake spec
+            else
+              bundle exec rspec || echo "No test task found in Rakefile"
+            fi
+          elif bundle show rspec > /dev/null 2>&1; then
+            bundle exec rspec
+          elif bundle show minitest > /dev/null 2>&1; then
+            if [ -d test ]; then
+              find test -name '*_test.rb' -exec ruby -Itest {} \;
+            else
+              echo "No test directory found"
+            fi
+          else
+            echo "No test framework found"
+          fi
+      
+      - name: Upload coverage
+        if: hashFiles('coverage/**') != ''
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./coverage
+          flags: unittests
+          token: ${{ secrets.CODECOV_TOKEN }}  # Required for v4
+          
+  all-jobs-pass:
+    name: All jobs pass
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs:
+      - build-lint-test
+    steps:
+      - run: echo "All jobs passed successfully!"

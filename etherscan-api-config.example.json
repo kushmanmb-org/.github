@@ -1,0 +1,10 @@
+{
+  "apiBaseUrl": "https://api.etherscan.io/v2/api",
+  "defaultAddress": "0x983e3660c0bE01991785F80f266A84B911ab59b0",
+  "defaultChainId": 1,
+  "defaultPage": 1,
+  "defaultOffset": 100,
+  "module": "account",
+  "action": "addresstokenbalance",
+  "_comment": "DO NOT put your API key in this file. Use environment variables (ETHERSCAN_API_KEY) or pass via command-line arguments."
+}

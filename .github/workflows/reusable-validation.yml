@@ -1,0 +1,50 @@
+name: Reusable File Validation
+
+on:
+  workflow_call:
+    inputs:
+      file-pattern:
+        description: 'File pattern to validate (e.g., *.py, *.sh)'
+        required: true
+        type: string
+      file-type:
+        description: 'Type of file being validated (for display)'
+        required: true
+        type: string
+      setup-command:
+        description: 'Optional command to run before validation'
+        required: false
+        type: string
+        default: ''
+      validation-command:
+        description: 'Command to validate each file ($file will be replaced)'
+        required: true
+        type: string
+      success-message:
+        description: 'Message to display on success'
+        required: false
+        type: string
+        default: '✓ All files validated successfully!'
+      exclude-paths:
+        description: 'Paths to exclude from validation'
+        required: false
+        type: string
+        default: './.git/*'
+
+jobs:
+  validate:
+    name: Validate ${{ inputs.file-type }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run validation
+        uses: ./.github/actions/validate-files
+        with:
+          file-pattern: ${{ inputs.file-pattern }}
+          exclude-paths: ${{ inputs.exclude-paths }}
+          setup-command: ${{ inputs.setup-command }}
+          validation-command: ${{ inputs.validation-command }}
+          success-message: ${{ inputs.success-message }}

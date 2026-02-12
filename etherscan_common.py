@@ -11,6 +11,28 @@ from urllib.parse import urlencode
 # Cache for config
 _config = None
 
+# Messages cache
+_MESSAGES = None
+
+
+def load_messages():
+    """
+    Load shared messages from JSON file.
+    
+    Returns:
+        dict: Messages data
+    """
+    global _MESSAGES
+    if _MESSAGES is None:
+        messages_path = os.path.join(os.path.dirname(__file__), 'etherscan-messages.json')
+        try:
+            with open(messages_path, 'r') as f:
+                _MESSAGES = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            # Fallback to empty dict if messages file not found
+            _MESSAGES = {"errors": {}, "status": {}, "labels": {}}
+    return _MESSAGES
+
 
 def load_config(config_path=None):
     """
@@ -28,7 +50,14 @@ def load_config(config_path=None):
     """
     global _config
     if config_path is None:
-        config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
+        # Try to load etherscan-api-config.json first, fall back to example
+        config_file = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
+        example_file = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.example.json')
+        
+        if os.path.exists(config_file):
+            config_path = config_file
+        else:
+            config_path = example_file
     
     try:
         with open(config_path, 'r') as f:
@@ -38,7 +67,7 @@ def load_config(config_path=None):
     except FileNotFoundError:
         raise FileNotFoundError(
             f"Configuration file not found: {config_path}\n"
-            "Please ensure etherscan-api-config.json exists in the script directory."
+            "Please ensure etherscan-api-config.json or etherscan-api-config.example.json exists in the script directory."
         )
     except json.JSONDecodeError as e:
         raise json.JSONDecodeError(
@@ -97,6 +126,22 @@ def build_api_params(config, address, api_key, chain_id=None, page=None, offset=
     return params
 
 
+def build_api_url(config, params):
+    """
+    Build full API URL with parameters.
+    
+    Args:
+        config (dict): Shared configuration
+        params (dict): API request parameters
+        
+    Returns:
+        str: Full API URL with query parameters
+    """
+    base_url = config['apiBaseUrl']
+    query_string = urlencode(params)
+    return f"{base_url}?{query_string}"
+
+
 def format_token_balance(token_data):
     """
     Format token balance data for display.
@@ -116,17 +161,29 @@ def format_token_balance(token_data):
     return "\n".join(lines)
 
 
-def build_api_url(config, params):
+def is_response_successful(response):
     """
-    Build full API URL with parameters.
+    Check if API response indicates success.
     
     Args:
-        config (dict): Shared configuration
-        params (dict): API request parameters
+        response (dict): API response data
         
     Returns:
-        str: Full API URL with query parameters
+        bool: True if successful, False otherwise
     """
-    base_url = config['apiBaseUrl']
-    query_string = urlencode(params)
-    return f"{base_url}?{query_string}"
+    return response and response.get("status") == "1"
+
+
+def format_response(response, pretty=False):
+    """
+    Format API response output.
+    
+    Args:
+        response (dict): API response data
+        pretty (bool): Whether to pretty-print the JSON
+        
+    Returns:
+        str: Formatted JSON string
+    """
+    indent = 2 if pretty else None
+    return json.dumps(response, indent=indent)

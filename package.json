@@ -1,0 +1,34 @@
+{
+  "name": "@kushmanmb/github-config",
+  "version": "1.0.0",
+  "description": "Organization-wide configuration, templates, and utilities for blockchain-related operations",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "echo 'No linting configured' && exit 0",
+    "build": "echo 'No build step required' && exit 0"
+  },
+  "keywords": [
+    "ethereum",
+    "blockchain",
+    "etherscan",
+    "token-balance",
+    "multisig-wallet",
+    "bitcoin",
+    "mempool",
+    "difficulty-adjustment"
+  ],
+  "author": "kushmanmb-org",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kushmanmb-org/.github.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kushmanmb-org/.github/issues"
+  },
+  "homepage": "https://github.com/kushmanmb-org/.github#readme"
+}

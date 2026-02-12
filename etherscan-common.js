@@ -15,11 +15,25 @@ let _config = null;
  */
 function getConfig() {
   if (!_config) {
-    const configPath = path.join(__dirname, 'etherscan-api-config.json');
-    const configData = fs.readFileSync(configPath, 'utf8');
-    _config = JSON.parse(configData);
+    _config = loadConfig();
   }
   return _config;
+}
+
+// Load shared messages
+let MESSAGES = null;
+function loadMessages() {
+  if (!MESSAGES) {
+    const messagesPath = path.join(__dirname, 'etherscan-messages.json');
+    try {
+      const messagesData = fs.readFileSync(messagesPath, 'utf8');
+      MESSAGES = JSON.parse(messagesData);
+    } catch (err) {
+      // Fallback to empty object if messages file not found
+      MESSAGES = { errors: {}, status: {}, labels: {} };
+    }
+  }
+  return MESSAGES;
 }
 
 /**
@@ -61,7 +75,15 @@ Object.defineProperty(exports, 'ETHEREUM_ADDRESS_PATTERN', {
  */
 function loadConfig(configPath = null) {
   if (!configPath) {
-    configPath = path.join(__dirname, 'etherscan-api-config.json');
+    // Try to load etherscan-api-config.json first, fall back to example
+    const configFile = path.join(__dirname, 'etherscan-api-config.json');
+    const exampleFile = path.join(__dirname, 'etherscan-api-config.example.json');
+    
+    if (fs.existsSync(configFile)) {
+      configPath = configFile;
+    } else {
+      configPath = exampleFile;
+    }
   }
   
   try {
@@ -74,7 +96,7 @@ function loadConfig(configPath = null) {
     if (err.code === 'ENOENT') {
       throw new Error(
         `Configuration file not found: ${configPath}\n` +
-        'Please ensure etherscan-api-config.json exists in the script directory.'
+        'Please ensure etherscan-api-config.json or etherscan-api-config.example.json exists in the script directory.'
       );
     } else if (err instanceof SyntaxError) {
       throw new Error(`Invalid JSON in configuration file: ${configPath}\n${err.message}`);
@@ -134,10 +156,34 @@ function formatTokenBalance(tokenData) {
   return lines.join('\n');
 }
 
+/**
+ * Check if API response indicates success.
+ * @param {object} response - API response data
+ * @returns {boolean} True if successful, false otherwise
+ */
+function isResponseSuccessful(response) {
+  return response && response.status === "1";
+}
+
+/**
+ * Format API response output based on options.
+ * @param {object} response - API response data
+ * @param {object} options - Formatting options (e.g., {pretty: true})
+ * @returns {string} Formatted output string
+ */
+function formatResponse(response, options = {}) {
+  const indent = options.pretty ? 2 : undefined;
+  return JSON.stringify(response, null, indent);
+}
+
 module.exports = {
   validateEthereumAddress,
   loadConfig,
+  loadMessages,
   buildApiParams,
   buildApiUrl,
-  formatTokenBalance
+  formatTokenBalance,
+  isResponseSuccessful,
+  formatResponse,
+  ETHEREUM_ADDRESS_PATTERN
 };
