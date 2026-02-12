@@ -85,7 +85,7 @@ This function downloads the official Foundry installer script and pipes it to ba
 
 ## lastcall Function
 
-The `lastcall` function queries the last transaction for an Ethereum address by retrieving its current nonce (transaction count).
+The `lastcall` function queries the transaction count (nonce) for an Ethereum address, which indicates the number of transactions sent from that address.
 
 ### Usage
 

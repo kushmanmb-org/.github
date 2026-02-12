@@ -15,7 +15,7 @@ foundryup() {
 }
 export -f foundryup
 
-# lastcall: Query the last transaction for an Ethereum address
+# lastcall: Query the transaction count (nonce) for an Ethereum address
 # Usage: lastcall <address> [rpc_url]
 lastcall() {
     if [ -z "$1" ]; then
