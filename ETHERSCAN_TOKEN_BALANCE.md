@@ -187,6 +187,35 @@ To use the Etherscan API, you need to:
 3. Generate a new API key
 4. Replace `YourApiKeyToken` in the examples above with your actual API key
 
+### Security Best Practices
+
+**Never commit API keys to version control.** The repository's `.gitignore` file is configured to protect against accidental commits of API keys by ignoring files matching these patterns:
+
+- `*apikey*`, `*api-key*`, `*api_key*`
+- `etherscan.apikey`, `etherscan-apikey*`
+- `*-apikey.json`, `*-apikey.txt`
+- `apikeys.json`, `api-keys.json`
+- `config.local.json`, `*.local.json`
+
+**Recommended approaches for API key management:**
+
+1. **Environment Variables** (Recommended): Store your API key in environment variables
+   ```bash
+   export ETHERSCAN_API_KEY="your_api_key_here"
+   ```
+
+2. **Local Configuration Files**: Create a local config file (e.g., `config.local.json`) which will be automatically ignored
+   ```json
+   {
+     "apikey": "your_api_key_here"
+   }
+   ```
+
+3. **Command Line Arguments**: Pass the API key as a command line argument when running scripts
+   ```bash
+   ./query-token-balance.sh --apikey YOUR_API_KEY
+   ```
+
 ## Rate Limits
 
 - Free tier: 5 calls/second

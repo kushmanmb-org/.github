@@ -67,6 +67,8 @@ For detailed usage and API documentation, see [BLOCKCHAIN_RPC.md](BLOCKCHAIN_RPC
 
 You can query ERC-20 token balances for any Ethereum address using the provided scripts.
 
+> **Security Note:** Never commit API keys to version control. Use environment variables (e.g., `ETHERSCAN_API_KEY`) or local configuration files (automatically ignored by `.gitignore`). See [ETHERSCAN_TOKEN_BALANCE.md](ETHERSCAN_TOKEN_BALANCE.md#security-best-practices) for details.
+
 #### Using Bash Script
 
 ```bash
