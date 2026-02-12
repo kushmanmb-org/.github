@@ -70,8 +70,8 @@ rpc.config*
 .aws/
 *.aws
 aws-credentials*
-credentials.csv
-accessKeys.csv
+aws-credentials.csv
+aws-accessKeys.csv
 
 # Google Cloud
 gcloud/
@@ -91,7 +91,6 @@ db-config*.json
 *connection-string*
 
 # CI/CD secrets
-.travis.yml.enc
 .circleci/config.local.yml
 .gitlab-ci-local.yml
 
