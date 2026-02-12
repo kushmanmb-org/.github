@@ -11,6 +11,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Blockchain Documentation
 
+- **[Address Labels Configuration](ADDRESS_LABELS.md)** - Best practices for configuring blockchain address labels and metadata
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
@@ -28,9 +29,13 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
 - **[query-token-balance.js](query-token-balance.js)** - JavaScript/Node.js script for querying token balances
+- **[validate-address-labels.py](validate-address-labels.py)** - Python script for validating address labels configuration
 
 ### Blockchain Resources
 
+- **[address-labels.json](address-labels.json)** - Address labeling configuration with metadata
+- **[address-labels.example.json](address-labels.example.json)** - Example address labels configuration with multiple entries
+- **[address-labels.schema.json](address-labels.schema.json)** - JSON schema for address labels validation
 - **[blockchain-address.json](blockchain-address.json)** - Blockchain address information
 - **[multisig-wallet.abi.json](multisig-wallet.abi.json)** - ABI definition for multisig wallet contract
 - **[mempool-difficulty-adjustment.html](mempool-difficulty-adjustment.html)** - HTML example for fetching Bitcoin difficulty adjustment data
@@ -113,6 +118,28 @@ curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstok
 
 For detailed usage and examples, see [ETHERSCAN_TOKEN_BALANCE.md](ETHERSCAN_TOKEN_BALANCE.md).
 
+### Address Labels Configuration
+
+Manage and validate blockchain address labels with metadata:
+
+```bash
+# Validate address labels configuration
+python3 validate-address-labels.py address-labels.json
+
+# Use the example configuration as a template
+cp address-labels.example.json my-labels.json
+# Edit my-labels.json with your addresses
+python3 validate-address-labels.py my-labels.json
+```
+
+The address labels configuration follows Etherscan API response format and supports:
+- Address identification and categorization
+- Custom labels and reputation scores
+- URL associations for projects and organizations
+- JSON schema validation
+
+For detailed documentation, see [ADDRESS_LABELS.md](ADDRESS_LABELS.md).
+
 ### Bitcoin Difficulty Adjustment
 
 View Bitcoin network difficulty adjustment data using the mempool.space API:
@@ -132,6 +159,7 @@ For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DI
 
 - **Token Balance Query Address**: `0x983e3660c0bE01991785F80f266A84B911ab59b0`
 - **Multisig Wallet Owner**: `0x6B834a2f2a24ae7e592AA0843aa2bDF58157bee7`
+- **Labeled Address (kushmanmb10)**: `0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43`
 
 ## Community Files
 

@@ -1,0 +1,41 @@
+{
+  "status": "1",
+  "message": "OK",
+  "result": [
+    {
+      "address": "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43",
+      "nametag": "kushmanmb10",
+      "url": "https://coinbase.com",
+      "labels": [
+        "Coinbase",
+        "Exchange"
+      ],
+      "reputation": 100,
+      "lastUpdatedTimestamp": 1721899658
+    },
+    {
+      "address": "0x1111111254eeb25477b68fb85ed929f73a960582",
+      "nametag": "1inch v5: Router",
+      "url": "https://1inch.io",
+      "labels": [
+        "1inch",
+        "DEX",
+        "Aggregator"
+      ],
+      "reputation": 95,
+      "lastUpdatedTimestamp": 1721899658
+    },
+    {
+      "address": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+      "nametag": "Uniswap V2: Router 2",
+      "url": "https://uniswap.org",
+      "labels": [
+        "Uniswap",
+        "DEX",
+        "DeFi"
+      ],
+      "reputation": 100,
+      "lastUpdatedTimestamp": 1721899658
+    }
+  ]
+}

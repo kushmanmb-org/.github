@@ -1,0 +1,17 @@
+{
+  "status": "1",
+  "message": "OK",
+  "result": [
+    {
+      "address": "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43",
+      "nametag": "kushmanmb10",
+      "url": "https://coinbase.com",
+      "labels": [
+        "Coinbase",
+        "Exchange"
+      ],
+      "reputation": 0,
+      "lastUpdatedTimestamp": 1721899658
+    }
+  ]
+}
