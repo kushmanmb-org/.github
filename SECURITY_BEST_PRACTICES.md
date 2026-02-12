@@ -40,12 +40,21 @@ node query-token-balance.js --apikey YOUR_API_KEY_HERE
 ```
 
 #### 3. Local Configuration Files
-Create local config files that are gitignored:
+Use the provided example configuration files and add your API keys locally:
+
+**For Etherscan API:**
 ```bash
-# Create a local config file (gitignored by *.local.json pattern)
+# The etherscan-api-config.json file is gitignored to protect your API key
+# Use it to store your actual API key (never commit this file)
+# The example file shows the expected format without sensitive data
+cat etherscan-api-config.example.json
+
+# You can also create additional local config files (gitignored by *.local.json pattern)
 cp etherscan-api-config.json etherscan-api-config.local.json
-# Edit etherscan-api-config.local.json to add your API key
+# Edit the file to add your API key
 ```
+
+**Important:** The `etherscan-api-config.json` file is now gitignored to prevent accidental commits of API keys. Always use environment variables or command-line arguments when possible.
 
 ## 📋 .gitignore Protection
 
@@ -60,6 +69,7 @@ Our `.gitignore` file protects the following types of sensitive data:
 - `api-keys.*`, `apikeys.*`
 - `*credentials*`, `*.credentials`
 - `secrets.*`, `*secrets.json`, `*secrets.yml`
+- `etherscan-api-config.json`, `*-api-config.json` (API configuration files)
 
 ### Private Keys and Certificates
 - `*.key`, `*.pem`, `*.p12`, `*.pfx`, `*.cer`, `*.crt`
