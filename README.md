@@ -12,6 +12,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Blockchain Documentation
 
+- **[Transaction Hash Verification](TX_HASH_VERIFICATION.md)** - Verify blockchain transaction hashes with private data protection using .gitignore
 - **[Address Labels Configuration](ADDRESS_LABELS.md)** - Best practices for configuring blockchain address labels and metadata
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
@@ -24,6 +25,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Utility Scripts
 
+- **[verify_tx_hash.py](verify_tx_hash.py)** - Verify blockchain transaction hashes (Ethereum and Bitcoin formats)
 - **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
 - **[blockchain_rpc_client.py](blockchain_rpc_client.py)** - Client for testing the JSON-RPC server
 - **[api-test.sh](api-test.sh)** - Simple script to test Etherscan API v2 endpoint connectivity
@@ -46,6 +48,31 @@ This repository contains organization-wide configuration, templates, and utiliti
 > **⚠️ Security Warning**: Never commit API keys, private keys, or sensitive credentials to version control.
 > Use environment variables or gitignored local configuration files.
 > See [Security Best Practices](SECURITY_BEST_PRACTICES.md) for detailed guidance.
+
+### Transaction Hash Verification
+
+Verify blockchain transaction hashes with automatic protection for private data:
+
+```bash
+# Verify a single transaction hash (Ethereum format)
+./verify_tx_hash.py --hash 0x0000000000000000000000000000000000000000000000000000000000000000
+
+# Verify a Bitcoin transaction hash
+./verify_tx_hash.py --hash 08901b81e39bc61d632c93241c44ec3763366bd57444b01494481ed46079c898
+
+# Verify multiple hashes from a file
+./verify_tx_hash.py --file tx-hashes-example.json
+
+# Output as JSON
+./verify_tx_hash.py --hash 0x000...000 --json --pretty
+```
+
+**Private Data Protection**: Transaction data files are automatically excluded from version control using `.gitignore` patterns. Store sensitive transaction data in:
+- `tx-data/` directory
+- `tx-hashes.json` files (not example files)
+- `transaction-data.*` files
+
+For detailed usage and examples, see [TX_HASH_VERIFICATION.md](TX_HASH_VERIFICATION.md).
 
 ### Blockchain JSON-RPC Server
 
