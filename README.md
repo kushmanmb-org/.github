@@ -36,6 +36,10 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ## Quick Start
 
+> **⚠️ Security Warning**: Never commit API keys, private keys, or sensitive credentials to version control. 
+> Use environment variables or gitignored local configuration files. 
+> See [Security Best Practices](SECURITY_BEST_PRACTICES.md) for detailed guidance.
+
 ### Blockchain JSON-RPC Server
 
 Start a JSON-RPC server for blockchain transaction operations:
@@ -132,6 +136,7 @@ For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DI
 
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
+- [Security Best Practices](SECURITY_BEST_PRACTICES.md) - Guidelines for protecting API keys and sensitive data
 - [Funding Information](FUNDING.yml)
 
 ## Workflow Templates
