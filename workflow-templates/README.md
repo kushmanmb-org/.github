@@ -6,7 +6,27 @@ This directory contains reusable GitHub Actions workflow templates.
 
 ### build-lint-test.yml
 
-**Purpose**: Runs build, lint, and test processes for pull requests and main branch pushes.
+**Purpose**: Runs build, lint, and test processes for pull requests and main branch pushes (JavaScript/TypeScript).
+
+**Permissions**:
+
+- `contents: read` - Read-only access to repository contents (explicit for security best practice)
+
+This workflow does not modify the repository, so it only requires read access.
+
+### go-build-lint-test.yml
+
+**Purpose**: Runs build, lint, and test processes for Go projects with support for multiple Go versions and Makefile-based builds.
+
+**Permissions**:
+
+- `contents: read` - Read-only access to repository contents (explicit for security best practice)
+
+This workflow does not modify the repository, so it only requires read access.
+
+### ruby-build-lint-test.yml
+
+**Purpose**: Runs build, lint, and test processes for Ruby projects with support for multiple Ruby versions and Bundler.
 
 **Permissions**:
 

@@ -136,6 +136,7 @@ The `workflow-templates/` directory contains GitHub Actions workflow templates f
 
 - **JavaScript/TypeScript Projects**: Build, lint, and test workflows (Node.js)
 - **Go Projects**: Build, lint, and test workflows with Makefile support (for repositories like ethpandaops/eth-beacon-genesis)
+- **Ruby Projects**: Build, lint, and test workflows with Bundler support
 - Release creation and publishing
 
 ## License
