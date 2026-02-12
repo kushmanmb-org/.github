@@ -112,6 +112,7 @@ lastcall 0x983e3660c0bE01991785F80f266A84B911ab59b0 https://eth.llamarpc.com
 ```
 
 The function returns the nonce (transaction count) for the address, which indicates how many transactions have been sent from this address. This is useful for:
+
 - Determining if an address has made any transactions
 - Checking the most recent transaction number
 - Verifying address activity
