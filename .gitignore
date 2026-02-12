@@ -109,3 +109,20 @@ __pycache__/
 test-data/
 local-test.*
 *.local.test.*
+
+# Transaction data and hashes (private data)
+tx-data/
+tx-hashes/
+transaction-data.*
+transactions.*
+*.txdata
+*.txhash
+private-transactions.*
+*private-tx*
+# Ignore tx-hashes files but allow example files
+*tx-hashes*.json
+!*tx-hashes*example*.json
+!*example*tx-hashes*.json
+*tx-data*.json
+!*tx-data*example*.json
+!*example*tx-data*.json
