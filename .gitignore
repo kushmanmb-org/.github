@@ -1,21 +1,132 @@
 # Environment variables and sensitive configuration files
 .env
 .env.*
-.env.local
-.env.development
-.env.test
-.env.production
-.env.staging
+config.local.*
+secrets.*
+*secrets*.json
+*secrets*.yaml
+*secrets*.yml
 
 # Private keys and credentials
 *.key
 *.pem
 private-key*
 *private-key*
+*credentials*.json
+*credentials*.txt
+*credentials*.yml
+*credentials*.yaml
+*credentials*.env
+*credentials*.conf
+*credentials*.config
+*.creds
+*.credentials
+# API key patterns - explicit prefix patterns for files starting with these names
+# Note: These are technically covered by the *apikey* patterns below, but are kept
+# for explicitness and to make the intent clearer for common naming conventions
+apikey*.json
+apikey*.txt
+apikey*.yml
+apikey*.yaml
+apikey*.env
+api-key*.json
+api-key*.txt
+api-key*.yml
+api-key*.yaml
+api-key*.env
+api_key*.json
+api_key*.txt
+api_key*.yml
+api_key*.yaml
+api_key*.env
+
+# SSH keys (all types)
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+
+# SSL/TLS certificates and keystores
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+
+# Cryptocurrency wallet files
+wallet.dat
+*.wallet
+# Directory patterns - matches keystore/ and wallets/ directories at any level
+# Note: If you have a legitimate feature directory named "wallets" or "keystore",
+# you can explicitly include it with: !your-feature-dir/
+**/keystore/
+**/wallets/
+mnemonic.txt
+seed.txt
+recovery.txt
+
+# API keys and tokens
+# Comprehensive patterns matching files containing these strings anywhere in the filename
+# These patterns provide complete coverage, including the prefix patterns above
+*apikey*.json
+*apikey*.txt
+*apikey*.yml
+*apikey*.yaml
+*apikey*.env
+*api_key*.json
+*api_key*.txt
+*api_key*.yml
+*api_key*.yaml
+*api_key*.env
+*api-key*.json
+*api-key*.txt
+*api-key*.yml
+*api-key*.yaml
+*api-key*.env
+*.token
+*token*.txt
+*.jwt
 
 # Infura and blockchain configuration
 infura.config*
 *.secrets
+alchemy.config*
+rpc.config*
+*-config-secret*
+
+# Cloud provider credentials
+# AWS
+.aws/
+*.aws
+aws-credentials*
+aws-accessKeys.csv
+
+# Google Cloud
+gcloud/
+*.gcp
+gcp-key*.json
+*service-account-*.json
+
+# Azure
+.azure/
+*.azure
+azure-credentials*
+
+# Database credentials
+*.sql.gz
+database*.yml
+database*.yaml
+db-config*.json
+*connection-string*.json
+*connection-string*.txt
+*connection-string*.yml
+*connection-string*.yaml
+*connection-string*.env
+
+# CI/CD secrets
+.circleci/config.local.yml
+.gitlab-ci-local.yml
 
 # Node modules and dependencies
 node_modules/
@@ -40,3 +151,10 @@ build/
 __pycache__/
 *.pyc
 *.pyo
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
