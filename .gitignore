@@ -21,7 +21,8 @@ private-key*
 *credentials*
 *.creds
 *.credentials
-# API key patterns - files starting with these names
+# API key patterns - files starting with these names (e.g., apikey.txt, api-key-prod.json)
+# These are separate from *apikey* patterns below which match files containing the string anywhere
 apikey*
 api-key*
 api_key*
@@ -50,7 +51,8 @@ seed.txt
 recovery.txt
 
 # API keys and tokens
-# Patterns with wildcards - files containing these names anywhere
+# Patterns for files containing these strings anywhere (e.g., my-apikey.txt, prod-api-key.json)
+# These complement the prefix patterns above to provide comprehensive coverage
 *apikey*
 *api_key*
 *api-key*
@@ -70,14 +72,13 @@ rpc.config*
 .aws/
 *.aws
 aws-credentials*
-aws-credentials.csv
 aws-accessKeys.csv
 
 # Google Cloud
 gcloud/
 *.gcp
 gcp-key*.json
-service-account*.json
+*service-account*.json
 
 # Azure
 .azure/
@@ -86,7 +87,8 @@ azure-credentials*
 
 # Database credentials
 *.sql.gz
-database.yml
+database*.yml
+database*.yaml
 db-config*.json
 *connection-string*
 
