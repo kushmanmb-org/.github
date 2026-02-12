@@ -19,7 +19,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Development Tools
 
-- **[Bash Configuration](BASHRC.md)** - Custom bash functions including foundryup (Foundry installer) and cwhois (bgp.tools whois wrapper)
+- **[Bash Configuration](BASHRC.md)** - Custom bash functions including foundryup (Foundry installer), cwhois (bgp.tools whois wrapper), and lastcall (Ethereum address transaction query)
 
 ### Utility Scripts
 
