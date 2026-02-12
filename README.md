@@ -7,6 +7,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 ### GitHub Documentation
 
 - **[Connecting to GitHub with SSH](CONNECTING_TO_GITHUB_WITH_SSH.md)** - Complete guide for setting up SSH authentication with GitHub
+- **[GPG Key Management](GPG_KEY_MANAGEMENT.md)** - Comprehensive guide for managing GPG keys, signing commits, and refreshing keys from keyservers
 
 ### Blockchain Documentation
 
@@ -36,8 +37,8 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ## Quick Start
 
-> **⚠️ Security Warning**: Never commit API keys, private keys, or sensitive credentials to version control. 
-> Use environment variables or gitignored local configuration files. 
+> **⚠️ Security Warning**: Never commit API keys, private keys, or sensitive credentials to version control.
+> Use environment variables or gitignored local configuration files.
 > See [Security Best Practices](SECURITY_BEST_PRACTICES.md) for detailed guidance.
 
 ### Blockchain JSON-RPC Server
