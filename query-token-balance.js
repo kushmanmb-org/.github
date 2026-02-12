@@ -75,11 +75,7 @@ async function queryTokenBalance(options) {
   const { apikey, address, chainid, page, offset } = options;
 
   if (!apikey) {
-<<<<<<< HEAD
-    console.error(sharedConfig.errorMessages.apiKeyRequired);
-=======
     console.error(messages.errors.apiKeyRequired + '. Use --apikey option or set ETHERSCAN_API_KEY environment variable.');
->>>>>>> origin/main
     process.exit(1);
   }
 

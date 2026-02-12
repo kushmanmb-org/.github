@@ -50,11 +50,7 @@ def query_token_balance(address, api_key, chain_id=None,
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-<<<<<<< HEAD
-        print(f"{shared_config['errorMessages']['apiRequestFailed']}: {e}", file=sys.stderr)
-=======
         print(f"{messages['errors']['apiFailed']}: {e}", file=sys.stderr)
->>>>>>> origin/main
         raise
 
 
@@ -75,13 +71,8 @@ Examples:
     
     parser.add_argument(
         "-a", "--address",
-<<<<<<< HEAD
-        default=DEFAULT_ADDRESS,
-        help=f"{help_options.get('address', 'Ethereum address to query')} (default: {DEFAULT_ADDRESS})"
-=======
         default=shared_config['defaultAddress'],
         help=f"Ethereum address to query (default: {shared_config['defaultAddress']})"
->>>>>>> origin/main
     )
     parser.add_argument(
         "-k", "--apikey",
@@ -91,35 +82,20 @@ Examples:
     parser.add_argument(
         "-c", "--chainid",
         type=int,
-<<<<<<< HEAD
-        default=DEFAULT_CHAIN_ID,
-        help=f"{help_options.get('chainid', 'Chain ID')} (default: {DEFAULT_CHAIN_ID})"
-=======
         default=shared_config['defaultChainId'],
         help=f"Chain ID (default: {shared_config['defaultChainId']} for Ethereum mainnet)"
->>>>>>> origin/main
     )
     parser.add_argument(
         "-p", "--page",
         type=int,
-<<<<<<< HEAD
-        default=DEFAULT_PAGE,
-        help=f"{help_options.get('page', 'Page number for pagination')} (default: {DEFAULT_PAGE})"
-=======
         default=shared_config['defaultPage'],
         help=f"Page number for pagination (default: {shared_config['defaultPage']})"
->>>>>>> origin/main
     )
     parser.add_argument(
         "-o", "--offset",
         type=int,
-<<<<<<< HEAD
-        default=DEFAULT_OFFSET,
-        help=f"{help_options.get('offset', 'Results per page')} (default: {DEFAULT_OFFSET})"
-=======
         default=shared_config['defaultOffset'],
         help=f"Results per page (default: {shared_config['defaultOffset']}, max: 10000)"
->>>>>>> origin/main
     )
     parser.add_argument(
         "--json",
@@ -136,18 +112,13 @@ Examples:
     
     # Check if API key is provided either as argument or environment variable
     if not args.apikey:
-        print(shared_config['errorMessages']['apiKeyRequired'], file=sys.stderr)
+        print(messages['errors']['apiKeyRequired'], file=sys.stderr)
         sys.exit(1)
     
     # Validate address
     if not validate_ethereum_address(args.address):
-<<<<<<< HEAD
-        print(shared_config['errorMessages']['invalidAddress'], file=sys.stderr)
-        print(shared_config['errorMessages']['invalidAddressFormat'], file=sys.stderr)
-=======
         print(messages['errors']['invalidAddress'], file=sys.stderr)
         print(messages['errors']['expectedAddressFormat'], file=sys.stderr)
->>>>>>> origin/main
         sys.exit(1)
     
     # Display query information

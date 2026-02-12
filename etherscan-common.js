@@ -184,6 +184,5 @@ module.exports = {
   buildApiUrl,
   formatTokenBalance,
   isResponseSuccessful,
-  formatResponse,
-  ETHEREUM_ADDRESS_PATTERN
+  formatResponse
 };

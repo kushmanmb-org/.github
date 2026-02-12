@@ -32,11 +32,6 @@ print(result)
 read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET API_MODULE API_ACTION HELP_DESC <<< \
   $(python3 -c "from etherscan_common import load_config; config = load_config(); print(config['apiBaseUrl'], config['defaultAddress'], config['defaultChainId'], config['defaultPage'], config['defaultOffset'], config['module'], config['action'], config['helpText']['description'])")
 
-# Load error messages once during initialization
-ERR_API_KEY=$(python3 -c "from etherscan_common import get_config; print(get_config()['errorMessages']['apiKeyRequired'])")
-ERR_INVALID_ADDR=$(python3 -c "from etherscan_common import get_config; print(get_config()['errorMessages']['invalidAddress'])")
-ERR_INVALID_FORMAT=$(python3 -c "from etherscan_common import get_config; print(get_config()['errorMessages']['invalidAddressFormat'])")
-
 # Function to validate Ethereum address using shared Python module
 validate_address() {
     # Pass address via stdin to prevent command injection
@@ -105,24 +100,15 @@ done
 
 # Validate required parameters
 if [ -z "$API_KEY" ]; then
-<<<<<<< HEAD
-    echo "$ERR_API_KEY"
-=======
     echo "$(get_message 'errors.apiKeyRequired')"
->>>>>>> origin/main
     echo ""
     usage
 fi
 
 # Validate address format using shared validation function
 if ! validate_address "$ADDRESS"; then
-<<<<<<< HEAD
-    echo "$ERR_INVALID_ADDR"
-    echo "$ERR_INVALID_FORMAT"
-=======
     echo "$(get_message 'errors.invalidAddress')"
     echo "$(get_message 'errors.expectedAddressFormat')"
->>>>>>> origin/main
     exit 1
 fi
 
