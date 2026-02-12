@@ -6,6 +6,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### GitHub Documentation
 
+- **[Git Key-Pairs Guide](GIT_KEY_PAIRS.md)** - Comprehensive overview of SSH and GPG key-pairs for Git authentication and commit signing
 - **[Connecting to GitHub with SSH](CONNECTING_TO_GITHUB_WITH_SSH.md)** - Complete guide for setting up SSH authentication with GitHub
 - **[GPG Key Management](GPG_KEY_MANAGEMENT.md)** - Comprehensive guide for managing GPG keys, signing commits, and refreshing keys from keyservers
 
