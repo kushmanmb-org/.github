@@ -21,8 +21,9 @@ private-key*
 *credentials*.config
 *.creds
 *.credentials
-# API key patterns - files starting with these names (e.g., apikey.txt, api-key-prod.json)
-# These are separate from *apikey* patterns in the "API keys and tokens" section below
+# API key patterns - explicit prefix patterns for files starting with these names
+# Note: These are technically covered by the *apikey* patterns below, but are kept
+# for explicitness and to make the intent clearer for common naming conventions
 apikey*.json
 apikey*.txt
 apikey*.yml
@@ -66,8 +67,8 @@ seed.txt
 recovery.txt
 
 # API keys and tokens
-# Patterns for files containing these strings anywhere (e.g., my-apikey.txt, prod-api-key.json)
-# These complement the prefix patterns in the "Private keys and credentials" section above
+# Comprehensive patterns matching files containing these strings anywhere in the filename
+# These patterns provide complete coverage, including the prefix patterns above
 *apikey*.json
 *apikey*.txt
 *apikey*.yml
