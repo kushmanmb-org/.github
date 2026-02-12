@@ -17,6 +17,20 @@ private-key*
 infura.config*
 *.secrets
 
+# API keys and credentials
+*apikey*
+*api-key*
+*api_key*
+*.apikey
+etherscan.apikey
+etherscan-apikey*
+*-apikey.json
+*-apikey.txt
+apikeys.json
+api-keys.json
+config.local.json
+*.local.json
+
 # Node modules and dependencies
 node_modules/
 npm-debug.log*
