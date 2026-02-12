@@ -136,6 +136,8 @@ For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DI
 ## Community Files
 
 - [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contributing Guide](CONTRIBUTING.md)
+- [Support](SUPPORT.md)
 - [Security Policy](SECURITY.md)
 - [Security Best Practices](SECURITY_BEST_PRACTICES.md) - Guidelines for protecting API keys and sensitive data
 - [Funding Information](FUNDING.yml)

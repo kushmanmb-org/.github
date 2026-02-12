@@ -101,14 +101,21 @@ We take security seriously. **Never commit API keys, private keys, or sensitive 
 ## 🤝 Contributing
 
 We welcome contributions! Check out our repositories and feel free to:
+
 - 🐛 Report bugs
 - 💡 Suggest features
 - 🔧 Submit pull requests
 - 📖 Improve documentation
 
+Please read our [Contributing Guide](https://github.com/kushmanmb-org/.github/blob/main/CONTRIBUTING.md) and [Code of Conduct](https://github.com/kushmanmb-org/.github/blob/main/CODE_OF_CONDUCT.md) before contributing.
+
 ## 📬 Get in Touch
 
-Have questions or want to collaborate? Feel free to reach out through GitHub Issues or Discussions!
+Need help? Have questions?
+
+- 📚 Check our [Support Guide](https://github.com/kushmanmb-org/.github/blob/main/SUPPORT.md)
+- 💬 Open a [GitHub Discussion](https://github.com/kushmanmb-org/.github/discussions)
+- 🐛 Report issues through [GitHub Issues](https://github.com/kushmanmb-org/.github/issues)
 
 ---
 
