@@ -1,11 +1,6 @@
 # Environment variables and sensitive configuration files
 .env
-.env*
-.env.local
-.env.development
-.env.test
-.env.production
-.env.staging
+.env.*
 config.local.*
 secrets.*
 *secrets*.json
@@ -17,14 +12,32 @@ secrets.*
 *.pem
 private-key*
 *private-key*
-*credentials*
+*credentials*.json
+*credentials*.txt
+*credentials*.yml
+*credentials*.yaml
+*credentials*.env
+*credentials*.conf
+*credentials*.config
 *.creds
 *.credentials
 # API key patterns - files starting with these names (e.g., apikey.txt, api-key-prod.json)
 # These are separate from *apikey* patterns below which match files containing the string anywhere
-apikey*
-api-key*
-api_key*
+apikey*.json
+apikey*.txt
+apikey*.yml
+apikey*.yaml
+apikey*.env
+api-key*.json
+api-key*.txt
+api-key*.yml
+api-key*.yaml
+api-key*.env
+api_key*.json
+api_key*.txt
+api_key*.yml
+api_key*.yaml
+api_key*.env
 
 # SSH keys (all types)
 id_rsa
@@ -43,8 +56,8 @@ id_ed25519
 # Cryptocurrency wallet files
 wallet.dat
 *.wallet
-keystore/
-wallets/
+**/keystore/
+**/wallets/
 mnemonic.txt
 seed.txt
 recovery.txt
