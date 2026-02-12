@@ -15,6 +15,10 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
 - **[Bitcoin Difficulty Adjustment API](MEMPOOL_DIFFICULTY.md)** - Example HTML page for fetching Bitcoin difficulty adjustment data using mempool.space API
 
+### Development Tools
+
+- **[Bash Configuration](BASHRC.md)** - Custom bash functions including foundryup (Foundry installer) and cwhois (bgp.tools whois wrapper)
+
 ### Utility Scripts
 
 - **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
