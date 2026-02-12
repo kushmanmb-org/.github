@@ -76,9 +76,9 @@ The function is defined as:
 
 ```bash
 foundryup() {
-    curl -L https://foundry.paradigm.xyz | bash
+    curl -fsSL https://foundry.paradigm.xyz | bash
 }
 export -f foundryup
 ```
 
-This function downloads the official Foundry installer script and pipes it to bash for execution. The installer will automatically install or update the Foundry toolchain components (forge, cast, anvil, and chisel).
+This function downloads the official Foundry installer script and pipes it to bash for execution. The installer will automatically install or update the Foundry toolchain components (forge, cast, anvil, and chisel). The `-fsSL` flags ensure that curl fails silently on errors, operates in silent mode while showing errors, and follows redirects.
