@@ -6,16 +6,105 @@
 .env.test
 .env.production
 .env.staging
+*.env
+config.local.*
+secrets.*
+*secrets*.json
+*secrets*.yaml
+*secrets*.yml
 
 # Private keys and credentials
 *.key
 *.pem
 private-key*
 *private-key*
+*credentials*
+*.creds
+*.credentials
+apikey*
+api-key*
+api_key*
+
+# SSH keys (all types)
+id_rsa
+id_rsa.pub
+id_dsa
+id_dsa.pub
+id_ecdsa
+id_ecdsa.pub
+id_ed25519
+id_ed25519.pub
+*.ppk
+known_hosts
+
+# SSL/TLS certificates and keystores
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+*.cer
+*.crt
+*.der
+*.csr
+*.cert
+*.ca-bundle
+
+# Cryptocurrency wallet files
+wallet.dat
+*.wallet
+*.keystore
+keystore/
+wallets/
+mnemonic.txt
+seed.txt
+recovery.txt
+
+# API keys and tokens
+*apikey*
+*api_key*
+*api-key*
+*.token
+*token*.txt
+*.jwt
 
 # Infura and blockchain configuration
 infura.config*
 *.secrets
+alchemy.config*
+rpc.config*
+*-config-secret*
+
+# Cloud provider credentials
+# AWS
+.aws/
+*.aws
+aws-credentials*
+credentials.csv
+accessKeys.csv
+
+# Google Cloud
+gcloud/
+*.gcp
+gcp-key*.json
+service-account*.json
+
+# Azure
+.azure/
+*.azure
+azure-credentials*
+
+# Database credentials
+*.sql.gz
+database.yml
+db-config*.json
+*connection-string*
+
+# CI/CD secrets
+.travis.yml.enc
+*.enc
+.circleci/config.local.yml
+.gitlab-ci-local.yml
 
 # Node modules and dependencies
 node_modules/
@@ -40,3 +129,10 @@ build/
 __pycache__/
 *.pyc
 *.pyo
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
