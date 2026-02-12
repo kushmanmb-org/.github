@@ -7,3 +7,10 @@ cwhois() {
     whois -h bgp.tools -v $*
 }
 export -f cwhois
+
+# foundryup: Install or update Foundry toolchain
+# Usage: foundryup
+foundryup() {
+    curl -L https://foundry.paradigm.xyz | bash
+}
+export -f foundryup
