@@ -191,10 +191,10 @@ To use the Etherscan API, you need to:
 
 **Never commit API keys to version control.** The repository's `.gitignore` file is configured to protect against accidental commits of API keys by ignoring files matching these patterns:
 
-- `*apikey*`, `*api-key*`, `*api_key*`
-- `etherscan.apikey`, `etherscan-apikey*`
-- `*-apikey.json`, `*-apikey.txt`
-- `apikeys.json`, `api-keys.json`
+- `*apikey.txt`, `*apikey.json`, `*apikey.env` (and variants with hyphens/underscores)
+- `.apikey`, `.apikeys`, `.env.apikey`
+- `etherscan.apikey`, `etherscan-apikey.json`, `etherscan-apikey.txt`
+- `apikeys.json`, `api-keys.json`, `api_keys.json`
 - `config.local.json`, `*.local.json`
 
 **Recommended approaches for API key management:**

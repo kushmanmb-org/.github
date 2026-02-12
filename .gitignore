@@ -18,18 +18,27 @@ infura.config*
 *.secrets
 
 # API keys and credentials
-*apikey*
-*api-key*
-*api_key*
-*.apikey
+*apikey.txt
+*apikey.json
+*apikey.env
+*api-key.txt
+*api-key.json
+*api-key.env
+*api_key.txt
+*api_key.json
+*api_key.env
+.apikey
+.apikeys
 etherscan.apikey
-etherscan-apikey*
-*-apikey.json
-*-apikey.txt
+etherscan-apikey.json
+etherscan-apikey.txt
 apikeys.json
 api-keys.json
+api_keys.json
 config.local.json
 *.local.json
+.env.apikey
+.env.apikeys
 
 # Node modules and dependencies
 node_modules/
