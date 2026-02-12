@@ -1,12 +1,11 @@
 # Environment variables and sensitive configuration files
 .env
-.env.*
+.env*
 .env.local
 .env.development
 .env.test
 .env.production
 .env.staging
-*.env
 config.local.*
 secrets.*
 *secrets*.json
@@ -53,9 +52,21 @@ recovery.txt
 # API keys and tokens
 # Patterns for files containing these strings anywhere (e.g., my-apikey.txt, prod-api-key.json)
 # These complement the prefix patterns above to provide comprehensive coverage
-*apikey*
-*api_key*
-*api-key*
+*apikey*.json
+*apikey*.txt
+*apikey*.yml
+*apikey*.yaml
+*apikey*.env
+*api_key*.json
+*api_key*.txt
+*api_key*.yml
+*api_key*.yaml
+*api_key*.env
+*api-key*.json
+*api-key*.txt
+*api-key*.yml
+*api-key*.yaml
+*api-key*.env
 *.token
 *token*.txt
 *.jwt
@@ -78,7 +89,7 @@ aws-accessKeys.csv
 gcloud/
 *.gcp
 gcp-key*.json
-*service-account*.json
+*service-account-*.json
 
 # Azure
 .azure/
@@ -90,7 +101,11 @@ azure-credentials*
 database*.yml
 database*.yaml
 db-config*.json
-*connection-string*
+*connection-string*.json
+*connection-string*.txt
+*connection-string*.yml
+*connection-string*.yaml
+*connection-string*.env
 
 # CI/CD secrets
 .circleci/config.local.yml
