@@ -6,16 +6,64 @@
 .env.test
 .env.production
 .env.staging
+*.local.json
+*.local.config
+*local.config.json
+config.local.*
 
-# Private keys and credentials
+# API Keys and Credentials
+*.apikey
+*.api-key
+*apikey*
+*api-key*
+api-keys.*
+apikeys.*
+*credentials*
+*.credentials
+secrets.*
+*secrets.json
+*secrets.yml
+*secrets.yaml
+
+# Private keys and certificates
 *.key
 *.pem
+*.p12
+*.pfx
+*.cer
+*.crt
 private-key*
 *private-key*
+privatekey*
+*privatekey*
+
+# Blockchain and cryptocurrency wallets
+keystore/
+*keystore*
+wallet.dat
+*.wallet
+mnemonic.*
+*mnemonic*
+seed.*
+*seed.txt
 
 # Infura and blockchain configuration
 infura.config*
 *.secrets
+alchemy.config*
+*-config-private.*
+
+# Authentication tokens and session data
+*.token
+*token.txt
+auth-token*
+session.*
+*.session
+
+# CI/CD secrets
+.secrets/
+secrets/
+*secret.env
 
 # Node modules and dependencies
 node_modules/
@@ -40,3 +88,19 @@ build/
 __pycache__/
 *.pyc
 *.pyo
+
+# Database files (may contain sensitive data)
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files (may contain sensitive data)
+*.backup
+*.bak
+*.old
+*-backup.*
+
+# Local test data and configs
+test-data/
+local-test.*
+*.local.test.*
