@@ -53,6 +53,11 @@ infura.config*
 alchemy.config*
 *-config-private.*
 
+# Etherscan API configuration (contains API keys)
+etherscan-api-config.json
+*-api-config.json
+!*-api-config.example.json
+
 # Authentication tokens and session data
 *.token
 *token.txt
