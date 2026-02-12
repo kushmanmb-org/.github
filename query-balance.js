@@ -80,6 +80,9 @@ function buildBalanceParams(config, address, apiKey, chainId, tag) {
 
 /**
  * Format balance from wei to ETH
+ * Note: Uses parseFloat which may lose precision for very large balances.
+ * For production use with precise financial calculations, consider using
+ * a library like BigNumber.js or ethers.js
  */
 function formatBalance(balanceWei) {
   const balanceEth = parseFloat(balanceWei) / 1e18;

@@ -121,8 +121,8 @@ echo "$(get_message 'labels.chainId'): $CHAIN_ID"
 echo "Tag: $TAG"
 echo ""
 
-# Make the API request
-if ! response=$(curl -s "$API_URL"); then
+# Make the API request with timeout
+if ! response=$(curl -s --max-time 30 "$API_URL"); then
     echo "$(get_message 'errors.apiFailed')"
     exit 1
 fi

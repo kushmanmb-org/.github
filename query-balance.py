@@ -8,6 +8,7 @@ This script queries ETH balance for an Ethereum address using the Etherscan API 
 import argparse
 import json
 import sys
+from decimal import Decimal
 import requests
 from etherscan_common import (
     validate_ethereum_address,
@@ -48,7 +49,7 @@ def build_balance_params(config, address, api_key, chain_id, tag):
 
 def format_balance(balance_wei):
     """
-    Format balance from wei to ETH.
+    Format balance from wei to ETH using Decimal for precision.
     
     Args:
         balance_wei (str): Balance in wei
@@ -56,7 +57,8 @@ def format_balance(balance_wei):
     Returns:
         str: Balance in ETH formatted to 18 decimal places
     """
-    balance_eth = float(balance_wei) / 1e18
+    # Use Decimal for precise conversion to avoid float precision loss
+    balance_eth = Decimal(balance_wei) / Decimal('1000000000000000000')
     return f"{balance_eth:.18f}"
 
 
