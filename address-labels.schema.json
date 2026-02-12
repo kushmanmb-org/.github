@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Address Labels Configuration",
+  "description": "Schema for blockchain address labeling configuration following Etherscan API response format",
+  "type": "object",
+  "required": ["status", "message", "result"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "description": "API response status code (1 for success, 0 for error)",
+      "enum": ["0", "1"]
+    },
+    "message": {
+      "type": "string",
+      "description": "API response message (OK for success, error description for failure)"
+    },
+    "result": {
+      "type": "array",
+      "description": "Array of labeled address entries",
+      "items": {
+        "type": "object",
+        "required": ["address", "nametag"],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Ethereum address in hexadecimal format (0x followed by 40 hex characters)",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "nametag": {
+            "type": "string",
+            "description": "Human-readable name or identifier for the address",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "description": "Optional URL associated with the address (e.g., project website)",
+            "format": "uri"
+          },
+          "labels": {
+            "type": "array",
+            "description": "Array of category labels for the address",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "reputation": {
+            "type": "integer",
+            "description": "Reputation score for the address (0 for neutral, positive for trusted, negative for suspicious)",
+            "default": 0
+          },
+          "lastUpdatedTimestamp": {
+            "type": "integer",
+            "description": "Unix timestamp of the last update to this address label",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}
