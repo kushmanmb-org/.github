@@ -16,6 +16,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[Address Labels Configuration](ADDRESS_LABELS.md)** - Best practices for configuring blockchain address labels and metadata
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
+- **[Etherscan Balance API](ETHERSCAN_BALANCE.md)** - Guide for querying native ETH balance using Etherscan API v2
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
 - **[Bitcoin Difficulty Adjustment API](MEMPOOL_DIFFICULTY.md)** - Example HTML page for fetching Bitcoin difficulty adjustment data using mempool.space API
 
@@ -29,6 +30,9 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
 - **[blockchain_rpc_client.py](blockchain_rpc_client.py)** - Client for testing the JSON-RPC server
 - **[api-test.sh](api-test.sh)** - Simple script to test Etherscan API v2 endpoint connectivity
+- **[query-balance.sh](query-balance.sh)** - Bash script for querying ETH balance
+- **[query-balance.py](query-balance.py)** - Python script for querying ETH balance
+- **[query-balance.js](query-balance.js)** - JavaScript/Node.js script for querying ETH balance
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
 - **[query-token-balance.js](query-token-balance.js)** - JavaScript/Node.js script for querying token balances
@@ -100,6 +104,36 @@ curl -X POST http://127.0.0.1:8332 \
 ```
 
 For detailed usage and API documentation, see [BLOCKCHAIN_RPC.md](BLOCKCHAIN_RPC.md).
+
+### Query ETH Balance
+
+You can query native ETH balance for any Ethereum address using the provided scripts.
+
+#### Using Bash Script
+
+```bash
+./query-balance.sh --apikey YOUR_API_KEY
+```
+
+#### Using Python Script
+
+```bash
+./query-balance.py --apikey YOUR_API_KEY --pretty
+```
+
+#### Using JavaScript/Node.js Script
+
+```bash
+node query-balance.js --apikey YOUR_API_KEY --pretty
+```
+
+#### Using cURL
+
+```bash
+curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=balance&address=0x983e3660c0bE01991785F80f266A84B911ab59b0&tag=latest&apikey=YourApiKeyToken"
+```
+
+For detailed usage and examples, see [ETHERSCAN_BALANCE.md](ETHERSCAN_BALANCE.md).
 
 ### Query Token Balances
 
@@ -185,7 +219,7 @@ For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DI
 
 ## Addresses
 
-- **Token Balance Query Address**: `0x983e3660c0bE01991785F80f266A84B911ab59b0`
+- **Balance Query Address**: `0x983e3660c0bE01991785F80f266A84B911ab59b0` (for both ETH and token balance queries)
 - **Multisig Wallet Owner**: `0x6B834a2f2a24ae7e592AA0843aa2bDF58157bee7`
 - **Labeled Address (kushmanmb10)**: `0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43`
 
