@@ -21,6 +21,7 @@ private-key*
 *credentials*
 *.creds
 *.credentials
+# API key patterns - files starting with these names
 apikey*
 api-key*
 api_key*
@@ -49,6 +50,7 @@ seed.txt
 recovery.txt
 
 # API keys and tokens
+# Patterns with wildcards - files containing these names anywhere
 *apikey*
 *api_key*
 *api-key*
