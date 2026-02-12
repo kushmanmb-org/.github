@@ -1,0 +1,14 @@
+{
+  "name": "Ruby Build, Lint, and Test",
+  "description": "Workflow template for building, linting, and testing Ruby repositories with Bundler support.",
+  "iconName": "metamask-fox",
+  "categories": [
+    "Ruby"
+  ],
+  "filePatterns": [
+    "Gemfile$",
+    "Gemfile.lock$",
+    "Rakefile$",
+    "\\.rb$"
+  ]
+}
