@@ -22,7 +22,7 @@ private-key*
 *.creds
 *.credentials
 # API key patterns - files starting with these names (e.g., apikey.txt, api-key-prod.json)
-# These are separate from *apikey* patterns below which match files containing the string anywhere
+# These are separate from *apikey* patterns in the "API keys and tokens" section below
 apikey*.json
 apikey*.txt
 apikey*.yml
@@ -56,6 +56,9 @@ id_ed25519
 # Cryptocurrency wallet files
 wallet.dat
 *.wallet
+# Directory patterns - matches keystore/ and wallets/ directories at any level
+# Note: If you have a legitimate feature directory named "wallets" or "keystore",
+# you can explicitly include it with: !your-feature-dir/
 **/keystore/
 **/wallets/
 mnemonic.txt
@@ -64,7 +67,7 @@ recovery.txt
 
 # API keys and tokens
 # Patterns for files containing these strings anywhere (e.g., my-apikey.txt, prod-api-key.json)
-# These complement the prefix patterns above to provide comprehensive coverage
+# These complement the prefix patterns in the "Private keys and credentials" section above
 *apikey*.json
 *apikey*.txt
 *apikey*.yml
