@@ -21,14 +21,14 @@
     "mempool",
     "difficulty-adjustment"
   ],
-  "author": "Kushmanmb",
+  "author": "kushmanmb-org",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kushmanmb/.github.git"
+    "url": "https://github.com/kushmanmb-org/.github.git"
   },
   "bugs": {
-    "url": "https://github.com/Kushmanmb/.github/issues"
+    "url": "https://github.com/kushmanmb-org/.github/issues"
   },
-  "homepage": "https://github.com/Kushmanmb/.github#readme"
+  "homepage": "https://github.com/kushmanmb-org/.github#readme"
 }
