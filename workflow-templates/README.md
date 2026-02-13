@@ -34,6 +34,27 @@ This workflow does not modify the repository, so it only requires read access.
 
 This workflow does not modify the repository, so it only requires read access.
 
+### balance-monitor.yml
+
+**Purpose**: Monitors cryptocurrency balances across multiple chains (Ethereum, Base, Polygon, Arbitrum, Optimism).
+
+**Permissions**:
+
+- `contents: read` - Read-only access to repository contents (explicit for security best practice)
+
+This workflow monitors balances and generates reports but does not modify the repository.
+
+### crypto-consolidation.yml
+
+**Purpose**: Safely consolidates cryptocurrency assets to kushmanmb.base.eth with manual approval gates.
+
+**Permissions**:
+
+- `contents: read` - Read-only access to repository contents
+- `issues: write` - Required for tracking approval requests
+
+This workflow requires write access to issues for the approval tracking system, but maintains read-only access to repository contents for security.
+
 ### create-release-pr.yml
 
 **Purpose**: Creates a release pull request with version bumps.

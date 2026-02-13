@@ -1,0 +1,14 @@
+{
+  "name": "Crypto Balance Monitor",
+  "description": "Monitor cryptocurrency balances across multiple chains (Ethereum, Base, Polygon, Arbitrum, Optimism)",
+  "iconName": "metamask-fox",
+  "categories": ["Automation", "Monitoring", "Blockchain"],
+  "filePatterns": [
+    "*.sol",
+    "*.vy",
+    "hardhat.config.*",
+    "foundry.toml",
+    "truffle-config.js",
+    "package.json"
+  ]
+}

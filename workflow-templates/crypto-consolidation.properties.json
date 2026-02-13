@@ -1,0 +1,14 @@
+{
+  "name": "Crypto Consolidation",
+  "description": "Safely consolidate cryptocurrency assets to kushmanmb.base.eth with multi-signature approval",
+  "iconName": "metamask-fox",
+  "categories": ["Automation", "Security", "Blockchain"],
+  "filePatterns": [
+    "*.sol",
+    "*.vy",
+    "hardhat.config.*",
+    "foundry.toml",
+    "truffle-config.js",
+    "package.json"
+  ]
+}
