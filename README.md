@@ -41,6 +41,7 @@ This repository implements industry-standard security practices following guidan
 
 ### Development Tools
 
+- **[Database Frontend (Go)](db/frontend.go)** - Secure database operations with SQL injection prevention, input validation, and proper error handling
 - **[Bash Configuration](BASHRC.md)** - Custom bash functions including foundryup (Foundry installer), cwhois (bgp.tools whois wrapper), and lastcall (Ethereum address transaction query)
 
 ### Utility Scripts
