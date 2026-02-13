@@ -2,6 +2,23 @@
 
 This repository contains organization-wide configuration, templates, and utilities for blockchain-related operations.
 
+## 🔒 Security and Privacy
+
+This repository implements industry-standard security practices following guidance from the Linux Foundation, GitHub Security Lab, and OpenSSF. Key security features include:
+
+- **Automated Dependency Updates**: Dependabot monitors and updates dependencies
+- **Security Scanning**: CodeQL and secret scanning workflows detect vulnerabilities
+- **Branch Protection**: Required reviews and status checks on main branch
+- **Workflow Security**: Script injection prevention and minimal permissions
+- **Commit Signing**: GPG verification for all commits (recommended)
+- **Secret Management**: Comprehensive .gitignore patterns and environment variable usage
+
+**📚 Security Documentation:**
+- [Security Policy](SECURITY.md) - Vulnerability reporting and disclosure
+- [Security Best Practices](SECURITY_BEST_PRACTICES.md) - Protecting API keys and sensitive data
+- [Workflow Security](WORKFLOW_SECURITY.md) - GitHub Actions security guidelines
+- [Branch Protection](BRANCH_PROTECTION.md) - Repository security configuration
+
 ## Contents
 
 ### GitHub Documentation
@@ -255,6 +272,8 @@ For detailed setup and usage instructions, see [CRYPTO_CONSOLIDATION.md](CRYPTO_
 - [Support](SUPPORT.md)
 - [Security Policy](SECURITY.md)
 - [Security Best Practices](SECURITY_BEST_PRACTICES.md) - Guidelines for protecting API keys and sensitive data
+- [Workflow Security](WORKFLOW_SECURITY.md) - GitHub Actions security best practices
+- [Branch Protection](BRANCH_PROTECTION.md) - Repository security configuration guide
 - [Funding Information](FUNDING.yml)
 
 ## Workflow Templates
