@@ -8,6 +8,7 @@ This script queries ERC-20 token balances for an Ethereum address using the Ethe
 import argparse
 import json
 import sys
+import os
 import requests
 from etherscan_common import (
     validate_ethereum_address,
@@ -55,8 +56,11 @@ def query_token_balance(address, api_key, chain_id=None,
 
 def main():
     """Main function to handle command-line interface and execute query."""
+    help_config = shared_config.get('helpText', {})
+    help_options = help_config.get('options', {})
+    
     parser = argparse.ArgumentParser(
-        description="Query ERC-20 token balances for an Ethereum address using Etherscan API v2",
+        description=help_config.get('description', 'Query ERC-20 token balances using Etherscan API v2'),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -72,8 +76,8 @@ Examples:
     )
     parser.add_argument(
         "-k", "--apikey",
-        required=True,
-        help="Etherscan API key (required)"
+        default=os.environ.get('ETHERSCAN_API_KEY'),
+        help=help_options.get('apikey', 'Etherscan API key (required)')
     )
     parser.add_argument(
         "-c", "--chainid",
@@ -105,6 +109,11 @@ Examples:
     )
     
     args = parser.parse_args()
+    
+    # Check if API key is provided either as argument or environment variable
+    if not args.apikey:
+        print(messages['errors']['apiKeyRequired'], file=sys.stderr)
+        sys.exit(1)
     
     # Validate address
     if not validate_ethereum_address(args.address):

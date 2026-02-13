@@ -8,8 +8,8 @@ import json
 import os
 from urllib.parse import urlencode
 
-# Ethereum address validation pattern
-ETHEREUM_ADDRESS_PATTERN = re.compile(r'^0x[a-fA-F0-9]{40}$')
+# Cache for config
+_config = None
 
 # Messages cache
 _MESSAGES = None
@@ -34,19 +34,6 @@ def load_messages():
     return _MESSAGES
 
 
-def validate_ethereum_address(address):
-    """
-    Validate Ethereum address format.
-    
-    Args:
-        address (str): Ethereum address to validate
-        
-    Returns:
-        bool: True if valid, False otherwise
-    """
-    return bool(ETHEREUM_ADDRESS_PATTERN.match(address))
-
-
 def load_config(config_path=None):
     """
     Load shared configuration from JSON file.
@@ -61,22 +48,55 @@ def load_config(config_path=None):
         FileNotFoundError: If config file doesn't exist
         json.JSONDecodeError: If config file is not valid JSON
     """
+    global _config
     if config_path is None:
-        config_path = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
+        # Try to load etherscan-api-config.json first, fall back to example
+        config_file = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.json')
+        example_file = os.path.join(os.path.dirname(__file__), 'etherscan-api-config.example.json')
+        
+        if os.path.exists(config_file):
+            config_path = config_file
+        else:
+            config_path = example_file
     
     try:
         with open(config_path, 'r') as f:
-            return json.load(f)
+            config = json.load(f)
+            _config = config  # Update cache
+            return config
     except FileNotFoundError:
         raise FileNotFoundError(
             f"Configuration file not found: {config_path}\n"
-            "Please ensure etherscan-api-config.json exists in the script directory."
+            "Please ensure etherscan-api-config.json or etherscan-api-config.example.json exists in the script directory."
         )
     except json.JSONDecodeError as e:
         raise json.JSONDecodeError(
             f"Invalid JSON in configuration file: {config_path}",
             e.doc, e.pos
         )
+
+
+def get_config():
+    """Get cached configuration."""
+    global _config
+    if _config is None:
+        _config = load_config()
+    return _config
+
+
+def validate_ethereum_address(address):
+    """
+    Validate Ethereum address format.
+    
+    Args:
+        address (str): Ethereum address to validate
+        
+    Returns:
+        bool: True if valid, False otherwise
+    """
+    config = get_config()
+    pattern = re.compile(config['validationPatterns']['ethereumAddress'])
+    return bool(pattern.match(address))
 
 
 def build_api_params(config, address, api_key, chain_id=None, page=None, offset=None):

@@ -47,17 +47,20 @@ function parseArgs() {
 }
 
 function printHelp() {
+  const helpConfig = sharedConfig.helpText;
   console.log(`
 Etherscan Token Balance Query Tool (JavaScript)
 
 Usage: node query-token-balance.js --apikey YOUR_API_KEY [options]
 
+Description: ${helpConfig.description}
+
 Options:
-  --apikey <key>      Etherscan API key (required)
-  --address <addr>    Ethereum address to query (default: ${sharedConfig.defaultAddress})
-  --chainid <id>      Chain ID (default: ${sharedConfig.defaultChainId} for Ethereum mainnet)
-  --page <num>        Page number for pagination (default: ${sharedConfig.defaultPage})
-  --offset <num>      Number of results per page (default: ${sharedConfig.defaultOffset})
+  --apikey <key>      ${helpConfig.options.apikey}
+  --address <addr>    ${helpConfig.options.address} (default: ${sharedConfig.defaultAddress})
+  --chainid <id>      ${helpConfig.options.chainid} (default: ${sharedConfig.defaultChainId})
+  --page <num>        ${helpConfig.options.page} (default: ${sharedConfig.defaultPage})
+  --offset <num>      ${helpConfig.options.offset} (default: ${sharedConfig.defaultOffset})
   --pretty            Pretty-print JSON output
   --help, -h          Show this help message
 

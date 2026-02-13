@@ -6,8 +6,19 @@
 const fs = require('fs');
 const path = require('path');
 
-// Ethereum address validation pattern
-const ETHEREUM_ADDRESS_PATTERN = /^0x[a-fA-F0-9]{40}$/;
+// Cache for config
+let _config = null;
+
+/**
+ * Get cached configuration.
+ * @returns {object} Configuration data
+ */
+function getConfig() {
+  if (!_config) {
+    _config = loadConfig();
+  }
+  return _config;
+}
 
 // Load shared messages
 let MESSAGES = null;
@@ -31,8 +42,30 @@ function loadMessages() {
  * @returns {boolean} True if valid, false otherwise
  */
 function validateEthereumAddress(address) {
-  return ETHEREUM_ADDRESS_PATTERN.test(address);
+  const config = getConfig();
+  const pattern = new RegExp(config.validationPatterns.ethereumAddress);
+  return pattern.test(address);
 }
+
+/**
+ * Get Ethereum address validation pattern (for backward compatibility).
+ * @returns {RegExp} Ethereum address validation pattern
+ */
+function getEthereumAddressPattern() {
+  const config = getConfig();
+  return new RegExp(config.validationPatterns.ethereumAddress);
+}
+
+// Lazy-loaded pattern for backward compatibility
+let _ethereumAddressPattern = null;
+Object.defineProperty(exports, 'ETHEREUM_ADDRESS_PATTERN', {
+  get: function() {
+    if (!_ethereumAddressPattern) {
+      _ethereumAddressPattern = getEthereumAddressPattern();
+    }
+    return _ethereumAddressPattern;
+  }
+});
 
 /**
  * Load shared configuration from JSON file.
@@ -42,17 +75,28 @@ function validateEthereumAddress(address) {
  */
 function loadConfig(configPath = null) {
   if (!configPath) {
-    configPath = path.join(__dirname, 'etherscan-api-config.json');
+    // Try to load etherscan-api-config.json first, fall back to example
+    const configFile = path.join(__dirname, 'etherscan-api-config.json');
+    const exampleFile = path.join(__dirname, 'etherscan-api-config.example.json');
+    
+    if (fs.existsSync(configFile)) {
+      configPath = configFile;
+    } else {
+      configPath = exampleFile;
+    }
   }
   
   try {
     const configData = fs.readFileSync(configPath, 'utf8');
-    return JSON.parse(configData);
+    const config = JSON.parse(configData);
+    // Update cached config
+    _config = config;
+    return config;
   } catch (err) {
     if (err.code === 'ENOENT') {
       throw new Error(
         `Configuration file not found: ${configPath}\n` +
-        'Please ensure etherscan-api-config.json exists in the script directory.'
+        'Please ensure etherscan-api-config.json or etherscan-api-config.example.json exists in the script directory.'
       );
     } else if (err instanceof SyntaxError) {
       throw new Error(`Invalid JSON in configuration file: ${configPath}\n${err.message}`);
@@ -98,6 +142,21 @@ function buildApiUrl(config, params) {
 }
 
 /**
+ * Format token balance data for display.
+ * @param {object} tokenData - Token data from API response
+ * @returns {string} Formatted token information
+ */
+function formatTokenBalance(tokenData) {
+  const lines = [];
+  lines.push(`  Token: ${tokenData.TokenName || 'Unknown'}`);
+  lines.push(`  Symbol: ${tokenData.TokenSymbol || 'N/A'}`);
+  lines.push(`  Address: ${tokenData.TokenAddress || 'N/A'}`);
+  lines.push(`  Quantity: ${tokenData.TokenQuantity || '0'}`);
+  lines.push(`  Divisor: ${tokenData.TokenDivisor || '18'}`);
+  return lines.join('\n');
+}
+
+/**
  * Check if API response indicates success.
  * @param {object} response - API response data
  * @returns {boolean} True if successful, false otherwise
@@ -123,7 +182,7 @@ module.exports = {
   loadMessages,
   buildApiParams,
   buildApiUrl,
+  formatTokenBalance,
   isResponseSuccessful,
-  formatResponse,
-  ETHEREUM_ADDRESS_PATTERN
+  formatResponse
 };

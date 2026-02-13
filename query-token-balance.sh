@@ -29,8 +29,8 @@ print(result)
 
 # Use Python to load config and validate address (shared functionality)
 # shellcheck disable=SC2046
-read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET API_MODULE API_ACTION <<< \
-  $(python3 -c "from etherscan_common import load_config; config = load_config(); print(config['apiBaseUrl'], config['defaultAddress'], config['defaultChainId'], config['defaultPage'], config['defaultOffset'], config['module'], config['action'])")
+read -r ETHERSCAN_API_BASE DEFAULT_ADDRESS DEFAULT_CHAIN_ID DEFAULT_PAGE DEFAULT_OFFSET API_MODULE API_ACTION HELP_DESC <<< \
+  $(python3 -c "from etherscan_common import load_config; config = load_config(); print(config['apiBaseUrl'], config['defaultAddress'], config['defaultChainId'], config['defaultPage'], config['defaultOffset'], config['module'], config['action'], config['helpText']['description'])")
 
 # Function to validate Ethereum address using shared Python module
 validate_address() {
@@ -42,14 +42,14 @@ validate_address() {
 usage() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
-    echo "Query ERC-20 token balances for an Ethereum address using Etherscan API v2"
+    echo "Description: $HELP_DESC"
     echo ""
     echo "Options:"
     echo "  -a, --address ADDRESS    Ethereum address to query (default: $DEFAULT_ADDRESS)"
-    echo "  -k, --apikey APIKEY      Etherscan API key (required)"
-    echo "  -c, --chainid CHAINID    Chain ID (default: $DEFAULT_CHAIN_ID for Ethereum mainnet)"
+    echo "  -k, --apikey APIKEY      Etherscan API key (required, can also be set via ETHERSCAN_API_KEY environment variable)"
+    echo "  -c, --chainid CHAINID    Chain ID (1 for Ethereum mainnet) (default: $DEFAULT_CHAIN_ID)"
     echo "  -p, --page PAGE          Page number for pagination (default: $DEFAULT_PAGE)"
-    echo "  -o, --offset OFFSET      Results per page (default: $DEFAULT_OFFSET, max: 10000)"
+    echo "  -o, --offset OFFSET      Results per page (max: 10000) (default: $DEFAULT_OFFSET)"
     echo "  -h, --help               Display this help message"
     echo ""
     echo "Example:"
@@ -63,7 +63,7 @@ ADDRESS="$DEFAULT_ADDRESS"
 CHAIN_ID="$DEFAULT_CHAIN_ID"
 PAGE="$DEFAULT_PAGE"
 OFFSET="$DEFAULT_OFFSET"
-API_KEY=""
+API_KEY="${ETHERSCAN_API_KEY:-}"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
