@@ -1,14 +1,16 @@
 # ENS Creator Verification for Base Network
 
-This document describes the ENS (Ethereum Name Service) creator verification system for `kushmanmb.base.eth` on the Base network.
+This document describes the ENS (Ethereum Name Service) creator verification and announcement system for `kushmanmb.base.eth` on the Base network.
 
 ## Overview
 
-The `verify_ens_creator.py` script provides automated verification of ENS name ownership and creator status on the Base network. It validates:
+The `verify_ens_creator.py` script is a format verification and documentation tool for ENS names on the Base network. It validates:
 
 1. **Name Format**: Ensures the name follows Base ENS naming conventions (*.base.eth)
-2. **Registration**: Verifies the name is registered on the Base network
-3. **Creator Status**: Confirms creator/owner status of the ENS name
+2. **Documentation**: Documents the name registration and creator status
+3. **Announcement**: Generates official creator status announcements
+
+> **Note**: This tool verifies name format and documents creator status. For production environments requiring on-chain verification, integrate with web3.py, ethers.js, or similar libraries to query the Base registry contracts directly.
 
 ## Official ENS Name
 
@@ -143,10 +145,15 @@ Overall Status: VERIFIED
 
 The ENS verification script follows security best practices:
 
-✅ **No API Keys Required**: Uses public blockchain data only  
+✅ **No API Keys Required**: Format verification only  
 ✅ **No Private Keys**: Does not require or handle private keys  
-✅ **No Authentication**: Verification is based on public records  
+✅ **No Authentication**: Documentation-based verification  
 ✅ **Safe to Run**: Can be run without any sensitive configuration  
+
+> **Note for Production**: For actual on-chain ownership verification, you would need:
+> - Web3 provider access (Infura, Alchemy, or local node)
+> - Read-only RPC endpoint for Base network
+> - Integration with ENS resolver contracts
 
 ### Protected Data Patterns
 
@@ -230,6 +237,48 @@ python3 verify_ens_creator.py --name kushmanmb.base.eth
 - [Security Best Practices](SECURITY_BEST_PRACTICES.md) - Guidelines for protecting sensitive data
 - [Base Network Documentation](https://docs.base.org/) - Official Base network documentation
 - [Basenames Documentation](https://www.base.org/names) - Official Basenames (Base ENS) documentation
+
+## Extending to On-Chain Verification
+
+To extend this tool for actual on-chain verification, you would need to:
+
+### 1. Add Web3 Dependencies
+
+```bash
+pip install web3
+```
+
+### 2. Integrate Base RPC Provider
+
+```python
+from web3 import Web3
+
+# Connect to Base network
+w3 = Web3(Web3.HTTPProvider('https://mainnet.base.org'))
+
+# Or use Infura/Alchemy for production
+# w3 = Web3(Web3.HTTPProvider(f'https://base-mainnet.infura.io/v3/{API_KEY}'))
+```
+
+### 3. Query ENS Resolver
+
+```python
+# Base ENS Registry ABI (simplified)
+registry_abi = [...]  # Add full ABI
+
+# Create contract instance
+registry = w3.eth.contract(
+    address='0x6533C94869D28fAA8dF77cc63f9e2b2D6Cf77eBA',
+    abi=registry_abi
+)
+
+# Query owner
+owner = registry.functions.owner(namehash).call()
+```
+
+### 4. Verify Ownership
+
+Query the registry to get the actual owner address and compare with expected owner.
 
 ## Troubleshooting
 

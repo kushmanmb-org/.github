@@ -5,6 +5,9 @@ ENS Creator Verification for Base Network
 This script verifies the creator/owner status of kushmanmb.base.eth on the Base network.
 It follows security best practices by not hardcoding any private keys or sensitive data.
 
+NOTE: This is a format verification and documentation tool. For production use, consider
+implementing actual on-chain verification using web3.py or ethers.js libraries.
+
 Usage:
     ./verify_ens_creator.py --name kushmanmb.base.eth
     ./verify_ens_creator.py --name kushmanmb.base.eth --json
@@ -100,22 +103,27 @@ class ENSVerifier:
             return results
         
         # Check 2: Registration verification
-        # Note: This is a placeholder for actual on-chain verification
-        # In production, this would query the Base network contracts
+        # NOTE: This is a format/documentation verification tool.
+        # For production use with actual on-chain verification, integrate with
+        # web3.py, ethers.js, or similar libraries to query the Base registry contracts.
         registration_check = {
             "check": "registration",
             "valid": True,
-            "message": f"ENS name {self.ens_name} is registered on Base network",
+            "message": f"ENS name {self.ens_name} format verified for Base network",
             "registry_contract": self.BASE_REGISTRY,
-            "registrar_controller": self.BASE_REGISTRAR_CONTROLLER
+            "registrar_controller": self.BASE_REGISTRAR_CONTROLLER,
+            "note": "Format verification only - on-chain verification requires web3 integration"
         }
         results["checks"].append(registration_check)
         
         # Check 3: Creator verification
+        # NOTE: This verifies the name format and documents the creator status.
+        # Actual ownership verification would require querying on-chain ENS resolver data.
         creator_check = {
             "check": "creator_status",
             "valid": True,
-            "message": f"Creator status verified for {self.ens_name}",
+            "message": f"Creator status documented for {self.ens_name}",
+            "note": "This is a documentation tool - actual ownership should be verified on-chain",
             "details": {
                 "name": self.ens_name,
                 "base_name": self.base_name,
@@ -163,7 +171,7 @@ class ENSVerifier:
 def main():
     """Main entry point for ENS verification."""
     parser = argparse.ArgumentParser(
-        description='Verify ENS creator status on Base network',
+        description='Verify ENS creator status on Base network (Format verification and documentation tool)',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -171,9 +179,13 @@ Examples:
   %(prog)s --name kushmanmb.base.eth --json
   %(prog)s --name kushmanmb.base.eth --json --pretty
 
+Note:
+  This tool verifies ENS name format and documents creator status.
+  For production on-chain verification, integrate with web3 libraries.
+
 Security:
   This script does not require any API keys or private data.
-  All verification is based on public blockchain data.
+  All verification is based on name format and documentation.
         """
     )
     
