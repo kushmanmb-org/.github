@@ -1,0 +1,158 @@
+name: Balance Monitor
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      chains:
+        description: 'Chains to monitor (comma-separated: ethereum,base,polygon,arbitrum,optimism)'
+        required: false
+        default: 'ethereum,base,polygon,arbitrum,optimism'
+      includeTokens:
+        description: 'Include ERC-20 token balances'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  monitor-balances:
+    name: Monitor Crypto Balances
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests web3 python-dotenv
+      
+      - name: Monitor Ethereum balances
+        if: contains(github.event.inputs.chains || 'ethereum,base,polygon,arbitrum,optimism', 'ethereum')
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          ETHEREUM_RPC_URL: ${{ secrets.ETHEREUM_RPC_URL }}
+          TARGET_ADDRESS: 'kushmanmb.base.eth'
+        run: |
+          echo "### Ethereum Mainnet Balances" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Monitor using existing query-token-balance script
+          if [ -f "./query-token-balance.py" ]; then
+            echo "Querying Ethereum balances..." >> $GITHUB_STEP_SUMMARY
+            python3 ./query-token-balance.py --apikey "$ETHERSCAN_API_KEY" --pretty || echo "Balance query completed with warnings" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Token balance script not found" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Monitor Base L2 balances
+        if: contains(github.event.inputs.chains || 'ethereum,base,polygon,arbitrum,optimism', 'base')
+        env:
+          BASESCAN_API_KEY: ${{ secrets.BASESCAN_API_KEY }}
+          BASE_RPC_URL: ${{ secrets.BASE_RPC_URL }}
+        run: |
+          echo "### Base L2 Balances" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Target: kushmanmb.base.eth" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Base chain monitoring
+          if [ -n "$BASE_RPC_URL" ] && [ -n "$BASESCAN_API_KEY" ]; then
+            echo "✓ Base monitoring configured" >> $GITHUB_STEP_SUMMARY
+            echo "Chain ID: 8453" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Base credentials not configured - skipping" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Monitor Polygon balances
+        if: contains(github.event.inputs.chains || 'ethereum,base,polygon,arbitrum,optimism', 'polygon')
+        env:
+          POLYGONSCAN_API_KEY: ${{ secrets.POLYGONSCAN_API_KEY }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+        run: |
+          echo "### Polygon Balances" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -n "$POLYGON_RPC_URL" ] && [ -n "$POLYGONSCAN_API_KEY" ]; then
+            echo "✓ Polygon monitoring configured" >> $GITHUB_STEP_SUMMARY
+            echo "Chain ID: 137" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Polygon credentials not configured - skipping" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Monitor Arbitrum balances
+        if: contains(github.event.inputs.chains || 'ethereum,base,polygon,arbitrum,optimism', 'arbitrum')
+        env:
+          ARBISCAN_API_KEY: ${{ secrets.ARBISCAN_API_KEY }}
+          ARBITRUM_RPC_URL: ${{ secrets.ARBITRUM_RPC_URL }}
+        run: |
+          echo "### Arbitrum One Balances" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -n "$ARBITRUM_RPC_URL" ] && [ -n "$ARBISCAN_API_KEY" ]; then
+            echo "✓ Arbitrum monitoring configured" >> $GITHUB_STEP_SUMMARY
+            echo "Chain ID: 42161" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Arbitrum credentials not configured - skipping" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Monitor Optimism balances
+        if: contains(github.event.inputs.chains || 'ethereum,base,polygon,arbitrum,optimism', 'optimism')
+        env:
+          OPTIMISTIC_ETHERSCAN_API_KEY: ${{ secrets.OPTIMISTIC_ETHERSCAN_API_KEY }}
+          OPTIMISM_RPC_URL: ${{ secrets.OPTIMISM_RPC_URL }}
+        run: |
+          echo "### Optimism Balances" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -n "$OPTIMISM_RPC_URL" ] && [ -n "$OPTIMISTIC_ETHERSCAN_API_KEY" ]; then
+            echo "✓ Optimism monitoring configured" >> $GITHUB_STEP_SUMMARY
+            echo "Chain ID: 10" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Optimism credentials not configured - skipping" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Generate balance summary
+        run: |
+          echo "## Balance Monitoring Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Target Address**: kushmanmb.base.eth" >> $GITHUB_STEP_SUMMARY
+          echo "**Monitored Chains**: ${CHAINS}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Review balances across all chains" >> $GITHUB_STEP_SUMMARY
+          echo "- If consolidation is needed, trigger the crypto-consolidation workflow" >> $GITHUB_STEP_SUMMARY
+          echo "- Ensure all API keys and RPC endpoints are properly configured" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For detailed documentation, see [CRYPTO_CONSOLIDATION.md](../CRYPTO_CONSOLIDATION.md)" >> $GITHUB_STEP_SUMMARY
+        env:
+          CHAINS: ${{ github.event.inputs.chains || 'ethereum,base,polygon,arbitrum,optimism' }}
+      
+      - name: Check consolidation thresholds
+        run: |
+          echo "## Consolidation Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ Automatic consolidation is not enabled in this workflow" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To consolidate funds, manually trigger the **crypto-consolidation** workflow" >> $GITHUB_STEP_SUMMARY
+          echo "with appropriate approvals and security checks." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY

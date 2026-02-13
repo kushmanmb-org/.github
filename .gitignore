@@ -58,6 +58,14 @@ etherscan-api-config.json
 *-api-config.json
 !*-api-config.example.json
 
+# Crypto consolidation configuration (may contain sensitive data)
+crypto-config.json
+*crypto-config.json
+!crypto-config.example.json
+address-whitelist.json
+*address-whitelist*
+!*address-whitelist.example.json
+
 # Authentication tokens and session data
 *.token
 *token.txt
