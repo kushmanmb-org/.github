@@ -2,6 +2,8 @@
 
 This document describes the security practices implemented in `db/frontend.go`.
 
+> **💡 See also**: Complete usage examples in [`examples/db_usage_example.go`](../examples/db_usage_example.go)
+
 ## Security Features
 
 ### 1. SQL Injection Prevention
