@@ -126,3 +126,18 @@ private-transactions.*
 *tx-data*.json
 !*tx-data*example*.json
 !*example*tx-data*.json
+
+# Git verification data (private verification policies and keys)
+verification-data/
+gpg-verification.*
+*verification-config*
+*-verification-config.*
+!*-verification-config.example.*
+!*example*verification*.json
+# Ignore commit verification files but allow example files
+*commits*.json
+!*commits*example*.json
+!*example*commits*.json
+verification-policy.*
+*verification-policy*
+!*verification-policy.example.*

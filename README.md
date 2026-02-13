@@ -9,6 +9,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 - **[Git Key-Pairs Guide](GIT_KEY_PAIRS.md)** - Comprehensive overview of SSH and GPG key-pairs for Git authentication and commit signing
 - **[Connecting to GitHub with SSH](CONNECTING_TO_GITHUB_WITH_SSH.md)** - Complete guide for setting up SSH authentication with GitHub
 - **[GPG Key Management](GPG_KEY_MANAGEMENT.md)** - Comprehensive guide for managing GPG keys, signing commits, and refreshing keys from keyservers
+- **[Git POW Verification](GIT_POW_VERIFICATION.md)** - Verify Git commit signatures using GPG with secure practices
 
 ### Blockchain Documentation
 
@@ -25,6 +26,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Utility Scripts
 
+- **[git_pow_verifier.py](git_pow_verifier.py)** - Verify Git commit signatures using GPG (Proof of Work verification)
 - **[verify_tx_hash.py](verify_tx_hash.py)** - Verify blockchain transaction hashes (Ethereum and Bitcoin formats)
 - **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
 - **[blockchain_rpc_client.py](blockchain_rpc_client.py)** - Client for testing the JSON-RPC server
@@ -48,6 +50,31 @@ This repository contains organization-wide configuration, templates, and utiliti
 > **⚠️ Security Warning**: Never commit API keys, private keys, or sensitive credentials to version control.
 > Use environment variables or gitignored local configuration files.
 > See [Security Best Practices](SECURITY_BEST_PRACTICES.md) for detailed guidance.
+
+### Git POW Verification
+
+Verify Git commit signatures using GPG to ensure commit authenticity:
+
+```bash
+# Verify a single commit (current HEAD)
+./git_pow_verifier.py --commit HEAD
+
+# Verify a specific commit by SHA
+./git_pow_verifier.py --commit abc123def456
+
+# Verify multiple commits from a file
+./git_pow_verifier.py --file commits-example.json
+
+# Output as JSON with details
+./git_pow_verifier.py --commit HEAD --json --pretty --info
+```
+
+**Private Data Protection**: Verification configuration files are automatically excluded from version control using `.gitignore` patterns. Store sensitive verification policies in:
+- `verification-data/` directory
+- `commits.json` files (not example files)
+- `verification-config.*` files
+
+For detailed usage and GPG setup, see [GIT_POW_VERIFICATION.md](GIT_POW_VERIFICATION.md).
 
 ### Transaction Hash Verification
 
