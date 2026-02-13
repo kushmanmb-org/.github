@@ -30,6 +30,7 @@ This repository implements industry-standard security practices following guidan
 
 ### Blockchain Documentation
 
+- **[ENS Creator Verification](ENS_VERIFICATION.md)** - Verify and announce kushmanmb.base.eth creator status on Base network
 - **[Cryptocurrency Consolidation](CRYPTO_CONSOLIDATION.md)** - Automated workflows for safely consolidating crypto assets to kushmanmb.base.eth
 - **[Transaction Hash Verification](TX_HASH_VERIFICATION.md)** - Verify blockchain transaction hashes with private data protection using .gitignore
 - **[Address Labels Configuration](ADDRESS_LABELS.md)** - Best practices for configuring blockchain address labels and metadata
@@ -44,6 +45,7 @@ This repository implements industry-standard security practices following guidan
 
 ### Utility Scripts
 
+- **[verify_ens_creator.py](verify_ens_creator.py)** - Verify ENS creator status on Base network (kushmanmb.base.eth)
 - **[git_pow_verifier.py](git_pow_verifier.py)** - Verify Git commit signatures using GPG (Proof of Work verification)
 - **[verify_tx_hash.py](verify_tx_hash.py)** - Verify blockchain transaction hashes (Ethereum and Bitcoin formats)
 - **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
@@ -68,6 +70,27 @@ This repository implements industry-standard security practices following guidan
 > **⚠️ Security Warning**: Never commit API keys, private keys, or sensitive credentials to version control.
 > Use environment variables or gitignored local configuration files.
 > See [Security Best Practices](SECURITY_BEST_PRACTICES.md) for detailed guidance.
+
+### ENS Creator Verification
+
+Verify and announce kushmanmb.base.eth creator status on Base network:
+
+```bash
+# Verify ENS creator status
+./verify_ens_creator.py --name kushmanmb.base.eth
+
+# Display official creator status announcement
+./verify_ens_creator.py --announce
+
+# Output as JSON with details
+./verify_ens_creator.py --json --pretty
+```
+
+**Official ENS Name**: `kushmanmb.base.eth` (Base Mainnet, Chain ID: 8453)
+
+This ENS name is the official primary consolidation address for the kushmanmb-org organization. The verification script uses only public blockchain data and requires no API keys or private information.
+
+For detailed usage and integration examples, see [ENS_VERIFICATION.md](ENS_VERIFICATION.md).
 
 ### Git POW Verification
 
