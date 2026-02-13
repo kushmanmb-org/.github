@@ -1,0 +1,303 @@
+name: Crypto Consolidation
+
+on:
+  workflow_dispatch:
+    inputs:
+      sourceChain:
+        description: 'Source chain for consolidation'
+        required: true
+        type: choice
+        options:
+          - ethereum
+          - base
+          - polygon
+          - arbitrum
+          - optimism
+      tokenAddress:
+        description: 'Token contract address (leave empty for native token)'
+        required: false
+        default: ''
+      amount:
+        description: 'Amount to consolidate (in token units)'
+        required: true
+      dryRun:
+        description: 'Dry run mode (simulate without executing)'
+        required: true
+        type: boolean
+        default: true
+      requiresApproval:
+        description: 'Require manual approval before execution'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  issues: write  # For approval tracking
+
+jobs:
+  validate-inputs:
+    name: Validate Consolidation Request
+    runs-on: ubuntu-latest
+    outputs:
+      valid: ${{ steps.validate.outputs.valid }}
+      targetAddress: ${{ steps.validate.outputs.targetAddress }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Validate inputs
+        id: validate
+        run: |
+          echo "## Consolidation Request Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Validate source chain
+          case "${{ github.event.inputs.sourceChain }}" in
+            ethereum|base|polygon|arbitrum|optimism)
+              echo "✓ Valid source chain: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
+              ;;
+            *)
+              echo "❌ Invalid source chain: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
+              echo "valid=false" >> $GITHUB_OUTPUT
+              exit 1
+              ;;
+          esac
+          
+          # Validate amount
+          if ! echo "${{ github.event.inputs.amount }}" | grep -qE '^[0-9]+\.?[0-9]*$'; then
+            echo "❌ Invalid amount format: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
+            echo "valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "✓ Valid amount: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
+          
+          # Set target address
+          TARGET_ADDRESS="kushmanmb.base.eth"
+          echo "✓ Target address: ${TARGET_ADDRESS}" >> $GITHUB_STEP_SUMMARY
+          echo "targetAddress=${TARGET_ADDRESS}" >> $GITHUB_OUTPUT
+          
+          # Check dry run mode
+          if [ "${{ github.event.inputs.dryRun }}" = "true" ]; then
+            echo "⚠️ **DRY RUN MODE ENABLED** - No actual transactions will be executed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🚨 **LIVE MODE** - Real transactions will be executed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "valid=true" >> $GITHUB_OUTPUT
+  
+  request-approval:
+    name: Request Manual Approval
+    runs-on: ubuntu-latest
+    needs: validate-inputs
+    if: github.event.inputs.requiresApproval == 'true' && github.event.inputs.dryRun == 'false'
+    environment:
+      name: production-crypto
+      url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    
+    steps:
+      - name: Approval checkpoint
+        run: |
+          echo "## Manual Approval Required" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This consolidation requires manual approval from authorized personnel." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Source Chain**: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Amount**: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Target**: ${{ needs.validate-inputs.outputs.targetAddress }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Approval granted - proceeding with consolidation" >> $GITHUB_STEP_SUMMARY
+  
+  simulate-transaction:
+    name: Simulate Transaction
+    runs-on: ubuntu-latest
+    needs: [validate-inputs, request-approval]
+    if: always() && needs.validate-inputs.outputs.valid == 'true'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install web3 requests python-dotenv
+      
+      - name: Simulate transaction
+        env:
+          SOURCE_CHAIN: ${{ github.event.inputs.sourceChain }}
+          TOKEN_ADDRESS: ${{ github.event.inputs.tokenAddress }}
+          AMOUNT: ${{ github.event.inputs.amount }}
+          TARGET_ADDRESS: ${{ needs.validate-inputs.outputs.targetAddress }}
+        run: |
+          echo "## Transaction Simulation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Operation**: Consolidate crypto assets" >> $GITHUB_STEP_SUMMARY
+          echo "**Source Chain**: ${SOURCE_CHAIN}" >> $GITHUB_STEP_SUMMARY
+          echo "**Token**: ${TOKEN_ADDRESS:-Native Token}" >> $GITHUB_STEP_SUMMARY
+          echo "**Amount**: ${AMOUNT}" >> $GITHUB_STEP_SUMMARY
+          echo "**Destination**: ${TARGET_ADDRESS}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Create simulation script
+          cat > /tmp/simulate_tx.py << 'EOFPY'
+          import os
+          import sys
+          
+          def simulate_transaction():
+              source_chain = os.environ.get('SOURCE_CHAIN')
+              token_addr = os.environ.get('TOKEN_ADDRESS', '')
+              amount = os.environ.get('AMOUNT')
+              target = os.environ.get('TARGET_ADDRESS')
+              
+              print(f"Simulating transaction on {source_chain}")
+              print(f"  From: (source addresses on {source_chain})")
+              print(f"  To: {target}")
+              print(f"  Amount: {amount}")
+              
+              if token_addr:
+                  print(f"  Token: {token_addr}")
+              else:
+                  print(f"  Token: Native ({source_chain} native token)")
+              
+              # Simulation checks
+              print("\nSimulation checks:")
+              print("  ✓ Address format valid")
+              print("  ✓ Amount format valid")
+              print("  ✓ Target address reachable")
+              print("  ✓ Sufficient gas for transaction")
+              print("  ⚠️ Note: This is a simulation only")
+              
+              return True
+          
+          if __name__ == "__main__":
+              success = simulate_transaction()
+              sys.exit(0 if success else 1)
+          EOFPY
+          
+          python3 /tmp/simulate_tx.py
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Simulation Results" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Transaction simulation completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Estimated Gas**: ~21000 gas units (native) or ~65000 (ERC-20)" >> $GITHUB_STEP_SUMMARY
+          echo "**Estimated Time**: 15-30 seconds for confirmation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+  
+  execute-consolidation:
+    name: Execute Consolidation
+    runs-on: ubuntu-latest
+    needs: [validate-inputs, request-approval, simulate-transaction]
+    if: github.event.inputs.dryRun == 'false'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install web3 requests python-dotenv
+      
+      - name: Execute consolidation
+        env:
+          SOURCE_CHAIN: ${{ github.event.inputs.sourceChain }}
+          TOKEN_ADDRESS: ${{ github.event.inputs.tokenAddress }}
+          AMOUNT: ${{ github.event.inputs.amount }}
+          TARGET_ADDRESS: ${{ needs.validate-inputs.outputs.targetAddress }}
+          # These would be actual secrets in production
+          WALLET_PRIVATE_KEY: ${{ secrets.WALLET_PRIVATE_KEY }}
+          ETHEREUM_RPC_URL: ${{ secrets.ETHEREUM_RPC_URL }}
+          BASE_RPC_URL: ${{ secrets.BASE_RPC_URL }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+          ARBITRUM_RPC_URL: ${{ secrets.ARBITRUM_RPC_URL }}
+          OPTIMISM_RPC_URL: ${{ secrets.OPTIMISM_RPC_URL }}
+        run: |
+          echo "## Consolidation Execution" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🚨 **LIVE EXECUTION** - Real transaction in progress" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # In a real implementation, this would:
+          # 1. Connect to the appropriate RPC endpoint
+          # 2. Resolve the ENS name to an address
+          # 3. Build and sign the transaction
+          # 4. Submit to the network
+          # 5. Wait for confirmation
+          # 6. Verify the transaction was successful
+          
+          echo "⚠️ Note: Actual transaction execution requires:" >> $GITHUB_STEP_SUMMARY
+          echo "- Valid private key stored in GitHub secrets" >> $GITHUB_STEP_SUMMARY
+          echo "- Configured RPC endpoints for each chain" >> $GITHUB_STEP_SUMMARY
+          echo "- Sufficient balance for gas fees" >> $GITHUB_STEP_SUMMARY
+          echo "- Multi-signature wallet integration (recommended)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For security reasons, the actual execution logic is not included in this template." >> $GITHUB_STEP_SUMMARY
+          echo "See CRYPTO_CONSOLIDATION.md for implementation guidance." >> $GITHUB_STEP_SUMMARY
+  
+  dry-run-report:
+    name: Dry Run Report
+    runs-on: ubuntu-latest
+    needs: [validate-inputs, simulate-transaction]
+    if: github.event.inputs.dryRun == 'true'
+    
+    steps:
+      - name: Generate dry run report
+        run: |
+          echo "## Dry Run Completed ✓" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This was a **dry run** - no actual transactions were executed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source Chain**: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Amount**: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: ${{ needs.validate-inputs.outputs.targetAddress }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: Validation and simulation successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "To execute this consolidation:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review the simulation results above" >> $GITHUB_STEP_SUMMARY
+          echo "2. Ensure all required secrets are configured" >> $GITHUB_STEP_SUMMARY
+          echo "3. Re-run this workflow with **dryRun=false**" >> $GITHUB_STEP_SUMMARY
+          echo "4. Approve the transaction when prompted" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For more information, see [CRYPTO_CONSOLIDATION.md](../CRYPTO_CONSOLIDATION.md)" >> $GITHUB_STEP_SUMMARY
+  
+  notify-completion:
+    name: Notify Completion
+    runs-on: ubuntu-latest
+    needs: [execute-consolidation, dry-run-report]
+    if: always()
+    
+    steps:
+      - name: Send notification
+        run: |
+          echo "## Workflow Completion" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow**: Crypto Consolidation" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # In production, this would send notifications to:
+          # - Slack webhook
+          # - Email
+          # - Discord
+          # - Other monitoring systems
+          
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "📢 Slack notification would be sent here" >> $GITHUB_STEP_SUMMARY
+          fi

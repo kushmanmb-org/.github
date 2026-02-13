@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-13",
+  "description": "Whitelist of authorized addresses for crypto consolidation operations",
+  "whitelistedAddresses": [
+    {
+      "address": "kushmanmb.base.eth",
+      "resolvedAddress": "Resolve ENS on target chain",
+      "label": "Primary Consolidation Address",
+      "purpose": "Main destination for all consolidated funds",
+      "authorized": true,
+      "authorizedBy": "Organization Admin",
+      "chains": ["ethereum", "base", "polygon", "arbitrum", "optimism"],
+      "addedDate": "2026-02-13",
+      "notes": "Primary ENS address on Base L2"
+    },
+    {
+      "address": "0x6B834a2f2a24ae7e592AA0843aa2bDF58157bee7",
+      "label": "Multisig Wallet Owner",
+      "purpose": "Multisignature wallet management",
+      "authorized": true,
+      "authorizedBy": "Organization Admin",
+      "chains": ["ethereum"],
+      "addedDate": "2026-02-13",
+      "notes": "Owner address for multisig operations"
+    },
+    {
+      "address": "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43",
+      "label": "kushmanmb10",
+      "purpose": "Labeled operational address",
+      "authorized": true,
+      "authorizedBy": "Organization Admin",
+      "chains": ["ethereum", "polygon"],
+      "addedDate": "2026-02-13",
+      "notes": "Operational address for specific tasks"
+    }
+  ],
+  "securityPolicies": {
+    "requiresApproval": true,
+    "minApprovals": 2,
+    "approvalTimeoutHours": 24,
+    "enableAddressVerification": true,
+    "enableENSResolution": true,
+    "blockUnauthorizedAddresses": true,
+    "alertOnNewAddresses": true
+  },
+  "auditTrail": {
+    "logAllTransactions": true,
+    "logAllAccess": true,
+    "retentionDays": 365,
+    "enableRealTimeAlerts": true
+  }
+}

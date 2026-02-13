@@ -1,0 +1,160 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-13",
+  "targetAddress": {
+    "ens": "kushmanmb.base.eth",
+    "description": "Primary consolidation address on Base L2",
+    "verification": "Verify ENS resolution before each transaction"
+  },
+  "chains": {
+    "ethereum": {
+      "chainId": 1,
+      "name": "Ethereum Mainnet",
+      "enabled": true,
+      "rpcUrlEnvVar": "ETHEREUM_RPC_URL",
+      "explorerApiKeyEnvVar": "ETHERSCAN_API_KEY",
+      "explorerUrl": "https://etherscan.io",
+      "nativeToken": "ETH",
+      "minBalanceThreshold": "0.1",
+      "consolidationThreshold": "1.0",
+      "gasLimitNative": 21000,
+      "gasLimitERC20": 65000
+    },
+    "base": {
+      "chainId": 8453,
+      "name": "Base",
+      "enabled": true,
+      "rpcUrlEnvVar": "BASE_RPC_URL",
+      "explorerApiKeyEnvVar": "BASESCAN_API_KEY",
+      "explorerUrl": "https://basescan.org",
+      "nativeToken": "ETH",
+      "minBalanceThreshold": "0.01",
+      "consolidationThreshold": "0.1",
+      "gasLimitNative": 21000,
+      "gasLimitERC20": 65000
+    },
+    "polygon": {
+      "chainId": 137,
+      "name": "Polygon",
+      "enabled": true,
+      "rpcUrlEnvVar": "POLYGON_RPC_URL",
+      "explorerApiKeyEnvVar": "POLYGONSCAN_API_KEY",
+      "explorerUrl": "https://polygonscan.com",
+      "nativeToken": "MATIC",
+      "minBalanceThreshold": "10",
+      "consolidationThreshold": "100",
+      "gasLimitNative": 21000,
+      "gasLimitERC20": 65000
+    },
+    "arbitrum": {
+      "chainId": 42161,
+      "name": "Arbitrum One",
+      "enabled": true,
+      "rpcUrlEnvVar": "ARBITRUM_RPC_URL",
+      "explorerApiKeyEnvVar": "ARBISCAN_API_KEY",
+      "explorerUrl": "https://arbiscan.io",
+      "nativeToken": "ETH",
+      "minBalanceThreshold": "0.01",
+      "consolidationThreshold": "0.1",
+      "gasLimitNative": 21000,
+      "gasLimitERC20": 90000
+    },
+    "optimism": {
+      "chainId": 10,
+      "name": "Optimism",
+      "enabled": true,
+      "rpcUrlEnvVar": "OPTIMISM_RPC_URL",
+      "explorerApiKeyEnvVar": "OPTIMISTIC_ETHERSCAN_API_KEY",
+      "explorerUrl": "https://optimistic.etherscan.io",
+      "nativeToken": "ETH",
+      "minBalanceThreshold": "0.01",
+      "consolidationThreshold": "0.1",
+      "gasLimitNative": 21000,
+      "gasLimitERC20": 65000
+    }
+  },
+  "tokens": {
+    "USDC": {
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "decimals": 6,
+      "addresses": {
+        "ethereum": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "base": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "polygon": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "arbitrum": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+        "optimism": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607"
+      }
+    },
+    "USDT": {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6,
+      "addresses": {
+        "ethereum": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        "polygon": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        "arbitrum": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+        "optimism": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58"
+      }
+    },
+    "WETH": {
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "decimals": 18,
+      "addresses": {
+        "ethereum": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        "base": "0x4200000000000000000000000000000000000006",
+        "polygon": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+        "arbitrum": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+        "optimism": "0x4200000000000000000000000000000000000006"
+      }
+    },
+    "DAI": {
+      "name": "Dai Stablecoin",
+      "symbol": "DAI",
+      "decimals": 18,
+      "addresses": {
+        "ethereum": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+        "polygon": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+        "arbitrum": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+        "optimism": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
+      }
+    }
+  },
+  "security": {
+    "requireMultiSig": true,
+    "minSignatures": 2,
+    "maxGasPriceGwei": {
+      "ethereum": 100,
+      "base": 10,
+      "polygon": 500,
+      "arbitrum": 10,
+      "optimism": 10
+    },
+    "enableDryRun": true,
+    "requireManualApproval": true,
+    "maxSingleTransactionValue": {
+      "ethereum": "10",
+      "base": "5",
+      "polygon": "1000",
+      "arbitrum": "5",
+      "optimism": "5"
+    }
+  },
+  "monitoring": {
+    "balanceCheckIntervalHours": 6,
+    "enableSlackNotifications": false,
+    "slackWebhookEnvVar": "SLACK_WEBHOOK_URL",
+    "enableEmailAlerts": true,
+    "alertOnLowGasBalance": true,
+    "alertOnFailedTransactions": true,
+    "alertOnHighGasPrices": true
+  },
+  "gasOptimization": {
+    "enableDynamicPricing": true,
+    "waitForFavorableGas": true,
+    "maxWaitTimeMinutes": 60,
+    "useEIP1559": true,
+    "priorityFeeMultiplier": 1.1
+  }
+}

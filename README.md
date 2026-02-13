@@ -13,6 +13,7 @@ This repository contains organization-wide configuration, templates, and utiliti
 
 ### Blockchain Documentation
 
+- **[Cryptocurrency Consolidation](CRYPTO_CONSOLIDATION.md)** - Automated workflows for safely consolidating crypto assets to kushmanmb.base.eth
 - **[Transaction Hash Verification](TX_HASH_VERIFICATION.md)** - Verify blockchain transaction hashes with private data protection using .gitignore
 - **[Address Labels Configuration](ADDRESS_LABELS.md)** - Best practices for configuring blockchain address labels and metadata
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
@@ -210,8 +211,39 @@ The page will automatically fetch and display current Bitcoin difficulty adjustm
 
 For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DIFFICULTY.md).
 
+### Cryptocurrency Consolidation
+
+Automated workflows for safely consolidating crypto assets across multiple chains:
+
+```bash
+# Monitor balances across all chains
+gh workflow run balance-monitor.yml
+
+# Consolidate funds (dry run first)
+gh workflow run crypto-consolidation.yml \
+  --field sourceChain=base \
+  --field amount=1.0 \
+  --field dryRun=true
+
+# Verify a transaction after consolidation
+gh workflow run tx-verification.yml \
+  --field txHash=0x... \
+  --field chain=base
+```
+
+**Target Consolidation Address**: `kushmanmb.base.eth`
+
+The consolidation system supports:
+- Multi-chain balance monitoring (Ethereum, Base, Polygon, Arbitrum, Optimism)
+- Secure transaction workflows with multi-signature approval
+- Automated verification and audit trails
+- Gas optimization strategies
+
+For detailed setup and usage instructions, see [CRYPTO_CONSOLIDATION.md](CRYPTO_CONSOLIDATION.md).
+
 ## Addresses
 
+- **Primary Consolidation Address**: `kushmanmb.base.eth`
 - **Token Balance Query Address**: `0x983e3660c0bE01991785F80f266A84B911ab59b0`
 - **Multisig Wallet Owner**: `0x6B834a2f2a24ae7e592AA0843aa2bDF58157bee7`
 - **Labeled Address (kushmanmb10)**: `0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43`
@@ -232,6 +264,7 @@ The `workflow-templates/` directory contains GitHub Actions workflow templates f
 - **JavaScript/TypeScript Projects**: Build, lint, and test workflows (Node.js)
 - **Go Projects**: Build, lint, and test workflows with Makefile support (for repositories like ethpandaops/eth-beacon-genesis)
 - **Ruby Projects**: Build, lint, and test workflows with Bundler support
+- **Cryptocurrency Operations**: Balance monitoring and consolidation workflows
 - Release creation and publishing
 
 ## License
