@@ -19,7 +19,10 @@
     "multisig-wallet",
     "bitcoin",
     "mempool",
-    "difficulty-adjustment"
+    "difficulty-adjustment",
+    "ens",
+    "base-network",
+    "basenames"
   ],
   "author": "kushmanmb-org",
   "license": "SEE LICENSE IN LICENSE",

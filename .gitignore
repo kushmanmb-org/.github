@@ -149,3 +149,74 @@ gpg-verification.*
 verification-policy.*
 *verification-policy*
 !*verification-policy.example.*
+
+# ENS and domain verification data (private ownership proofs)
+# Ignore all ens-verification files...
+ens-verification.*
+*ens-verification*
+# ...except example files
+!ens-verification-example.*
+!*ens-verification*example*
+!*example*ens-verification*
+ens-ownership.*
+*ens-ownership*
+domain-verification.*
+*domain-verification*
+ownership-proof.*
+*ownership-proof*
+
+# Base network and ENS configuration (may contain private data)
+base-config.*
+*base-config*
+!*base-config.example.*
+ens-config.*
+*ens-config*
+!*ens-config.example.*
+
+# Smart contract deployment artifacts (may contain sensitive addresses)
+deployments/
+*deployments/
+.openzeppelin/
+*.deployed
+*deployment-info*
+*deploy-info*
+
+# Web3 and blockchain provider configurations
+web3-config.*
+*web3-config*
+!*web3-config.example.*
+provider-config.*
+*provider-config*
+!*provider-config.example.*
+
+# Additional wallet and key patterns
+*.keystore
+*keystore.json
+utxo.db
+*.spvchain
+
+# Gas optimization and transaction simulation data
+gas-estimates.*
+*gas-estimates*
+simulation-data.*
+*simulation-data*
+
+# Private blockchain data
+chaindata/
+*chaindata/
+private-chain.*
+*private-chain*
+
+# Signing keys and encrypted data
+*.encrypted
+*encrypted.*
+signing-key.*
+*signing-key*
+
+# Temporary and cache files
+*.tmp
+*.temp
+*~
+.cache/
+tmp/
+temp/

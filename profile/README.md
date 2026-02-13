@@ -8,6 +8,9 @@
 [![Code of Conduct](https://img.shields.io/badge/code%20of-conduct-green.svg)](https://github.com/kushmanmb-org/.github/blob/main/CODE_OF_CONDUCT.md)
 [![Made with ❤️](https://img.shields.io/badge/Made%20with-%E2%9D%A4%EF%B8%8F-red.svg)](https://github.com/kushmanmb-org)
 
+### ✨ Official ENS: [kushmanmb.base.eth](https://www.base.org/names) ✨
+**Verified Creator** | Base Mainnet (Chain ID: 8453)
+
 </div>
 
 ---
@@ -17,6 +20,14 @@
 We're an organization dedicated to **blockchain development**, **Ethereum ecosystem tools**, and **smart contract utilities**. Our mission is to provide developers with robust, well-documented tools for interacting with blockchain networks.
 
 ## ✨ Featured Projects
+
+### 🏷️ ENS Creator Verification
+Automated verification and announcement of ENS creator status on Base network
+- ✓ **Verified**: kushmanmb.base.eth creator status
+- 🔐 **Secure**: Uses only public blockchain data
+- 📊 **Transparent**: Full verification with JSON output
+
+👉 [View Documentation](https://github.com/kushmanmb-org/.github/blob/main/ENS_VERIFICATION.md)
 
 ### 🪙 Token Balance Queries
 Multi-language implementations for querying ERC-20 token balances via Etherscan API v2
