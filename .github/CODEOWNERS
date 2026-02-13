@@ -1,0 +1,25 @@
+# CODEOWNERS - Defines individuals or teams responsible for code in the repository
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @kushmanmb-org/admins
+
+# Security and privacy-sensitive files require admin review
+SECURITY.md @kushmanmb-org/admins
+SECURITY_BEST_PRACTICES.md @kushmanmb-org/admins
+.github/workflows/*.yml @kushmanmb-org/admins
+.github/dependabot.yml @kushmanmb-org/admins
+.gitignore @kushmanmb-org/admins
+CODEOWNERS @kushmanmb-org/admins
+
+# Crypto and blockchain operations require additional review
+*crypto*.* @kushmanmb-org/admins
+*blockchain*.* @kushmanmb-org/admins
+*wallet*.* @kushmanmb-org/admins
+*.key @kushmanmb-org/admins
+*.pem @kushmanmb-org/admins
+
+# Scripts that execute code or handle secrets
+*.py @kushmanmb-org/admins
+*.sh @kushmanmb-org/admins
+*.js @kushmanmb-org/admins

@@ -49,29 +49,33 @@ jobs:
       
       - name: Validate inputs
         id: validate
+        env:
+          SOURCE_CHAIN: ${{ github.event.inputs.sourceChain }}
+          AMOUNT: ${{ github.event.inputs.amount }}
+          DRY_RUN: ${{ github.event.inputs.dryRun }}
         run: |
           echo "## Consolidation Request Validation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           # Validate source chain
-          case "${{ github.event.inputs.sourceChain }}" in
+          case "$SOURCE_CHAIN" in
             ethereum|base|polygon|arbitrum|optimism)
-              echo "✓ Valid source chain: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
+              echo "✓ Valid source chain: $SOURCE_CHAIN" >> $GITHUB_STEP_SUMMARY
               ;;
             *)
-              echo "❌ Invalid source chain: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
+              echo "❌ Invalid source chain: $SOURCE_CHAIN" >> $GITHUB_STEP_SUMMARY
               echo "valid=false" >> $GITHUB_OUTPUT
               exit 1
               ;;
           esac
           
           # Validate amount
-          if ! echo "${{ github.event.inputs.amount }}" | grep -qE '^[0-9]+\.?[0-9]*$'; then
-            echo "❌ Invalid amount format: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
+          if ! echo "$AMOUNT" | grep -qE '^[0-9]+\.?[0-9]*$'; then
+            echo "❌ Invalid amount format: $AMOUNT" >> $GITHUB_STEP_SUMMARY
             echo "valid=false" >> $GITHUB_OUTPUT
             exit 1
           fi
-          echo "✓ Valid amount: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Valid amount: $AMOUNT" >> $GITHUB_STEP_SUMMARY
           
           # Set target address
           TARGET_ADDRESS="kushmanmb.base.eth"
@@ -79,7 +83,7 @@ jobs:
           echo "targetAddress=${TARGET_ADDRESS}" >> $GITHUB_OUTPUT
           
           # Check dry run mode
-          if [ "${{ github.event.inputs.dryRun }}" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "⚠️ **DRY RUN MODE ENABLED** - No actual transactions will be executed" >> $GITHUB_STEP_SUMMARY
           else
             echo "🚨 **LIVE MODE** - Real transactions will be executed" >> $GITHUB_STEP_SUMMARY
@@ -99,14 +103,18 @@ jobs:
     
     steps:
       - name: Approval checkpoint
+        env:
+          SOURCE_CHAIN: ${{ github.event.inputs.sourceChain }}
+          AMOUNT: ${{ github.event.inputs.amount }}
+          TARGET_ADDRESS: ${{ needs.validate-inputs.outputs.targetAddress }}
         run: |
           echo "## Manual Approval Required" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "This consolidation requires manual approval from authorized personnel." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Source Chain**: ${{ github.event.inputs.sourceChain }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Amount**: ${{ github.event.inputs.amount }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Target**: ${{ needs.validate-inputs.outputs.targetAddress }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Source Chain**: $SOURCE_CHAIN" >> $GITHUB_STEP_SUMMARY
+          echo "**Amount**: $AMOUNT" >> $GITHUB_STEP_SUMMARY
+          echo "**Target**: $TARGET_ADDRESS" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ Approval granted - proceeding with consolidation" >> $GITHUB_STEP_SUMMARY
   
