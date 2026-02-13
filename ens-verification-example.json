@@ -1,0 +1,38 @@
+{
+  "ens_name": "kushmanmb.base.eth",
+  "base_name": "kushmanmb",
+  "chain_id": 8453,
+  "network": "Base Mainnet",
+  "status": "VERIFIED",
+  "verified": true,
+  "checks": [
+    {
+      "check": "name_format",
+      "valid": true,
+      "name": "kushmanmb.base.eth",
+      "base_name": "kushmanmb",
+      "message": "Valid Base ENS name format"
+    },
+    {
+      "check": "registration",
+      "valid": true,
+      "message": "ENS name kushmanmb.base.eth is registered on Base network",
+      "registry_contract": "0x6533C94869D28fAA8dF77cc63f9e2b2D6Cf77eBA",
+      "registrar_controller": "0x4cCb0BB02FCABA27e82a56646E81d8c5bC4119a5"
+    },
+    {
+      "check": "creator_status",
+      "valid": true,
+      "message": "Creator status verified for kushmanmb.base.eth",
+      "details": {
+        "name": "kushmanmb.base.eth",
+        "base_name": "kushmanmb",
+        "network": "Base Mainnet",
+        "chain_id": 8453
+      }
+    }
+  ],
+  "timestamp": "2026-02-13T20:51:00Z",
+  "verification_tool": "verify_ens_creator.py",
+  "description": "Example ENS verification output for kushmanmb.base.eth"
+}

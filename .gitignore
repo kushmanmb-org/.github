@@ -151,9 +151,12 @@ verification-policy.*
 !*verification-policy.example.*
 
 # ENS and domain verification data (private ownership proofs)
+# Ignore all ens-verification files...
 ens-verification.*
 *ens-verification*
-!*ens-verification.example.*
+# ...except example files
+!ens-verification-example.*
+!*ens-verification*example*
 !*example*ens-verification*
 ens-ownership.*
 *ens-ownership*
