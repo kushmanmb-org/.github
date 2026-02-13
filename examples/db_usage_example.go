@@ -160,7 +160,11 @@ func main() {
 // Invalid username example (would fail validation)
 func exampleInvalidUsername() {
 	config := db.DefaultConfig()
-	frontend, _ := db.NewFrontend(config, "user", "pass")
+	frontend, err := db.NewFrontend(config, "user", "pass")
+	if err != nil {
+		fmt.Printf("Failed to create frontend: %v\n", err)
+		return
+	}
 	defer frontend.Close()
 
 	ctx := context.Background()
@@ -186,7 +190,11 @@ func exampleInvalidUsername() {
 // Invalid email example (would fail validation)
 func exampleInvalidEmail() {
 	config := db.DefaultConfig()
-	frontend, _ := db.NewFrontend(config, "user", "pass")
+	frontend, err := db.NewFrontend(config, "user", "pass")
+	if err != nil {
+		fmt.Printf("Failed to create frontend: %v\n", err)
+		return
+	}
 	defer frontend.Close()
 
 	ctx := context.Background()
