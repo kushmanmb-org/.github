@@ -5,6 +5,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
@@ -109,7 +110,7 @@ func main() {
 
 	// Example 10: Transaction example
 	log.Println("\n--- Transaction Example ---")
-	err = frontend.ExecuteInTransaction(ctx, func(tx *db.Tx) error {
+	err = frontend.ExecuteInTransaction(ctx, func(tx *sql.Tx) error {
 		// Multiple operations in a transaction
 		log.Println("  Executing operations in transaction...")
 		
