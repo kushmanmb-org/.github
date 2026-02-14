@@ -89,6 +89,14 @@ dist/
 build/
 *.log
 
+# Test coverage and artifacts
+coverage/
+.nyc_output/
+*.coverage
+.jest-cache/
+test-results/
+junit.xml
+
 # IDE and editor files
 .vscode/
 .idea/

@@ -7,9 +7,14 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "test": "node --test",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
     "lint": "echo 'No linting configured' && exit 0",
-    "build": "echo 'No build step required' && exit 0"
+    "build": "echo 'No build step required' && exit 0",
+    "security:audit": "npm audit --audit-level=moderate",
+    "security:check": "npm outdated"
   },
   "keywords": [
     "ethereum",
@@ -33,5 +38,11 @@
   "bugs": {
     "url": "https://github.com/kushmanmb-org/.github/issues"
   },
-  "homepage": "https://github.com/kushmanmb-org/.github#readme"
+  "homepage": "https://github.com/kushmanmb-org/.github#readme",
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  }
 }
