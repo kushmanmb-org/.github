@@ -15,7 +15,7 @@ module.exports = {
       {
         // Target Node.js 18+ (matches package.json engines)
         targets: {
-          node: '18'
+          node: '18.0'
         },
         
         // Only include necessary polyfills

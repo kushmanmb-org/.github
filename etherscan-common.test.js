@@ -18,7 +18,7 @@ describe('etherscan-common security tests', () => {
     // doesn't include validationPatterns. In production use,
     // validationPatterns should be added to the config file.
     test.skip('should validate correct Ethereum address format', () => {
-      const validAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+      const validAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0';
       expect(validateEthereumAddress(validAddress)).toBe(true);
     });
 
@@ -66,7 +66,7 @@ describe('etherscan-common security tests', () => {
     test('should build API parameters without leaking sensitive data', () => {
       const config = loadConfig();
       const testApiKey = 'TEST_API_KEY';
-      const testAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+      const testAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0';
       
       const params = buildApiParams(config, testAddress, testApiKey);
       
@@ -103,7 +103,7 @@ describe('etherscan-common security tests', () => {
     test('should properly encode URL parameters', () => {
       const config = loadConfig();
       const params = {
-        address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
+        address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0',
         apikey: 'TEST_KEY'
       };
       
