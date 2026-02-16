@@ -102,7 +102,7 @@ build_json_body() {
     # Add validators if provided
     if [ -n "$VALIDATORS" ]; then
         # Convert comma-separated string to JSON array
-        local validator_array=$(echo "$VALIDATORS" | sed 's/,/,/g' | awk '{gsub(/[^0-9,]/,""); split($0,a,","); printf "["; for(i=1;i<=length(a);i++){printf "%s%d", (i>1?",":""), a[i]}; printf "]"}')
+        local validator_array=$(echo "$VALIDATORS" | awk '{gsub(/[^0-9,]/,""); split($0,a,","); printf "["; for(i=1;i<=length(a);i++){printf "%s%d", (i>1?",":""), a[i]}; printf "]"}')
         if [ "$first" = true ]; then
             first=false
         else
