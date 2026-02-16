@@ -55,6 +55,8 @@ This repository implements industry-standard security practices following guidan
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
 - **[query-token-balance.js](query-token-balance.js)** - JavaScript/Node.js script for querying token balances
+- **[test-verify.js](test-verify.js)** - JavaScript verification utilities for transaction hashes and ENS names
+- **[verify-contract.js](verify-contract.js)** - JavaScript smart contract verification utilities for Ethereum addresses and ABI handling
 - **[validate-address-labels.py](validate-address-labels.py)** - Python script for validating address labels configuration
 
 ### Blockchain Resources

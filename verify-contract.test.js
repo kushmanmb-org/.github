@@ -114,6 +114,27 @@ describe('ContractAddressValidator', () => {
       
       expect(result.valid).toBe(false);
     });
+    
+    test('should reject non-string inputs - number', () => {
+      const result = ContractAddressValidator.validateAddress(12345);
+      
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Address must be a non-empty string');
+    });
+    
+    test('should reject non-string inputs - object', () => {
+      const result = ContractAddressValidator.validateAddress({});
+      
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Address must be a non-empty string');
+    });
+    
+    test('should reject non-string inputs - array', () => {
+      const result = ContractAddressValidator.validateAddress([]);
+      
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Address must be a non-empty string');
+    });
   });
   
   describe('normalizeAddress', () => {
@@ -266,8 +287,8 @@ describe('ContractVerifier', () => {
       
       expect(parsed.functions).toHaveLength(2);
       expect(parsed.events).toHaveLength(1);
-      expect(parsed.constructor).toBeDefined();
-      expect(parsed.constructor.type).toBe('constructor');
+      expect(parsed.constructorAbi).toBeDefined();
+      expect(parsed.constructorAbi.type).toBe('constructor');
     });
     
     test('should throw error for non-array ABI', () => {

@@ -217,12 +217,12 @@ class ContractVerifier {
     
     this.functions = abi.filter(item => item.type === 'function');
     this.events = abi.filter(item => item.type === 'event');
-    this.constructor_abi = abi.find(item => item.type === 'constructor');
+    this.constructorAbi = abi.find(item => item.type === 'constructor');
     
     return {
       functions: this.functions,
       events: this.events,
-      constructor: this.constructor_abi
+      constructorAbi: this.constructorAbi
     };
   }
   
