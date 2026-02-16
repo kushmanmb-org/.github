@@ -39,6 +39,7 @@ This repository implements industry-standard security practices following guidan
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
 - **[Validator Rewards API](VALIDATOR_REWARDS.md)** - Query Ethereum validator rewards using Beaconcha.in API v2
 - **[Bitcoin Difficulty Adjustment API](MEMPOOL_DIFFICULTY.md)** - Example HTML page for fetching Bitcoin difficulty adjustment data using mempool.space API
+- **[Solscan API](SOLSCAN_API.md)** - Query Solana account transfer history using Solscan API v2.0
 
 ### Development Tools
 
@@ -60,6 +61,7 @@ This repository implements industry-standard security practices following guidan
 - **[query-validator-rewards.sh](query-validator-rewards.sh)** - Bash script for querying validator rewards
 - **[query-validator-rewards.py](query-validator-rewards.py)** - Python script for querying validator rewards
 - **[query-validator-rewards.js](query-validator-rewards.js)** - JavaScript/Node.js script for querying validator rewards
+- **[query-solana-transfers.js](query-solana-transfers.js)** - JavaScript/Node.js script for querying Solana account transfers via Solscan API
 - **[test-verify.js](test-verify.js)** - JavaScript verification utilities for transaction hashes and ENS names
 - **[verify-contract.js](verify-contract.js)** - JavaScript smart contract verification utilities for Ethereum addresses and ABI handling
 - **[validate-address-labels.py](validate-address-labels.py)** - Python script for validating address labels configuration
@@ -72,6 +74,8 @@ This repository implements industry-standard security practices following guidan
 - **[blockchain-address.json](blockchain-address.json)** - Blockchain address information
 - **[multisig-wallet.abi.json](multisig-wallet.abi.json)** - ABI definition for multisig wallet contract
 - **[mempool-difficulty-adjustment.html](mempool-difficulty-adjustment.html)** - HTML example for fetching Bitcoin difficulty adjustment data
+- **[solscan-api-config.example.json](solscan-api-config.example.json)** - Configuration template for Solscan API queries
+- **[solscan-example.js](solscan-example.js)** - Example usage of Solscan API with axios
 
 ## Quick Start
 
@@ -302,6 +306,51 @@ xdg-open mempool-difficulty-adjustment.html
 The page will automatically fetch and display current Bitcoin difficulty adjustment information including progress percentage, difficulty change, estimated retarget date, and remaining blocks.
 
 For detailed usage and API documentation, see [MEMPOOL_DIFFICULTY.md](MEMPOOL_DIFFICULTY.md).
+
+### Query Solana Transfers
+
+Query Solana account transfer history using the Solscan API v2.0:
+
+#### Using JavaScript/Node.js Script
+
+```bash
+node query-solana-transfers.js --token YOUR_API_TOKEN --pretty
+```
+
+#### Using the Example Module
+
+```bash
+node solscan-example.js
+```
+
+#### Using axios Directly
+
+```javascript
+import axios from 'axios'
+
+const requestOptions = {
+  method: "get",
+  url: "https://pro-api.solscan.io/v2.0/account/transfer",
+  params: {
+    page: "1",
+    page_size: "10",
+    sort_by: "block_time",
+    sort_order: "desc",
+  },
+  headers: {
+    token: process.env.SOLSCAN_API_TOKEN
+  },
+}
+
+axios
+  .request(requestOptions)
+  .then(response => console.log(response.data))
+  .catch(err => console.error(err));
+```
+
+**Security Note**: Never commit your API token to version control. Use environment variables (`SOLSCAN_API_TOKEN`) or pass the token via command-line arguments.
+
+For detailed usage and examples, see [SOLSCAN_API.md](SOLSCAN_API.md).
 
 ### Cryptocurrency Consolidation
 
