@@ -1,0 +1,10 @@
+{
+  "apiEndpoint": "https://beaconcha.in/api/v2/ethereum/validators/rewards-list",
+  "apiKey": "YOUR_API_KEY_HERE",
+  "defaultLimit": 100,
+  "defaultOffset": 0,
+  "exampleValidators": [1, 2, 3],
+  "exampleEpoch": 123456,
+  "note": "Never commit this file with real API keys. Add to .gitignore if you create a local copy.",
+  "securityNote": "See SECURITY_BEST_PRACTICES.md for guidelines on protecting API keys"
+}

@@ -37,6 +37,7 @@ This repository implements industry-standard security practices following guidan
 - **[Blockchain JSON-RPC Server](BLOCKCHAIN_RPC.md)** - JSON-RPC 2.0 server for blockchain transaction operations (Electrum protocol)
 - **[Multisig Wallet ABI](MULTISIG_WALLET_README.md)** - Documentation for Ethereum multisignature wallet smart contract
 - **[Etherscan Token Balance API](ETHERSCAN_TOKEN_BALANCE.md)** - Guide for querying ERC-20 token balances using Etherscan API v2
+- **[Validator Rewards API](VALIDATOR_REWARDS.md)** - Query Ethereum validator rewards using Beaconcha.in API v2
 - **[Bitcoin Difficulty Adjustment API](MEMPOOL_DIFFICULTY.md)** - Example HTML page for fetching Bitcoin difficulty adjustment data using mempool.space API
 
 ### Development Tools
@@ -52,9 +53,13 @@ This repository implements industry-standard security practices following guidan
 - **[blockchain_rpc_server.py](blockchain_rpc_server.py)** - JSON-RPC server for blockchain.transaction.get_merkle
 - **[blockchain_rpc_client.py](blockchain_rpc_client.py)** - Client for testing the JSON-RPC server
 - **[api-test.sh](api-test.sh)** - Simple script to test Etherscan API v2 endpoint connectivity
+- **[validator-rewards-test.sh](validator-rewards-test.sh)** - Simple script to test Beaconcha.in API v2 endpoint connectivity
 - **[query-token-balance.sh](query-token-balance.sh)** - Bash script for querying token balances
 - **[query-token-balance.py](query-token-balance.py)** - Python script for querying token balances
 - **[query-token-balance.js](query-token-balance.js)** - JavaScript/Node.js script for querying token balances
+- **[query-validator-rewards.sh](query-validator-rewards.sh)** - Bash script for querying validator rewards
+- **[query-validator-rewards.py](query-validator-rewards.py)** - Python script for querying validator rewards
+- **[query-validator-rewards.js](query-validator-rewards.js)** - JavaScript/Node.js script for querying validator rewards
 - **[test-verify.js](test-verify.js)** - JavaScript verification utilities for transaction hashes and ENS names
 - **[verify-contract.js](verify-contract.js)** - JavaScript smart contract verification utilities for Ethereum addresses and ABI handling
 - **[validate-address-labels.py](validate-address-labels.py)** - Python script for validating address labels configuration
@@ -216,6 +221,50 @@ curl "https://api.etherscan.io/v2/api?chainid=1&module=account&action=addresstok
 ```
 
 For detailed usage and examples, see [ETHERSCAN_TOKEN_BALANCE.md](ETHERSCAN_TOKEN_BALANCE.md).
+
+### Query Validator Rewards
+
+You can query Ethereum validator rewards using the Beaconcha.in API v2 with the provided scripts.
+
+#### Using Bash Script
+
+```bash
+./query-validator-rewards.sh --apikey YOUR_API_KEY
+```
+
+#### Using Python Script
+
+```bash
+./query-validator-rewards.py --apikey YOUR_API_KEY --pretty
+```
+
+#### Using JavaScript/Node.js Script
+
+```bash
+node query-validator-rewards.js --apikey YOUR_API_KEY --pretty
+```
+
+#### Using cURL
+
+##### Test API Endpoint
+
+```bash
+./validator-rewards-test.sh
+```
+
+##### Query Validator Rewards (Full Example)
+
+```bash
+curl -X POST 'https://beaconcha.in/api/v2/ethereum/validators/rewards-list' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "validators": [1, 2, 3],
+    "limit": 10
+  }'
+```
+
+For detailed usage and examples, see [VALIDATOR_REWARDS.md](VALIDATOR_REWARDS.md).
 
 ### Address Labels Configuration
 

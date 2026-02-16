@@ -58,6 +58,14 @@ etherscan-api-config.json
 *-api-config.json
 !*-api-config.example.json
 
+# Beaconcha.in and validator rewards configuration (contains API keys)
+validator-rewards-config.json
+*validator-rewards-config*
+!*validator-rewards-config.example.*
+beaconchain-config.*
+*beaconchain-config*
+!*beaconchain-config.example.*
+
 # Crypto consolidation configuration (may contain sensitive data)
 crypto-config.json
 *crypto-config.json
