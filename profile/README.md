@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 Blockchain Development & Ethereum Tools
+# 🌏  Blockchain Development & Ethereum Tools
 
 **Building the future of decentralized applications**
 
