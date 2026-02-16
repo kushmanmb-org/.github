@@ -1,0 +1,8 @@
+{
+  "apiBaseUrl": "https://pro-api.solscan.io/v2.0",
+  "defaultPage": "1",
+  "defaultPageSize": "10",
+  "defaultSortBy": "block_time",
+  "defaultSortOrder": "desc",
+  "_comment": "DO NOT put your API token in this file. Use environment variables (SOLSCAN_API_TOKEN) or pass via command-line arguments."
+}
