@@ -87,6 +87,35 @@ Verify blockchain transaction hashes:
 - **Multisig Wallet Owner**: `0x6B834a2f2a24ae7e592AA0843aa2bDF58157bee7`
 - **Labeled Address (kushmanmb10)**: `0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43`
 
+## 🧪 Testing & CI/CD
+
+### Testing
+
+The repository includes comprehensive test suites:
+
+- **JavaScript Tests**: Jest-based tests for Ethereum and Solana utilities
+- **Python Tests**: pytest-based tests for verification scripts
+- **Automated CI**: GitHub Actions runs all tests on push and pull requests
+
+```bash
+# Run JavaScript tests
+npm test
+
+# Run Python tests
+python3 -m pytest
+```
+
+### GitHub Actions Workflows
+
+Automated workflows for:
+
+- **Security**: CodeQL analysis, secret scanning, and vulnerability detection
+- **Validation**: JSON, Markdown, Python, and shell script linting
+- **Blockchain**: Balance monitoring, asset consolidation, transaction verification
+- **Documentation**: Automated GitHub Pages deployment
+
+For detailed information, see the [main README](../README.md#github-actions-workflows).
+
 ## 🤝 Community
 
 - [Code of Conduct](../CODE_OF_CONDUCT.md)
