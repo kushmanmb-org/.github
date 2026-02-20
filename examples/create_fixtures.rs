@@ -36,7 +36,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("Each proof system has its own fixture file:");
     println!("  - fixtures/proof_fixture_plonk.json");
     println!("  - fixtures/proof_fixture_groth16.json");
-    println!("  - fixtures/proof_fixture_STARK.json");
+    println!("  - fixtures/proof_fixture_stark.json");
 
     println!("\nNote: In a real implementation, proof and vk would come from");
     println!("the SP1 SDK's ProverClient after generating actual zero-knowledge proofs.");

@@ -107,7 +107,7 @@ pub fn create_proof_fixture(
     let filename = match system {
         ProofSystem::Plonk => "proof_fixture_plonk.json",
         ProofSystem::Groth16 => "proof_fixture_groth16.json",
-        ProofSystem::STARK => "proof_fixture_STARK.json",
+        ProofSystem::STARK => "proof_fixture_stark.json",
     };
 
     let fixture_path = fixtures_dir.join(filename);

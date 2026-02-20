@@ -107,7 +107,7 @@ pub struct ProofFixture {
 Fixture files are created in the `fixtures/` directory with the following naming convention:
 - `proof_fixture_plonk.json` - For Plonk proofs
 - `proof_fixture_groth16.json` - For Groth16 proofs
-- `proof_fixture_STARK.json` - For STARK proofs
+- `proof_fixture_stark.json` - For STARK proofs
 
 Each file contains JSON-formatted proof data that can be easily inspected or loaded for testing.
 
