@@ -236,3 +236,12 @@ signing-key.*
 .cache/
 tmp/
 temp/
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+Gemfile.lock
