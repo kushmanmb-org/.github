@@ -1,0 +1,14 @@
+{
+  "name": "Cargo Build, Lint, and Test",
+  "description": "Workflow template for building, linting, and testing Rust repositories with Cargo.",
+  "iconName": "code",
+  "categories": [
+    "Rust",
+    "Cargo"
+  ],
+  "filePatterns": [
+    "Cargo.toml$",
+    "Cargo.lock$",
+    "\\.rs$"
+  ]
+}
