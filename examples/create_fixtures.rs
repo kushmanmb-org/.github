@@ -29,14 +29,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("✓ Groth16 fixture created\n");
 
     println!("Generating STARK proof fixture...");
-    create_proof_fixture(&proof, &vk, ProofSystem::Stark)?;
+    create_proof_fixture(&proof, &vk, ProofSystem::STARK)?;
     println!("✓ STARK fixture created\n");
 
     println!("All fixture files created in the './fixtures' directory");
     println!("Each proof system has its own fixture file:");
     println!("  - fixtures/proof_fixture_plonk.json");
     println!("  - fixtures/proof_fixture_groth16.json");
-    println!("  - fixtures/proof_fixture_stark.json");
+    println!("  - fixtures/proof_fixture_STARK.json");
 
     println!("\nNote: In a real implementation, proof and vk would come from");
     println!("the SP1 SDK's ProverClient after generating actual zero-knowledge proofs.");

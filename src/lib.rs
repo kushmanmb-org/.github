@@ -32,7 +32,7 @@ pub enum ProofSystem {
     /// Groth16 proof system
     Groth16,
     /// STARK proof system
-    Stark,
+    STARK,
 }
 
 /// Proof fixture structure for serialization
@@ -94,16 +94,12 @@ pub fn create_proof_fixture(
     let fixtures_dir = PathBuf::from("fixtures");
     fs::create_dir_all(&fixtures_dir)?;
 
-    // Serialize the proof data
-    let proof_bytes = bincode::serialize(&proof.proof)?;
-    let public_values_bytes = bincode::serialize(&proof.public_values)?;
-    let vk_bytes = bincode::serialize(&vk.vk)?;
-
     // Create the fixture structure
+    // Note: We use the raw Vec<u8> values directly since they're already in binary format
     let fixture = ProofFixture {
-        proof: proof_bytes,
-        public_values: public_values_bytes,
-        vk: vk_bytes,
+        proof: proof.proof.clone(),
+        public_values: proof.public_values.clone(),
+        vk: vk.vk.clone(),
         system,
     };
 
@@ -111,7 +107,7 @@ pub fn create_proof_fixture(
     let filename = match system {
         ProofSystem::Plonk => "proof_fixture_plonk.json",
         ProofSystem::Groth16 => "proof_fixture_groth16.json",
-        ProofSystem::Stark => "proof_fixture_stark.json",
+        ProofSystem::STARK => "proof_fixture_STARK.json",
     };
 
     let fixture_path = fixtures_dir.join(filename);
@@ -134,7 +130,7 @@ mod tests {
         let systems = vec![
             ProofSystem::Plonk,
             ProofSystem::Groth16,
-            ProofSystem::Stark,
+            ProofSystem::STARK,
         ];
 
         for system in systems {

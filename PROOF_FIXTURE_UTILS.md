@@ -25,14 +25,20 @@ proof-fixture-utils = "0.1.0"
 ## Usage
 
 ```rust
-use proof_fixture_utils::{create_proof_fixture, ProofSystem};
-use sp1_sdk::{SP1ProofWithPublicValues, SP1VerifyingKey};
+use proof_fixture_utils::{create_proof_fixture, ProofSystem, SP1ProofWithPublicValues, SP1VerifyingKey};
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // Assuming you have generated a proof and verifying key
-    let proof: SP1ProofWithPublicValues = /* your proof */;
-    let vk: SP1VerifyingKey = /* your verifying key */;
+    // Create proof data structures
+    // In a real implementation, these would come from the SP1 SDK's ProverClient
+    let proof = SP1ProofWithPublicValues {
+        proof: vec![1, 2, 3, 4, 5, 6, 7, 8],
+        public_values: vec![42, 100, 200],
+    };
+    
+    let vk = SP1VerifyingKey {
+        vk: vec![9, 10, 11, 12, 13, 14, 15, 16],
+    };
     
     // Create a Plonk proof fixture
     create_proof_fixture(&proof, &vk, ProofSystem::Plonk)?;
@@ -41,7 +47,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     create_proof_fixture(&proof, &vk, ProofSystem::Groth16)?;
     
     // Create a STARK proof fixture
-    create_proof_fixture(&proof, &vk, ProofSystem::Stark)?;
+    create_proof_fixture(&proof, &vk, ProofSystem::STARK)?;
     
     Ok(())
 }
@@ -82,7 +88,7 @@ This function will return an error if:
 Represents the supported proof systems:
 - `ProofSystem::Plonk` - Plonk proof system
 - `ProofSystem::Groth16` - Groth16 proof system
-- `ProofSystem::Stark` - STARK proof system
+- `ProofSystem::STARK` - STARK proof system
 
 ### `ProofFixture` Structure
 
@@ -101,7 +107,7 @@ pub struct ProofFixture {
 Fixture files are created in the `fixtures/` directory with the following naming convention:
 - `proof_fixture_plonk.json` - For Plonk proofs
 - `proof_fixture_groth16.json` - For Groth16 proofs
-- `proof_fixture_stark.json` - For STARK proofs
+- `proof_fixture_STARK.json` - For STARK proofs
 
 Each file contains JSON-formatted proof data that can be easily inspected or loaded for testing.
 
@@ -125,8 +131,9 @@ cargo test
 
 - `serde` - Serialization framework
 - `serde_json` - JSON serialization
-- `sp1-sdk` - SP1 zero-knowledge proof SDK
 - `bincode` - Binary serialization
+
+Note: This library defines its own simplified types (`SP1ProofWithPublicValues`, `SP1VerifyingKey`) that are compatible with the SP1 SDK interface but don't require the full SP1 SDK as a dependency. This makes the library lightweight and easy to build.
 
 ## Security Considerations
 
