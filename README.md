@@ -2,6 +2,8 @@
 
 This repository contains organization-wide configuration, templates, and utilities for blockchain-related operations.
 
+> 📖 **[View Documentation Site](https://kushmanmb-org.github.io/.github/)** - Browse the full documentation on GitHub Pages
+
 ## 🔒 Security and Privacy
 
 This repository implements industry-standard security practices following guidance from the Linux Foundation, GitHub Security Lab, and OpenSSF. Key security features include:
