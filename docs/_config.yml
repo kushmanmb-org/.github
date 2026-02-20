@@ -1,0 +1,48 @@
+---
+title: kushmanmb-org/.github
+description: >-
+  Organization-wide configuration, templates, and utilities for
+  blockchain-related operations
+theme: jekyll-theme-minimal
+baseurl: "/.github"
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Exclude files from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - package.json
+  - package-lock.json
+  - yarn.lock
+  - "*.py"
+  - "*.js"
+  - "*.sh"
+  - "*.test.js"
+  - db/
+  - examples/
+  - profile/
+
+# Include README files
+include:
+  - README.md
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# GitHub metadata
+repository: kushmanmb-org/.github
+
+# Navigation
+header_pages:
+  - index.md
+  - security.md
+  - contributing.md
