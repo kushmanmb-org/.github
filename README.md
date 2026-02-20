@@ -46,7 +46,15 @@ This repository implements industry-standard security practices following guidan
 ### Development Tools
 
 - **[Database Frontend (Go)](db/frontend.go)** - Secure database operations with SQL injection prevention, input validation, and proper error handling
+- **[Database Usage Example (Go)](examples/db_usage_example.go)** - Example demonstrating secure database operations with the frontend package
 - **[Bash Configuration](BASHRC.md)** - Custom bash functions including foundryup (Foundry installer), cwhois (bgp.tools whois wrapper), and lastcall (Ethereum address transaction query)
+
+### Build & Configuration
+
+- **[package.json](package.json)** - Node.js dependencies and scripts for JavaScript components
+- **[requirements.txt](requirements.txt)** - Python dependencies for Python scripts
+- **[jest.config.js](jest.config.js)** - Jest testing framework configuration
+- **[babel.config.js](babel.config.js)** - Babel transpiler configuration for modern JavaScript support
 
 ### Utility Scripts
 
@@ -68,16 +76,29 @@ This repository implements industry-standard security practices following guidan
 - **[verify-contract.js](verify-contract.js)** - JavaScript smart contract verification utilities for Ethereum addresses and ABI handling
 - **[validate-address-labels.py](validate-address-labels.py)** - Python script for validating address labels configuration
 
+### Example Scripts
+
+- **[fetch-example.js](fetch-example.js)** - Example demonstrating fetch API usage for blockchain data queries
+- **[verify-contract-example.js](verify-contract-example.js)** - Example demonstrating smart contract verification with ABI handling
+- **[solscan-example.js](solscan-example.js)** - Example usage of Solscan API for Solana account queries
+
 ### Blockchain Resources
 
 - **[address-labels.json](address-labels.json)** - Address labeling configuration with metadata
 - **[address-labels.example.json](address-labels.example.json)** - Example address labels configuration with multiple entries
 - **[address-labels.schema.json](address-labels.schema.json)** - JSON schema for address labels validation
+- **[address-whitelist.example.json](address-whitelist.example.json)** - Example address whitelist configuration
 - **[blockchain-address.json](blockchain-address.json)** - Blockchain address information
+- **[commits-example.json](commits-example.json)** - Example commit verification data for Git POW verification
+- **[crypto-config.example.json](crypto-config.example.json)** - Example cryptocurrency configuration template
+- **[ens-verification-example.json](ens-verification-example.json)** - Example ENS verification data structure
+- **[etherscan-api-config.example.json](etherscan-api-config.example.json)** - Configuration template for Etherscan API queries
+- **[etherscan-messages.json](etherscan-messages.json)** - Etherscan API response message templates
 - **[multisig-wallet.abi.json](multisig-wallet.abi.json)** - ABI definition for multisig wallet contract
 - **[mempool-difficulty-adjustment.html](mempool-difficulty-adjustment.html)** - HTML example for fetching Bitcoin difficulty adjustment data
 - **[solscan-api-config.example.json](solscan-api-config.example.json)** - Configuration template for Solscan API queries
-- **[solscan-example.js](solscan-example.js)** - Example usage of Solscan API with axios
+- **[tx-hashes-example.json](tx-hashes-example.json)** - Example transaction hash data for verification
+- **[validator-rewards-config.example.json](validator-rewards-config.example.json)** - Configuration template for validator rewards queries
 
 ## Quick Start
 
@@ -390,6 +411,79 @@ For detailed setup and usage instructions, see [CRYPTO_CONSOLIDATION.md](CRYPTO_
 - **Token Balance Query Address**: `0x983e3660c0bE01991785F80f266A84B911ab59b0`
 - **Multisig Wallet Owner**: `0x6B834a2f2a24ae7e592AA0843aa2bDF58157bee7`
 - **Labeled Address (kushmanmb10)**: `0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43`
+
+## Testing
+
+The repository includes comprehensive test suites for JavaScript and Python components:
+
+### JavaScript Tests (Jest)
+
+```bash
+# Run all JavaScript tests
+npm test
+
+# Run specific test file
+npm test etherscan-common.test.js
+npm test verify-contract.test.js
+```
+
+**Test Files**:
+- **[etherscan-common.test.js](etherscan-common.test.js)** - Tests for Etherscan API utility functions
+- **[query-solana-transfers.test.js](query-solana-transfers.test.js)** - Tests for Solana transfer query functionality
+- **[test-verify.test.js](test-verify.test.js)** - Tests for transaction hash and ENS name verification
+- **[verify-contract.test.js](verify-contract.test.js)** - Tests for smart contract verification utilities
+
+### Python Tests (pytest)
+
+```bash
+# Run all Python tests
+python3 -m pytest
+
+# Run specific test file
+python3 test_git_pow_verifier.py
+python3 test_verify_tx_hash.py
+```
+
+**Test Files**:
+- **[test_git_pow_verifier.py](test_git_pow_verifier.py)** - Tests for Git commit signature verification
+- **[test_verify_tx_hash.py](test_verify_tx_hash.py)** - Tests for blockchain transaction hash verification
+- **[test_verify_ens_creator.py](test_verify_ens_creator.py)** - Tests for ENS creator verification
+- **[test_blockchain_rpc.py](test_blockchain_rpc.py)** - Tests for JSON-RPC blockchain server
+
+### Configuration
+
+- **[jest.config.js](jest.config.js)** - Jest testing framework configuration
+- **[babel.config.js](babel.config.js)** - Babel transpiler configuration for JavaScript tests
+
+## GitHub Actions Workflows
+
+The repository uses GitHub Actions for continuous integration, security scanning, and automation:
+
+### Security & Code Quality
+
+- **[.github/workflows/codeql-analysis.yml](.github/workflows/codeql-analysis.yml)** - CodeQL security analysis for vulnerability detection
+- **[.github/workflows/secret-scanning.yml](.github/workflows/secret-scanning.yml)** - Automated detection of accidentally committed secrets
+- **[.github/workflows/ci.yml](.github/workflows/ci.yml)** - Main continuous integration workflow with build and test automation
+
+### Validation Workflows
+
+- **[.github/workflows/json-validation.yml](.github/workflows/json-validation.yml)** - Validates JSON configuration files
+- **[.github/workflows/markdown-validation.yml](.github/workflows/markdown-validation.yml)** - Lints and validates Markdown documentation
+- **[.github/workflows/python-validation.yml](.github/workflows/python-validation.yml)** - Python code linting and validation
+- **[.github/workflows/shell-validation.yml](.github/workflows/shell-validation.yml)** - Shell script validation with shellcheck
+- **[.github/workflows/reusable-validation.yml](.github/workflows/reusable-validation.yml)** - Reusable validation workflow for multiple file types
+
+### Blockchain Operations
+
+- **[.github/workflows/balance-monitor.yml](.github/workflows/balance-monitor.yml)** - Monitors cryptocurrency balances across multiple chains
+- **[.github/workflows/crypto-consolidation.yml](.github/workflows/crypto-consolidation.yml)** - Automated crypto asset consolidation to kushmanmb.base.eth
+- **[.github/workflows/tx-verification.yml](.github/workflows/tx-verification.yml)** - Verifies blockchain transaction hashes after consolidation
+
+### Documentation
+
+- **[.github/workflows/pages.yml](.github/workflows/pages.yml)** - Builds and deploys Jekyll documentation site to GitHub Pages
+
+For detailed workflow documentation, see [WORKFLOW_SECURITY.md](WORKFLOW_SECURITY.md).
 
 ## Community Files
 
