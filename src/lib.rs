@@ -95,7 +95,10 @@ pub fn create_proof_fixture(
     fs::create_dir_all(&fixtures_dir)?;
 
     // Create the fixture structure
-    // Note: We use the raw Vec<u8> values directly since they're already in binary format
+    // Note: We clone the Vec<u8> data since:
+    // 1. The function signature uses references (better API ergonomics)
+    // 2. The ProofFixture needs to own the data for serialization
+    // 3. Proof data is typically small enough (KB to MB range) that cloning is acceptable
     let fixture = ProofFixture {
         proof: proof.proof.clone(),
         public_values: proof.public_values.clone(),
