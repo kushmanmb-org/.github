@@ -71,7 +71,7 @@ pub fn create_proof_fixture(
 **Parameters:**
 - `proof`: The SP1 proof with public values
 - `vk`: The SP1 verifying key
-- `system`: The proof system used (Plonk, Groth16, or Stark)
+- `system`: The proof system used (Plonk, Groth16, or STARK)
 
 **Returns:**
 - `Ok(())` on success
@@ -131,7 +131,6 @@ cargo test
 
 - `serde` - Serialization framework
 - `serde_json` - JSON serialization
-- `bincode` - Binary serialization
 
 Note: This library defines its own simplified types (`SP1ProofWithPublicValues`, `SP1VerifyingKey`) that are compatible with the SP1 SDK interface but don't require the full SP1 SDK as a dependency. This makes the library lightweight and easy to build.
 
