@@ -177,13 +177,42 @@ def is_response_successful(response):
 def format_response(response, pretty=False):
     """
     Format API response output.
+    Redacts sensitive fields like API keys to prevent accidental exposure.
     
     Args:
         response (dict): API response data
         pretty (bool): Whether to pretty-print the JSON
         
     Returns:
-        str: Formatted JSON string
+        str: Formatted JSON string with sensitive fields redacted
     """
+    import copy
+    
+    # List of sensitive field names to redact
+    sensitive_fields = ['apikey', 'api_key', 'apiKey', 'token', 'access_token', 'secret', 'password', 'authorization']
+    
+    # Create a deep copy and redact sensitive fields
+    sanitized = copy.deepcopy(response)
+    
+    def redact_sensitive_fields(obj):
+        """Recursively redact sensitive fields in nested structures."""
+        if not isinstance(obj, dict):
+            return
+        
+        for key in list(obj.keys()):
+            # Check if this is a sensitive field
+            if any(field.lower() in key.lower() for field in sensitive_fields):
+                obj[key] = '[REDACTED]'
+            elif isinstance(obj[key], dict):
+                # Recursively redact nested objects
+                redact_sensitive_fields(obj[key])
+            elif isinstance(obj[key], list):
+                # Redact items in lists
+                for item in obj[key]:
+                    if isinstance(item, dict):
+                        redact_sensitive_fields(item)
+    
+    redact_sensitive_fields(sanitized)
+    
     indent = 2 if pretty else None
-    return json.dumps(response, indent=indent)
+    return json.dumps(sanitized, indent=indent)
