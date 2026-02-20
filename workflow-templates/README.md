@@ -34,6 +34,16 @@ This workflow does not modify the repository, so it only requires read access.
 
 This workflow does not modify the repository, so it only requires read access.
 
+### cargo-build-lint-test.yml
+
+**Purpose**: Runs build, lint, and test processes for Rust projects with support for multiple Rust versions (stable, beta, nightly) and Cargo tooling.
+
+**Permissions**:
+
+- `contents: read` - Read-only access to repository contents (explicit for security best practice)
+
+This workflow does not modify the repository, so it only requires read access. It includes formatting checks with `cargo fmt`, linting with `cargo clippy`, building with `cargo build`, testing with `cargo test`, and code coverage with `cargo-tarpaulin` (on stable only).
+
 ### balance-monitor.yml
 
 **Purpose**: Monitors cryptocurrency balances across multiple chains (Ethereum, Base, Polygon, Arbitrum, Optimism).

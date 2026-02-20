@@ -1,0 +1,85 @@
+name: Cargo Build, Lint, and Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build-lint-test:
+    name: Build, Lint, and Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        rust-version: [stable, beta, nightly]
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Rust ${{ matrix.rust-version }}
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          components: rustfmt, clippy
+      
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+      
+      - name: Cache cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-index-
+      
+      - name: Cache cargo build
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-target-
+      
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      
+      - name: Lint
+        run: cargo clippy --all-targets --all-features -- -D warnings
+      
+      - name: Build
+        run: cargo build --verbose --all-features
+      
+      - name: Test
+        run: cargo test --verbose --all-features
+      
+      - name: Install cargo-tarpaulin
+        if: matrix.rust-version == 'stable'
+        run: cargo install cargo-tarpaulin
+      
+      - name: Generate coverage
+        if: matrix.rust-version == 'stable'
+        run: cargo tarpaulin --out xml --all-features
+      
+      - name: Upload coverage
+        if: matrix.rust-version == 'stable'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./cobertura.xml
+          flags: unittests
+          
+  all-jobs-pass:
+    name: All jobs pass
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs:
+      - build-lint-test
+    steps:
+      - run: echo "All jobs passed successfully!"
