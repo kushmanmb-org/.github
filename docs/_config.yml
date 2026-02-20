@@ -1,5 +1,8 @@
+---
 title: kushmanmb-org/.github
-description: Organization-wide configuration, templates, and utilities for blockchain-related operations
+description: >-
+  Organization-wide configuration, templates, and utilities for
+  blockchain-related operations
 theme: jekyll-theme-minimal
 baseurl: "/.github"
 
