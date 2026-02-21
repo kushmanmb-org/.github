@@ -212,7 +212,9 @@ Alerts are triggered for:
 The workflows implement dynamic gas pricing:
 - Query current gas prices before transactions
 - Wait for favorable gas conditions (if not urgent)
-- Use EIP-1559 for Ethereum mainnet
+- Use EIP-1559 for Ethereum mainnet (dynamic base fee and priority fee)
+- Support EIP-7976 calldata floor pricing (64/64 gas per byte for data-heavy transactions)
+- Support EIP-7981 access list pricing (aligned with EIP-7976 floor costs)
 - Configure maximum gas price limits
 
 ### Best Practices
@@ -301,6 +303,8 @@ All workflows support dry-run mode:
 - [Multisig Wallet Documentation](MULTISIG_WALLET_README.md)
 - [Etherscan API Guide](ETHERSCAN_TOKEN_BALANCE.md)
 - [Transaction Hash Verification](TX_HASH_VERIFICATION.md)
+- [EIP-7976: Increase Calldata Floor Cost](EIP_7976.md)
+- [EIP-7981: Increase Access List Cost](EIP_7981.md)
 
 ## Support
 

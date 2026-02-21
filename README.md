@@ -43,6 +43,11 @@ This repository implements industry-standard security practices following guidan
 - **[Bitcoin Difficulty Adjustment API](MEMPOOL_DIFFICULTY.md)** - Example HTML page for fetching Bitcoin difficulty adjustment data using mempool.space API
 - **[Solscan API](SOLSCAN_API.md)** - Query Solana account transfer history using Solscan API v2.0
 
+### Ethereum Improvement Proposals (EIPs)
+
+- **[EIP-7976: Increase Calldata Floor Cost](EIP_7976.md)** - Documentation for EIP-7976 calldata floor pricing (64/64 gas per byte)
+- **[EIP-7981: Increase Access List Cost](EIP_7981.md)** - Documentation for EIP-7981 access list pricing, aligned with EIP-7976
+
 ### Development Tools
 
 - **[Database Frontend (Go)](db/frontend.go)** - Secure database operations with SQL injection prevention, input validation, and proper error handling
