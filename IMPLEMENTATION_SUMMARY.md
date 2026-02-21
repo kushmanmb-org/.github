@@ -141,7 +141,9 @@ Added documentation for new workflows
 ### 6. Gas Optimization
 - Dynamic gas pricing
 - Wait for favorable conditions
-- EIP-1559 support
+- EIP-1559 support (Ethereum mainnet fee market)
+- EIP-7976 support (calldata floor pricing at 64/64 gas per byte)
+- EIP-7981 support (access list cost with aligned floor pricing)
 - Maximum gas price limits
 
 ## Supported Chains
