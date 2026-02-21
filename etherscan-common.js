@@ -167,13 +167,40 @@ function isResponseSuccessful(response) {
 
 /**
  * Format API response output based on options.
+ * Redacts sensitive fields like API keys to prevent accidental exposure.
  * @param {object} response - API response data
  * @param {object} options - Formatting options (e.g., {pretty: true})
  * @returns {string} Formatted output string
  */
 function formatResponse(response, options = {}) {
+  // List of sensitive field names to redact
+  const sensitiveFields = ['apikey', 'api_key', 'apiKey', 'token', 'access_token', 'secret', 'password', 'authorization'];
+  
+  // Create a deep copy and redact sensitive fields
+  const sanitized = JSON.parse(JSON.stringify(response));
+  
+  function redactSensitiveFields(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+      return;
+    }
+    
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        // Check if this is a sensitive field
+        if (sensitiveFields.some(field => key.toLowerCase().includes(field.toLowerCase()))) {
+          obj[key] = '[REDACTED]';
+        } else if (typeof obj[key] === 'object') {
+          // Recursively redact nested objects
+          redactSensitiveFields(obj[key]);
+        }
+      }
+    }
+  }
+  
+  redactSensitiveFields(sanitized);
+  
   const indent = options.pretty ? 2 : undefined;
-  return JSON.stringify(response, null, indent);
+  return JSON.stringify(sanitized, null, indent);
 }
 
 module.exports = {
