@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌏  Blockchain Development & Ethereum Tools
+# 🌏  BeyondGlobal  🗺️
 
 **Building the future of decentralized applications**
 
