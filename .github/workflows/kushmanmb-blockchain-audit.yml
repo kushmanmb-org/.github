@@ -1,0 +1,66 @@
+name: "Kushmanmb Blockchain Audit"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  blockchain_audit:
+    name: Blockchain Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: latest
+
+      - name: Solidity static analysis
+        run: |
+          pip install slither-analyzer
+          slither .
+
+      - name: Foundry compilation check
+        run: forge build --force
+
+      - name: contract.js verification
+        run: |
+          if [ -f contract.js ]; then
+            node contract.js
+          elif [ -f scripts/contract.js ]; then
+            node scripts/contract.js
+          else
+            echo "contract.js not found"
+          fi
+
+      - name: ABI validation
+        run: |
+          if [ -f abi.json ]; then
+            echo "ABI file found"
+          elif [ -f scripts/validate-abi.js ]; then
+            node scripts/validate-abi.js
+          else
+            echo "No ABI validation script found"
+          fi
+
+      - name: Automated error detection
+        run: |
+          if [ -f scripts/detect-errors.js ]; then
+            node scripts/detect-errors.js
+          else
+            echo "No automated error detection script found"
+          fi
