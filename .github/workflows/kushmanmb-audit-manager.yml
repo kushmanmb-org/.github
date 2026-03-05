@@ -1,0 +1,86 @@
+name: "Kushmanmb Audit Manager"
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  audit-manager:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      actions: read
+    steps:
+      - name: Trigger blockchain-audit workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          workflow: blockchain-audit.yml
+          ref: ${{ github.ref }}
+      - name: Trigger kushmanmb-blockchain-audit workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          workflow: kushmanmb-blockchain-audit.yml
+          ref: ${{ github.ref }}
+      - name: Trigger kushmanmb-code-fix workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          workflow: kushmanmb-code-fix.yml
+          ref: ${{ github.ref }}
+      - name: Aggregate results and open issue if errors
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflows = [
+              'blockchain-audit.yml',
+              'kushmanmb-blockchain-audit.yml',
+              'kushmanmb-code-fix.yml'
+            ];
+            const runsWithErrors = [];
+            for (const wf of workflows) {
+              const { data: workflow } = await github.rest.actions.getWorkflow({
+                owner,
+                repo,
+                workflow_id: wf,
+              });
+              const { data: runs } = await github.rest.actions.listWorkflowRuns({
+                owner,
+                repo,
+                workflow_id: workflow.id,
+                per_page: 1,
+              });
+              const run = runs.workflow_runs[0];
+              if (run && run.conclusion && run.conclusion !== 'success') {
+                runsWithErrors.push({ name: wf, conclusion: run.conclusion, html_url: run.html_url });
+              }
+            }
+            if (runsWithErrors.length > 0) {
+              const issueTitle = 'Blockchain Audit Errors Detected';
+              const issueBody = runsWithErrors.map(run => `- **${run.name}**: ${run.conclusion} - [Run](${run.html_url})`).join('\n');
+              const { data: existingIssues } = await github.rest.issues.listForRepo({
+                owner,
+                repo,
+                state: 'open',
+                labels: ['audit-manager'],
+                per_page: 100,
+              });
+              const issueExists = existingIssues.some(issue => issue.title === issueTitle);
+              if (!issueExists) {
+                await github.rest.issues.create({
+                  owner,
+                  repo,
+                  title: issueTitle,
+                  body: `The following audit workflows reported errors:\n${issueBody}\n\nPlease investigate and resolve the issues.`,
+                  labels: ['audit-manager'],
+                });
+              }
+            } else {
+              console.log('All audit workflows completed successfully');
+            }
