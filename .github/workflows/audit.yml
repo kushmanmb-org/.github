@@ -1,0 +1,43 @@
+name: Audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  audit:
+    name: Smart Contract Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Blockchain Code Scanning
+        uses: crytic/slither-action@v0.0.13
+        with:
+          target: contracts
+
+      - name: Smart Contract Linting
+        uses: crytic/solhint-action@v1.0.1
+        with:
+          path: contracts
+
+      - name: ABI Validation
+        run: |
+          # Validate ABI files
+          npm run abi:validate
+
+      - name: Contract.js Verification
+        run: |
+          # Verify contract.js implementations
+          npm run verify:contracts
