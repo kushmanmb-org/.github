@@ -1,0 +1,54 @@
+name: "Kushmanmb Audit Master"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  run_blockchain_audit:
+    uses: ./.github/workflows/blockchain-audit.yml
+    secrets: inherit
+
+  run_kushmanmb_blockchain_audit:
+    uses: ./.github/workflows/kushmanmb-blockchain-audit.yml
+    secrets: inherit
+
+  aggregate_results:
+    name: Aggregate Blockchain Audit Results
+    needs:
+      - run_blockchain_audit
+      - run_kushmanmb_blockchain_audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate unified audit report
+        id: generate_report
+        run: |
+          {
+            echo "## Unified Blockchain Audit Report"
+            echo ""
+            echo "### blockchain-audit.yml result: ${{ needs.run_blockchain_audit.result }}"
+            echo "### kushmanmb-blockchain-audit.yml result: ${{ needs.run_kushmanmb_blockchain_audit.result }}"
+          } > report.md
+      - name: Publish unified audit report as GitHub Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('report.md', 'utf8');
+            const run1 = '${{ needs.run_blockchain_audit.result }}';
+            const run2 = '${{ needs.run_kushmanmb_blockchain_audit.result }}';
+            const conclusion = (run1 === 'success' && run2 === 'success') ? 'success' : 'failure';
+            await github.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Unified Blockchain Audit',
+              head_sha: context.payload.after || context.sha,
+              status: 'completed',
+              conclusion: conclusion,
+              output: {
+                title: 'Unified Blockchain Audit Report',
+                summary: report
+              }
+            });
