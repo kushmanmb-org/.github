@@ -88,11 +88,44 @@ Security Note:
 `);
 }
 
+/**
+ * Format API response data as JSON string.
+ * Redacts sensitive fields to prevent accidental exposure.
+ * @param {object} data - Response data to format
+ * @param {boolean} pretty - Whether to pretty-print the JSON
+ * @returns {string} Formatted JSON string with sensitive fields redacted
+ */
 function formatResponse(data, pretty = false) {
-  if (pretty) {
-    return JSON.stringify(data, null, 2);
+  // List of sensitive field names to redact
+  const sensitiveFields = ['apikey', 'api_key', 'apiKey', 'token', 'access_token', 'secret', 'password', 'authorization'];
+  
+  // Create a deep copy and redact sensitive fields
+  const sanitized = JSON.parse(JSON.stringify(data));
+  
+  function redactSensitiveFields(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+      return;
+    }
+    
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        // Check if this is a sensitive field
+        if (sensitiveFields.some(field => key.toLowerCase().includes(field.toLowerCase()))) {
+          obj[key] = '[REDACTED]';
+        } else if (typeof obj[key] === 'object') {
+          // Recursively redact nested objects
+          redactSensitiveFields(obj[key]);
+        }
+      }
+    }
   }
-  return JSON.stringify(data);
+  
+  redactSensitiveFields(sanitized);
+  
+  if (pretty) {
+    return JSON.stringify(sanitized, null, 2);
+  }
+  return JSON.stringify(sanitized);
 }
 
 function formatRewardRecord(record) {

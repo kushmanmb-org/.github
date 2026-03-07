@@ -492,6 +492,8 @@ For detailed workflow documentation, see [WORKFLOW_SECURITY.md](WORKFLOW_SECURIT
 - [Support](SUPPORT.md)
 - [Security Policy](SECURITY.md)
 - [Security Best Practices](SECURITY_BEST_PRACTICES.md) - Guidelines for protecting API keys and sensitive data
+- [Security Audit Report](SECURITY_AUDIT_REPORT.md) - Latest security audit findings (2026-02-20)
+- [Security Improvements](SECURITY_IMPROVEMENTS.md) - Implemented security enhancements
 - [Workflow Security](WORKFLOW_SECURITY.md) - GitHub Actions security best practices
 - [Branch Protection](BRANCH_PROTECTION.md) - Repository security configuration guide
 - [Funding Information](FUNDING.yml)

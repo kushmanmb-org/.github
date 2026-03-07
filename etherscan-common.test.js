@@ -144,11 +144,48 @@ describe('etherscan-common security tests', () => {
       expect(formatted).toContain('\n');
     });
 
-    test('should not leak sensitive data in formatting', () => {
+    test('should redact sensitive data in formatting', () => {
       const response = { apikey: 'SHOULD_NOT_APPEAR', status: "1" };
       const formatted = formatResponse(response);
-      // In real implementation, might want to redact sensitive fields
-      expect(formatted).toBeTruthy();
+      expect(formatted).not.toContain('SHOULD_NOT_APPEAR');
+      expect(formatted).toContain('[REDACTED]');
+      expect(formatted).toContain('"status":"1"');
+    });
+
+    test('should redact various sensitive field names', () => {
+      const response = {
+        apikey: 'secret1',
+        api_key: 'secret2',
+        apiKey: 'secret3',
+        token: 'secret4',
+        access_token: 'secret5',
+        password: 'secret6',
+        normalField: 'visible',
+        status: "1"
+      };
+      const formatted = formatResponse(response);
+      expect(formatted).not.toContain('secret1');
+      expect(formatted).not.toContain('secret2');
+      expect(formatted).not.toContain('secret3');
+      expect(formatted).not.toContain('secret4');
+      expect(formatted).not.toContain('secret5');
+      expect(formatted).not.toContain('secret6');
+      expect(formatted).toContain('visible');
+      expect(formatted).toContain('"status":"1"');
+    });
+
+    test('should redact nested sensitive fields', () => {
+      const response = {
+        status: "1",
+        data: {
+          apikey: 'NESTED_SECRET',
+          result: 'ok'
+        }
+      };
+      const formatted = formatResponse(response);
+      expect(formatted).not.toContain('NESTED_SECRET');
+      expect(formatted).toContain('[REDACTED]');
+      expect(formatted).toContain('result');
     });
   });
 });

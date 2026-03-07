@@ -76,10 +76,48 @@ def query_validator_rewards(api_key, validators=None, epoch=None,
 
 
 def format_response(data, pretty=False):
-    """Format API response as JSON string."""
+    """
+    Format API response data as JSON string.
+    Redacts sensitive fields to prevent accidental exposure.
+    
+    Args:
+        data: Response data to format
+        pretty: Whether to pretty-print the JSON
+        
+    Returns:
+        str: Formatted JSON string with sensitive fields redacted
+    """
+    import copy
+    
+    # List of sensitive field names to redact
+    sensitive_fields = ['apikey', 'api_key', 'apiKey', 'token', 'access_token', 'secret', 'password', 'authorization']
+    
+    # Create a deep copy and redact sensitive fields
+    sanitized = copy.deepcopy(data)
+    
+    def redact_sensitive_fields(obj):
+        """Recursively redact sensitive fields in nested structures."""
+        if not isinstance(obj, dict):
+            return
+        
+        for key in list(obj.keys()):
+            # Check if this is a sensitive field
+            if any(field.lower() in key.lower() for field in sensitive_fields):
+                obj[key] = '[REDACTED]'
+            elif isinstance(obj[key], dict):
+                # Recursively redact nested objects
+                redact_sensitive_fields(obj[key])
+            elif isinstance(obj[key], list):
+                # Redact items in lists
+                for item in obj[key]:
+                    if isinstance(item, dict):
+                        redact_sensitive_fields(item)
+    
+    redact_sensitive_fields(sanitized)
+    
     if pretty:
-        return json.dumps(data, indent=2, sort_keys=False)
-    return json.dumps(data)
+        return json.dumps(sanitized, indent=2, sort_keys=False)
+    return json.dumps(sanitized)
 
 
 def format_reward_record(record):
