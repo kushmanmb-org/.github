@@ -236,3 +236,15 @@ signing-key.*
 .cache/
 tmp/
 temp/
+
+# Rust build artifacts
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+
+# SP1 proof fixtures (may contain sensitive proof data)
+fixtures/
+*.fixture.json
+*proof-fixture*
+!*proof-fixture.example.*
